@@ -1,7 +1,7 @@
-import 'package:mood_journal_app/src/features/mood/data/datasources/mood_local_data_source.dart';
-import 'package:mood_journal_app/src/features/mood/data/models/mood_entry_model.dart';
-import 'package:mood_journal_app/src/features/mood/domain/entities/mood_entry.dart';
-import 'package:mood_journal_app/src/features/mood/domain/repositories/mood_repository.dart';
+import 'package:mood_journal_app/src/features/journal/data/datasources/mood_local_data_source.dart';
+import 'package:mood_journal_app/src/features/journal/data/models/mood_entry_model.dart';
+import 'package:mood_journal_app/src/features/journal/domain/entities/mood_entry.dart';
+import 'package:mood_journal_app/src/features/journal/domain/repositories/mood_repository.dart';
 
 class MoodRepositoryImpl implements MoodRepository {
   const MoodRepositoryImpl(this._localDataSource);

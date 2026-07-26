@@ -1,4 +1,4 @@
-import 'package:mood_journal_app/src/features/mood/domain/entities/mood_entry.dart';
+import 'package:mood_journal_app/src/features/journal/domain/entities/mood_entry.dart';
 
 class MoodEntryModel {
   const MoodEntryModel({required this.id, required this.mood, required this.note, required this.createdAt});

@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mood_journal_app/src/core/errors/app_exception.dart';
-import 'package:mood_journal_app/src/features/mood/domain/entities/mood_entry.dart';
-import 'package:mood_journal_app/src/features/mood/domain/repositories/mood_repository.dart';
-import 'package:mood_journal_app/src/features/mood/domain/usecases/add_mood_entry.dart';
+import 'package:mood_journal_app/src/features/journal/domain/entities/mood_entry.dart';
+import 'package:mood_journal_app/src/features/journal/domain/repositories/mood_repository.dart';
+import 'package:mood_journal_app/src/features/journal/domain/usecases/add_mood_entry.dart';
 
 void main() {
   test('rejects an entry without a mood', () async {

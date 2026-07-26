@@ -1,6 +1,6 @@
 import 'package:mood_journal_app/src/core/errors/app_exception.dart';
-import 'package:mood_journal_app/src/features/mood/domain/entities/mood_entry.dart';
-import 'package:mood_journal_app/src/features/mood/domain/repositories/mood_repository.dart';
+import 'package:mood_journal_app/src/features/journal/domain/entities/mood_entry.dart';
+import 'package:mood_journal_app/src/features/journal/domain/repositories/mood_repository.dart';
 
 class AddMoodEntry {
   const AddMoodEntry(this._repository);

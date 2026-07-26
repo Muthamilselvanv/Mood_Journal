@@ -16,9 +16,9 @@ class App extends StatelessWidget {
       title: 'Mood Journal',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system,
-      initialBinding: InitialBinding(),
-      initialRoute: AppRoutes.home,
+      themeMode: ThemeMode.system, // this command will use the system theme (light or dark) based on the device settings
+      initialBinding: InitialBinding(), // register global dependencies for the entire app
+      initialRoute: AppRoutes.home, // open the home page ( / ) when the app starts
       getPages: AppPages.pages,
       unknownRoute: AppPages.unknownRoute,
     );

@@ -1,5 +1,5 @@
 import 'package:mood_journal_app/src/core/database/app_database.dart';
-import 'package:mood_journal_app/src/features/mood/data/models/mood_entry_model.dart';
+import 'package:mood_journal_app/src/features/journal/data/models/mood_entry_model.dart';
 
 abstract interface class MoodLocalDataSource {
   Future<List<MoodEntryModel>> getEntries();
