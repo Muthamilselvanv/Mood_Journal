@@ -5,6 +5,9 @@ String formattedDate() {
   //return DateFormat('EEEE, dd MMMM yyyy').format(DateTime.now());
 }
 
+String formateaddDate(){
+  return DateFormat('dd-mm-yyyy').format(DateTime.now());
+}
 String greeting() {
   final hour = DateTime.now().hour;
 

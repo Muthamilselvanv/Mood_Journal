@@ -1,9 +1,11 @@
 import 'package:mood_journal_app/src/features/main/presentation/controller/main_controller.dart';
+import 'package:mood_journal_app/src/features/home/presentation/controllers/mood_select_controller.dart';
 import 'package:get/get.dart';
 
 class MainBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<MainController>(() => MainController());
+    Get.lazyPut(() => HomeController(), fenix: true);
   }
 }

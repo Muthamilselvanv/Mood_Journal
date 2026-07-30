@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mood_journal_app/src/core/constants/app_colors.dart';
 import 'package:mood_journal_app/src/core/constants/app_spacing.dart';
+import 'package:mood_journal_app/src/core/constants/app_text_style.dart';
+import 'package:mood_journal_app/src/features/home/presentation/controllers/mood_select_controller.dart';
 import 'package:mood_journal_app/src/features/home/presentation/widgets/greeting.dart';
+import 'package:lucide_flutter/lucide_flutter.dart';
+import 'package:mood_journal_app/src/features/home/presentation/widgets/mood_select/mood_selector.dart';
+import 'package:mood_journal_app/src/shared/widgets/app_gradient_button.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -48,11 +54,11 @@ class HomePage extends StatelessWidget {
               children: [
                 IconButton(
                   onPressed: () {},
-                  icon: const Icon(Icons.notifications_none_rounded),
+                  icon: Icon(LucideIcons.bell, size: AppIconSizes.medium),
                 ),
                 Positioned(
-                  top: 10,
-                  right: 10,
+                  top: 12,
+                  right: 15,
                   child: Container(
                     width: 8,
                     height: 8,
@@ -85,7 +91,19 @@ class HomePage extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           padding: AppSpacing.screen,
-          child: Column(children: [buildMoodCard(context)]),
+          child: Column(
+            children: [
+              buildMoodCard(context),
+              const SizedBox(height: AppSpacing.space20),
+              const MoodSelector(title: "SELECT YOUR MOOD"), // from widget
+              const SizedBox(height: AppSpacing.space20),
+              buildAddMoodButton(context),
+              const SizedBox(height: AppSpacing.space20),
+              buildTodaySnapshot(context),
+              const SizedBox(height: AppSpacing.space20),
+              buildQuickStats(context),
+            ],
+          ),
         ),
       ),
     );
@@ -163,8 +181,8 @@ Widget buildMoodCard(BuildContext context) {
 
           // Flower Emoji
           Positioned(
-            bottom: 18,
-            right: 18,
+            bottom: 10,
+            right: 5,
             child: Text("🌸", style: TextStyle(fontSize: bigCircle * 0.45)),
           ),
           Padding(
@@ -181,11 +199,12 @@ Widget buildMoodCard(BuildContext context) {
                   ),
                 ),
 
-                const SizedBox(height: 12),
+                const SizedBox(height: 10),
 
                 Text(
                   "How are you\nfeeling today?",
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    color: const Color(0xFF000000),
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -227,5 +246,225 @@ Widget buildMoodCard(BuildContext context) {
         ],
       ),
     ),
+  );
+}
+
+// mood selector in Widget folder
+
+//Add Butoon
+Widget buildAddMoodButton(BuildContext context) {
+  return SizedBox(
+    width: double.infinity,
+    child: AppGradientButton(
+      label: "Add Today's Mood",
+      icon: Icons.add,
+      onPressed: () {
+        Get.toNamed('/addmoodentry');
+      },
+    ),
+  );
+}
+
+//final controller = Get.find<HomeController>();
+//Today's Snapshot
+Widget buildTodaySnapshot(BuildContext context) {
+  final controller = Get.find<HomeController>();
+
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        "TODAY'S SNAPSHOT",
+        style: Theme.of(context).textTheme.labelMedium?.copyWith(
+          fontWeight: FontWeight.bold,
+          fontSize: AppIconSizes.small,
+        ),
+      ),
+      const SizedBox(height: AppSpacing.space20),
+
+      Obx(() {
+        final mood = controller.selectedMood;
+        final weather = controller.weather;
+
+        return Card(
+          elevation: 0,
+          color: Colors.white,
+          child: Padding(
+            padding: AppSpacing.card,
+            child: Row(
+              children: [
+                Container(
+                  width: 72,
+                  height: 72,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                  child: Center(
+                    child: Text(
+                      mood.emoji,
+                      style: const TextStyle(fontSize: 34),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(width: 16),
+
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            mood.title,
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: AppIconSizes.medium,
+                                  fontFamily: AppTextStyles.heading1.fontFamily,
+                                  color: Colors.black,
+                                ),
+                          ),
+                          const SizedBox(width: AppSpacing.space20),
+                          Text(
+                            "${controller.intensity.value.toInt()}/10",
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(color: mood.color),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 4),
+
+                      Text(
+                        controller.selectedMood.message,
+                        //controller.moodMessage,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          fontSize: AppIconSizes.tiny,
+                          fontFamily: AppTextStyles.bodyMedium.fontFamily,
+                          color: Colors.grey,
+                        ),
+                      ),
+
+                      const SizedBox(height: 10),
+
+                      Row(
+                        children: [
+                          Text(weather.emoji),
+                          const SizedBox(width: 6),
+                          Text(
+                            weather.title,
+                            style: const TextStyle(color: Colors.black),
+                          ),
+
+                          const SizedBox(width: AppSpacing.space8),
+
+                          const Text(
+                            "•",
+                            style: TextStyle(color: Colors.black),
+                          ),
+
+                          const SizedBox(width: AppSpacing.space4),
+
+                          Text(
+                            TimeOfDay.now().format(context),
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(color: Colors.black),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }),
+    ],
+  );
+}
+
+//Quick Stats
+class StatsCard extends StatelessWidget {
+  final String emoji;
+  final String value;
+  final String label;
+
+  const StatsCard({
+    super.key,
+    required this.emoji,
+    required this.value,
+    required this.label,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 0,
+      color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 18),
+        child: Column(
+          children: [
+            Text(emoji, style: const TextStyle(fontSize: 30)),
+            const SizedBox(height: 8),
+            Text(
+              value,
+              style: Theme.of(
+                context,
+              ).textTheme.headlineSmall?.copyWith(color: Colors.black87),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              label,
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: Colors.black87),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+Widget buildQuickStats(BuildContext context) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        "QUICK STATS",
+        style: Theme.of(context).textTheme.labelMedium?.copyWith(
+          fontWeight: FontWeight.bold,
+          fontSize: AppIconSizes.small,
+        ),
+      ),
+
+      const SizedBox(height: AppSpacing.space12),
+
+      Row(
+        children: const [
+          Expanded(
+            child: StatsCard(emoji: "🔥", value: "7", label: "Day Streak"),
+          ),
+
+          SizedBox(width: 12),
+
+          Expanded(
+            child: StatsCard(emoji: "📖", value: "42", label: "Total Entries"),
+          ),
+
+          SizedBox(width: 12),
+
+          Expanded(
+            child: StatsCard(emoji: "⭐", value: "7.2", label: "Avg Mood"),
+          ),
+        ],
+      ),
+    ],
   );
 }

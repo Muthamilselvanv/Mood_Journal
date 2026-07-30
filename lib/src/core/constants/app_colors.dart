@@ -40,4 +40,10 @@ abstract final class AppColors {
   static const darkBackground = Color(0xFF171321);
   static const darkSurface = Color(0xFF221C31);
   static const darkText = Color(0xFFF8F7FF);
+
+  static const moodHappy = Color(0xFFFFB648);
+  static const moodCalm = Color(0xFF34D399);
+  static const moodNeutral = Color(0xFF60A5FA);
+  static const moodSad = Color(0xFF7B61FF);
+  static const moodAngry = Color(0xFFFF5A5F);
 }

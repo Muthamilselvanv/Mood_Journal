@@ -6,6 +6,7 @@ import 'package:mood_journal_app/src/features/main/presentation/pages/main_page.
 import 'package:mood_journal_app/src/features/profile/presentation/pages/profile.dart';
 import 'package:mood_journal_app/src/features/trends/presentation/pages/trends.dart';
 import 'package:mood_journal_app/src/features/main/presentation/binding/main_binding.dart';
+import 'package:mood_journal_app/src/features/home/presentation/pages/add_mood_entry.dart';
 
 class AppPages {
   AppPages._(); // private constructor to prevent instantiation
@@ -15,11 +16,17 @@ class AppPages {
       name: AppRoutes.home,
       page: () => const MainPage(),
       binding: MainBinding(),
+    ),
+
+    GetPage(
+      name: AppRoutes.addMoodEntry,
+      page: () => const AddMoodEntry(),
     ), // this is the home page ( / ) route
 
     GetPage(
       name: AppRoutes.journal,
-      page: () => const JournalPage(), // very important: this binding will be used to inject dependencies for the mood page before the page is created
+      page: () =>
+          const JournalPage(), // very important: this binding will be used to inject dependencies for the mood page before the page is created
     ),
     GetPage(name: AppRoutes.trends, page: () => const TrendsPages()),
     // (/mood) route for the mood page + MoodBinding
