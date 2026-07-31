@@ -13,7 +13,7 @@ class InputFields extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Journal Title",
+          "JOURNAL TITLE",
           style: Theme.of(context).textTheme.labelMedium?.copyWith(
             fontWeight: FontWeight.bold,
             fontSize: AppIconSizes.tiny,
@@ -21,7 +21,7 @@ class InputFields extends StatelessWidget {
           ),
         ),
 
-        const SizedBox(height: AppSpacing.space16),
+        const SizedBox(height: AppSpacing.space4),
         TextFormField(
           controller: controller.titleController,
           decoration: InputDecoration(
@@ -33,9 +33,9 @@ class InputFields extends StatelessWidget {
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
           ),
         ),
-        const SizedBox(height: AppSpacing.space8),
+        const SizedBox(height: AppSpacing.space16),
         Text(
-          "Notes",
+          "NOTES",
           style: Theme.of(context).textTheme.labelMedium?.copyWith(
             fontWeight: FontWeight.bold,
             fontSize: AppIconSizes.tiny,
@@ -43,7 +43,7 @@ class InputFields extends StatelessWidget {
           ),
         ),
 
-        const SizedBox(height: AppSpacing.space16),
+        const SizedBox(height: AppSpacing.space4),
         TextFormField(
           controller: controller.notesController,
           maxLines: 6,

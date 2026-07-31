@@ -14,8 +14,6 @@ class AppBottomNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.sizeOf(context).width;
-
     return Container(
       height: 80,
       decoration: BoxDecoration(

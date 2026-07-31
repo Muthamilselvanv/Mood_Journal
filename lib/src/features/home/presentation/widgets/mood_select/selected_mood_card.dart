@@ -23,7 +23,6 @@ class SelectedMoodCard extends GetView<HomeController> {
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(28),
-
           // Background changes automatically
           color: mood.color.withOpacity(.12),
         ),
@@ -34,7 +33,7 @@ class SelectedMoodCard extends GetView<HomeController> {
               width: responsiveSize,
               height: responsiveSize,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(28),
               ),
               child: Center(

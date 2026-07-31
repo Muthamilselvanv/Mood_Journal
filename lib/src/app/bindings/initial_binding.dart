@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:mood_journal_app/src/core/database/app_database.dart';
+import 'package:mood_journal_app/src/core/database/database_helper.dart';
 
 // Bindings is GetX’s dependency-registration class.
 // Get.put creates and registers one AppDatabase.
@@ -10,6 +10,6 @@ import 'package:mood_journal_app/src/core/database/app_database.dart';
 class InitialBinding extends Bindings {
   @override
   void dependencies() {
-    Get.put<AppDatabase>(AppDatabase(), permanent: true);
+    Get.lazyPut<DatabaseHelper>(() => DatabaseHelper.instance, fenix: true);
   }
 }

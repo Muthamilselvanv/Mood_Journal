@@ -24,13 +24,16 @@ class MoodIntensitySlider extends GetView<HomeController> {
             ),
           ),
 
-          const SizedBox(height: AppSpacing.space16),
+          const SizedBox(height: AppSpacing.space8),
 
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: Colors.grey
+              )
             ),
             child: Column(
               children: [
@@ -39,7 +42,7 @@ class MoodIntensitySlider extends GetView<HomeController> {
                     Text(
                       "How strong is this feeling?",
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Colors.black,
+                        color: Theme.of(context).colorScheme.onSurface,
                         fontWeight: FontWeight.bold,
                         fontSize: AppIconSizes.tiny,
                         fontFamily: AppTextStyles.heading1.fontFamily,
@@ -58,7 +61,7 @@ class MoodIntensitySlider extends GetView<HomeController> {
                   ],
                 ),
 
-                const SizedBox(height: AppSpacing.space12),
+                const SizedBox(height: AppSpacing.space8),
 
                 SliderTheme(
                   data: SliderTheme.of(context).copyWith(
@@ -100,7 +103,7 @@ class MoodIntensitySlider extends GetView<HomeController> {
                       "${index + 1}",
                       style: Theme.of(
                         context,
-                      ).textTheme.bodySmall?.copyWith(color: Colors.black),
+                      ).textTheme.bodySmall?.copyWith(color: Theme.of(context).colorScheme.onSurface),
                     ),
                   ),
                 ),

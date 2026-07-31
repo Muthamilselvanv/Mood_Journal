@@ -1,0 +1,396 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:mood_journal_app/src/core/constants/app_spacing.dart';
+import 'package:mood_journal_app/src/features/home/presentation/models/mood_entry_model.dart';
+
+class JournalDetailPage extends StatelessWidget {
+  final MoodEntry entry;
+
+  const JournalDetailPage({super.key, required this.entry});
+
+  Color get moodColor {
+    switch (entry.mood) {
+      case "Happy":
+        return const Color(0xffFDB515);
+      case "Calm":
+        return const Color(0xff36C690);
+      case "Neutral":
+        return const Color(0xff5B9DFF);
+      case "Sad":
+        return const Color(0xff8B80F9);
+      case "Angry":
+        return const Color(0xffFF5A6E);
+      default:
+        return Colors.grey;
+    }
+  }
+
+  String get moodEmoji {
+    switch (entry.mood) {
+      case "Happy":
+        return "😊";
+      case "Calm":
+        return "😌";
+      case "Neutral":
+        return "😐";
+      case "Sad":
+        return "😔";
+      case "Angry":
+        return "😡";
+      default:
+        return "🙂";
+    }
+  }
+
+  String get weatherEmoji {
+    switch (entry.weather) {
+      case "Sunny":
+        return "☀️";
+      case "Cloudy":
+        return "☁️";
+      case "Rainy":
+        return "🌧️";
+      case "Snowy":
+        return "❄️";
+      case "Windy":
+        return "💨";
+      case "Stormy":
+        return "⛈️";
+      default:
+        return "🌤";
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              //---------------------------------------
+              // App Bar
+              //---------------------------------------
+              Row(
+                children: [
+                  CircleAvatar(
+                    radius: 22,
+                    backgroundColor: theme.colorScheme.surface,
+                    child: IconButton(
+                      icon: const Icon(Icons.arrow_back),
+                      onPressed: Get.back,
+                    ),
+                  ),
+
+                  const Spacer(),
+
+                  CircleAvatar(
+                    radius: 22,
+                    backgroundColor: theme.colorScheme.surface,
+                    child: IconButton(
+                      icon: const Icon(Icons.favorite_outline_sharp),
+                      onPressed: () {},
+                    ),
+                  ),
+
+                  const SizedBox(width: AppSpacing.space8),
+
+                  CircleAvatar(
+                    radius: 22,
+                    backgroundColor: theme.colorScheme.surface,
+                    child: IconButton(
+                      icon: const Icon(Icons.share_outlined),
+                      onPressed: () {},
+                    ),
+                  ),
+
+                  const SizedBox(width: AppSpacing.space8),
+
+                  CircleAvatar(
+                    radius: 22,
+                    backgroundColor: theme.colorScheme.surface,
+                    child: IconButton(
+                      icon: const Icon(Icons.add_reaction_rounded),
+                      onPressed: () {},
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: AppSpacing.space24),
+
+              //---------------------------------------
+              // Hero Card
+              //---------------------------------------
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(
+                  vertical: 28,
+                  horizontal: 20,
+                ),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [moodColor, moodColor.withOpacity(.75)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(28),
+                ),
+                child: Column(
+                  children: [
+                    Text(moodEmoji, style: const TextStyle(fontSize: 70)),
+
+                    const SizedBox(height: AppSpacing.space8),
+
+                    Text(
+                      "Feeling ${entry.mood}",
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    const SizedBox(height: AppSpacing.space4),
+
+                    Text(
+                      DateFormat(
+                        "EEEE, MMM dd • hh:mm a",
+                      ).format(entry.createdAt),
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: AppSpacing.space20),
+
+              //---------------------------------------
+              // Mood Intensity
+              //---------------------------------------
+              _InfoCard(
+                title: "Mood Intensity",
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: LinearProgressIndicator(
+                              value: entry.intensity / 10,
+                              minHeight: 12,
+                              color: moodColor,
+                              backgroundColor: moodColor.withOpacity(.15),
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(width: AppSpacing.space12),
+
+                        Text(
+                          "${entry.intensity}/10",
+                          style: TextStyle(
+                            fontSize: 26,
+                            color: moodColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: AppSpacing.space16),
+
+              //---------------------------------------
+              // Weather
+              //---------------------------------------
+              _InfoCard(
+                title: "Weather",
+                child: Row(
+                  children: [
+                    Container(
+                      width: 60,
+                      height: 60,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: moodColor.withOpacity(.10),
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                      child: Text(
+                        weatherEmoji,
+                        style: const TextStyle(fontSize: 34),
+                      ),
+                    ),
+
+                    const SizedBox(width: AppSpacing.space16),
+
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            entry.weather,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+
+                          const SizedBox(height: AppSpacing.space4),
+
+                          Text(
+                            "Weather during your journal",
+                            style: TextStyle(
+                              color: Colors.grey.shade600,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: AppSpacing.space16),
+
+              //---------------------------------------
+              // Activities
+              //---------------------------------------
+              _InfoCard(
+                title: "Activities",
+                child: Wrap(
+                  spacing: 10,
+                  runSpacing: 10,
+                  children: entry.activities.map((activity) {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 18,
+                        vertical: 10,
+                      ),
+                      decoration: BoxDecoration(
+                        color: moodColor.withOpacity(.12),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Text(
+                        activity,
+                        style: TextStyle(
+                          color: moodColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+
+              const SizedBox(height: AppSpacing.space16),
+
+              //---------------------------------------
+              // Journal
+              //---------------------------------------
+              _InfoCard(
+                title: "Journal",
+
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      entry.title,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    const SizedBox(height: AppSpacing.space16),
+
+                    Text(
+                      entry.notes,
+                      style: TextStyle(
+                        fontSize: 16,
+                        height: 1.8,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              Center(
+                child: Text(
+                  "✨ Every day is a fresh start",
+                  style: TextStyle(
+                    color: moodColor,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _InfoCard extends StatelessWidget {
+  final String title;
+  final Widget child;
+
+  const _InfoCard({required this.title, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: theme.dividerColor.withOpacity(.15)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(.04),
+            blurRadius: 18,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title.toUpperCase(),
+            style: TextStyle(
+              color: theme.colorScheme.primary,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1.2,
+              fontSize: 12,
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
+          child,
+        ],
+      ),
+    );
+  }
+}

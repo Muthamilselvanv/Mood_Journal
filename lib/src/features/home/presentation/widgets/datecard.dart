@@ -23,6 +23,7 @@ class Datecard extends StatelessWidget {
             fontWeight: FontWeight.bold,
             fontSize: AppIconSizes.tiny,
             fontFamily: AppTextStyles.heading1.fontFamily,
+            color: Theme.of(context).colorScheme.onSurface
           ),
         ),
         const SizedBox(height: AppSpacing.space8),
@@ -30,8 +31,9 @@ class Datecard extends StatelessWidget {
           height: responsiveSize,
           padding: const EdgeInsets.symmetric(horizontal: 18),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: Colors.grey),
           ),
           child: Row(
             children: [
@@ -39,10 +41,10 @@ class Datecard extends StatelessWidget {
               const SizedBox(width: AppSpacing.space16),
               Text(
                 today,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
+                    ?.copyWith(color: Theme.of(context).colorScheme.onSurface),
               ),
             ],
           ),

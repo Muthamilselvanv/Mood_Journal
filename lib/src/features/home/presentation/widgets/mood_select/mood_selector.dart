@@ -21,7 +21,7 @@ class MoodSelector extends GetView<HomeController> {
               ),
         ),
 
-        const SizedBox(height: AppSpacing.space20),
+        const SizedBox(height: AppSpacing.space12),
 
         Obx(
           () => Row(

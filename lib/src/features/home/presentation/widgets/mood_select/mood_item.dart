@@ -26,10 +26,10 @@ class MoodItem extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 16),
 
         decoration: BoxDecoration(
-          color: Colors.white, // Always white
+          color: Theme.of(context).colorScheme.surface,// Always white
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: selected ? mood.color : const Color(0xFFE9E9E9),
+            color: selected ? mood.color : Colors.grey,
             width: selected ? 2 : 1,
           ),
           boxShadow: [
@@ -52,7 +52,7 @@ class MoodItem extends StatelessWidget {
               style: TextStyle(
                 fontSize: 15,
                 fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-                color: selected ? mood.color : const Color(0xFF7B7B7B),
+                color: selected ? mood.color : Colors.grey,
               ),
             ),
           ],

@@ -147,5 +147,16 @@ class HomeController extends GetxController {
   bool isActivitySelected(String activity) {
     return selectedActivities.contains(activity);
   }
-  
+
+  void resetForm() {
+    titleController.clear();
+    notesController.clear();
+
+    selectMood(0);
+    selectedWeather(0);
+
+    selectedActivities.clear();
+
+    intensity.value = 5;
+  }
 }

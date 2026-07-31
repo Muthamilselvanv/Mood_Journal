@@ -14,7 +14,7 @@ class ActivitySelector extends GetView<HomeController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "WEATHER",
+          "ACTIVITIES",
           style: Theme.of(context).textTheme.labelMedium?.copyWith(
             fontWeight: FontWeight.bold,
             fontSize: AppIconSizes.tiny,
