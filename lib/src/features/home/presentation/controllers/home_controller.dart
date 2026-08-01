@@ -1,10 +1,15 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lucide_flutter/lucide_flutter.dart';
-import 'package:mood_journal_app/src/features/home/presentation/models/mood_select_model.dart';
 import 'package:mood_journal_app/src/core/constants/app_colors.dart';
+import 'package:mood_journal_app/src/core/services/permission_service.dart';
+import 'package:mood_journal_app/src/core/services/image_picker_service.dart';
+import 'package:mood_journal_app/src/features/home/data/repositories/mood_repository.dart';
 import 'package:mood_journal_app/src/features/home/presentation/models/weather_model.dart';
 import 'package:mood_journal_app/src/features/home/presentation/models/activity_model.dart';
+import 'package:mood_journal_app/src/features/home/presentation/models/mood_select_model.dart';
 
 class HomeController extends GetxController {
   final moods = <MoodModel>[
@@ -102,6 +107,21 @@ class HomeController extends GetxController {
     ),
   ];
 
+  @override
+  void onInit() {
+    super.onInit();
+
+    loadMood();
+  }
+
+  Future<void> loadMood() async {
+    final repository = Get.find<MoodRepository>();
+
+    final moods = await repository.getAllMoods();
+
+    print("Total entries: ${moods.length}");
+  }
+
   final selectedIndex = 0.obs;
 
   final intensity = 1.0.obs;
@@ -109,9 +129,12 @@ class HomeController extends GetxController {
   final selectedWeather = 0.obs;
 
   final selectedActivities = <String>[].obs;
-
+  
+  final formKey = GlobalKey<FormState>();
   final titleController = TextEditingController();
   final notesController = TextEditingController();
+
+  final selectedImage = Rx<File?>(null);
 
   @override
   void onClose() {
@@ -158,5 +181,34 @@ class HomeController extends GetxController {
     selectedActivities.clear();
 
     intensity.value = 5;
+    selectedImage.value = null;
+  }
+
+  Future<void> takePhoto() async {
+    final granted = await PermissionService.requestCameraPermission();
+
+    if (!granted) return;
+
+    final image = await ImagePickerService.pickFromCamera();
+
+    if (image != null) {
+      selectedImage.value = image;
+    }
+  }
+
+  Future<void> pickPhoto() async {
+    final granted = await PermissionService.requestGalleryPermission();
+
+    if (!granted) return;
+
+    final image = await ImagePickerService.pickFromGallery();
+
+    if (image != null) {
+      selectedImage.value = image;
+    }
+  }
+
+  void removePhoto() {
+    selectedImage.value = null;
   }
 }

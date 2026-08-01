@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mood_journal_app/src/core/constants/app_spacing.dart';
-import 'package:mood_journal_app/src/features/home/presentation/controllers/mood_select_controller.dart';
+import 'package:mood_journal_app/src/features/home/presentation/controllers/home_controller.dart';
 import 'package:mood_journal_app/src/features/home/presentation/widgets/mood_select/mood_item.dart';
 
 class MoodSelector extends GetView<HomeController> {

@@ -1,14 +1,14 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:lucide_flutter/lucide_flutter.dart';
 import 'package:mood_journal_app/src/app/routes/app_routes.dart';
 import 'package:mood_journal_app/src/core/constants/app_colors.dart';
 import 'package:mood_journal_app/src/core/constants/app_spacing.dart';
 import 'package:mood_journal_app/src/core/constants/app_text_style.dart';
-import 'package:mood_journal_app/src/features/home/presentation/controllers/mood_select_controller.dart';
-import 'package:mood_journal_app/src/features/home/presentation/widgets/greeting.dart';
-import 'package:lucide_flutter/lucide_flutter.dart';
-import 'package:mood_journal_app/src/features/home/presentation/widgets/mood_select/mood_selector.dart';
 import 'package:mood_journal_app/src/shared/widgets/app_gradient_button.dart';
+import 'package:mood_journal_app/src/features/home/presentation/widgets/greeting.dart';
+import 'package:mood_journal_app/src/features/home/presentation/controllers/home_controller.dart';
+import 'package:mood_journal_app/src/features/home/presentation/widgets/mood_select/mood_selector.dart';
 import 'package:mood_journal_app/src/features/journal/presentation/controllers/journal_controller.dart';
 
 class HomePage extends StatelessWidget {
@@ -271,7 +271,6 @@ Widget buildAddMoodButton(BuildContext context) {
 //Today's Snapshot
 Widget buildTodaySnapshot(BuildContext context) {
   final controller = Get.find<HomeController>();
-
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -413,14 +412,14 @@ class StatsCard extends StatelessWidget {
         child: Column(
           children: [
             Text(emoji, style: const TextStyle(fontSize: 30)),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacing.space8),
             Text(
               value,
               style: Theme.of(
                 context,
               ).textTheme.headlineSmall?.copyWith(color: Colors.black87),
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: AppSpacing.space8),
             Text(
               label,
               style: Theme.of(
@@ -451,24 +450,26 @@ Widget buildQuickStats(BuildContext context) {
 
       const SizedBox(height: AppSpacing.space12),
 
-      Row(
-        children: [
-          Expanded(
-            child: StatsCard(emoji: "🔥", value: '${controller.moodEntries.length}', label: "Day Streak"),
-          ),
-
-          const SizedBox(width: 12),
-
-          const Expanded(
-            child: StatsCard(emoji: "📖", value: "42", label: "Total Entries"),
-          ),
-
-          const SizedBox(width: 12),
-
-          const Expanded(
-            child: StatsCard(emoji: "⭐", value: "7.2", label: "Avg Mood"),
-          ),
-        ],
+      Obx(
+        () => Row(
+          children: [
+            Expanded(
+              child: StatsCard(emoji: "🔥", value: controller.activeDays.toString(), label: "Day Streak"),
+            ),
+        
+            const SizedBox(width: AppSpacing.space12),
+        
+            Expanded(
+              child: StatsCard(emoji: "📖", value: controller.moodEntries.length.toString(), label: "Total Entries"),
+            ),
+        
+            const SizedBox(width: AppSpacing.space12),
+        
+            Expanded(
+              child: StatsCard(emoji: "⭐", value: controller.averageMood.toStringAsFixed(1), label: "Avg Mood"),
+            ),
+          ],
+        ),
       ),
     ],
   );

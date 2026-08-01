@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mood_journal_app/src/core/constants/app_spacing.dart';
+import 'package:mood_journal_app/src/features/journal/presentation/controllers/journal_controller.dart';
 import 'package:mood_journal_app/src/features/journal/presentation/widgets/add_mood_fab.dart';
+import 'package:mood_journal_app/src/features/journal/presentation/widgets/empty_journal_view.dart';
 import 'package:mood_journal_app/src/features/journal/presentation/widgets/journal_list.dart';
 import 'package:mood_journal_app/src/features/journal/presentation/widgets/mood_filter.dart';
 
@@ -9,6 +12,7 @@ class JournalPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<JournalController>();
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -39,17 +43,22 @@ class JournalPage extends StatelessWidget {
       ),
 
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: AppSpacing.screen,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children:[
-               const MoodFilter(),
-               const SizedBox(height: AppSpacing.space20),
-               const JournalList()
-            ],
-          ),
-        ),
+        child: Obx(() {
+          if (controller.moodEntries.isEmpty) {
+            return const Center(child: EmptyJournalView());
+          }
+          return SingleChildScrollView(
+            padding: AppSpacing.screen,
+            child: const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                MoodFilter(),
+                SizedBox(height: AppSpacing.space20),
+                JournalList(),
+              ],
+            ),
+          );
+        }),
       ),
       floatingActionButton: const AddMoodFAB(),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,

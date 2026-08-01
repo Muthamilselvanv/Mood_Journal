@@ -32,6 +32,7 @@ class MoodEntry {
       "title": title,
       "notes": notes,
       "createdAt": createdAt.toIso8601String(),
+      "imagePath": imagePath,
     };
   }
 
@@ -45,6 +46,7 @@ class MoodEntry {
       title: map["title"],
       notes: map["notes"],
       createdAt: DateTime.parse(map["createdAt"]),
+      imagePath: map["imagePath"],
     );
   }
 }

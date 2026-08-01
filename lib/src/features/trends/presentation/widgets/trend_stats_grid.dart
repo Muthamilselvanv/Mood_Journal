@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mood_journal_app/src/features/journal/presentation/controllers/journal_controller.dart';
 import 'package:mood_journal_app/src/features/trends/presentation/widgets/trend_stat_card.dart';
 
 class TrendStatsGrid extends StatelessWidget {
@@ -6,6 +8,7 @@ class TrendStatsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<JournalController>();
     return GridView.count(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -13,13 +16,15 @@ class TrendStatsGrid extends StatelessWidget {
       crossAxisSpacing: 16,
       mainAxisSpacing: 16,
       childAspectRatio: 1.15,
-      children: const [
-        TrendStatCard(
-          emoji: "⭐",
-          title: "AVG SCORE",
-          value: "7.2",
-          backgroundColor: Color(0xffFFF8E6),
-          borderColor: Color(0xffFFE39A),
+      children: [
+        Obx(
+          () => TrendStatCard(
+            emoji: "⭐",
+            title: "AVG SCORE",
+            value: controller.averageMood.toStringAsFixed(1),
+            backgroundColor: Color(0xffFFF8E6),
+            borderColor: Color(0xffFFE39A),
+          ),
         ),
 
         TrendStatCard(
@@ -30,12 +35,14 @@ class TrendStatsGrid extends StatelessWidget {
           borderColor: Color(0xffFFD0D0),
         ),
 
-        TrendStatCard(
-          emoji: "📖",
-          title: "TOTAL ENTRIES",
-          value: "42",
-          backgroundColor: Color(0xffEEF5FF),
-          borderColor: Color(0xffCFE0FF),
+        Obx(
+          () => TrendStatCard(
+            emoji: "📖",
+            title: "TOTAL ENTRIES",
+            value: controller.moodEntries.length.toString(),
+            backgroundColor: Color(0xffEEF5FF),
+            borderColor: Color(0xffCFE0FF),
+          ),
         ),
 
         TrendStatCard(

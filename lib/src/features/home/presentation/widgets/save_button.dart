@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mood_journal_app/src/features/home/data/repositories/mood_repository.dart';
-import 'package:mood_journal_app/src/features/home/presentation/controllers/mood_select_controller.dart';
+import 'package:mood_journal_app/src/features/home/presentation/controllers/home_controller.dart';
 import 'package:mood_journal_app/src/features/journal/presentation/controllers/journal_controller.dart';
 import 'package:mood_journal_app/src/features/main/presentation/controller/main_controller.dart';
 import 'package:mood_journal_app/src/shared/widgets/app_gradient_button.dart';
@@ -22,6 +22,9 @@ class BuildAddMoodButton extends StatelessWidget {
         label: "Save",
         icon: Icons.save,
         onPressed: () async {
+          if (!controller.formKey.currentState!.validate()) {
+            return;
+          }
           final entry = MoodEntry(
             mood: controller.selectedMood.title,
             weather: controller.weather.title,
@@ -30,6 +33,7 @@ class BuildAddMoodButton extends StatelessWidget {
             title: controller.titleController.text,
             notes: controller.notesController.text,
             createdAt: DateTime.now(),
+            imagePath: controller.selectedImage.value?.path,
           );
 
           try {

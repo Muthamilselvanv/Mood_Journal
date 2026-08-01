@@ -79,24 +79,35 @@ class ProfileHeader extends StatelessWidget {
 
           const SizedBox(height: 25),
 
-          Row(
-            children: [
-              const Expanded(
-                child: _StatCard(value: "42", title: "Journals"),
-              ),
+          Obx(
+            () => Row(
+              children: [
+                Expanded(
+                  child: _StatCard(
+                    value: controller.moodEntries.length.toString(),
+                    title: "Journals",
+                  ),
+                ),
 
-              const SizedBox(width: 14),
+                SizedBox(width: 14),
 
-              Expanded(
-                child: _StatCard(value: '${controller.moodEntries.length}', title: "Day Streak"),
-              ),
+                Expanded(
+                  child: _StatCard(
+                    value: controller.activeDays.toString(),
+                    title: "Day Streak",
+                  ),
+                ),
 
-              const SizedBox(width: 14),
+                const SizedBox(width: 14),
 
-              const Expanded(
-                child: _StatCard(value: "7.2", title: "Avg Mood"),
-              ),
-            ],
+                Expanded(
+                  child: _StatCard(
+                    value: controller.averageMood.toStringAsFixed(1),
+                    title: "Avg Mood",
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

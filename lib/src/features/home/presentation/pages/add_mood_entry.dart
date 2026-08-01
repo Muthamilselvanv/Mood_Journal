@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mood_journal_app/src/core/utils/app_bottom_sheet.dart';
 import 'package:mood_journal_app/src/core/constants/app_spacing.dart';
+import 'package:mood_journal_app/src/features/home/presentation/controllers/home_controller.dart';
 import 'package:mood_journal_app/src/features/home/presentation/widgets/activity_select/activity_selector.dart';
 import 'package:mood_journal_app/src/features/home/presentation/widgets/attach_photo_card.dart';
 import 'package:mood_journal_app/src/features/home/presentation/widgets/input_fields.dart';
@@ -20,6 +23,7 @@ class AddMoodEntry extends StatefulWidget {
 class _AddMoodEntryState extends State<AddMoodEntry> {
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<HomeController>();
     return Scaffold(
       appBar: AppBar(
         //automaticallyImplyLeading: false,
@@ -53,11 +57,28 @@ class _AddMoodEntryState extends State<AddMoodEntry> {
               const SizedBox(height: AppSpacing.space20),
               const InputFields(),
               const SizedBox(height: AppSpacing.space20),
-              AttachPhotoCard(
-                onTap: () {
-                  // Later:
-                  // Image Picker
-                },
+              Obx(
+                () => AttachPhotoCard(
+                  image: controller.selectedImage.value,
+
+                  onTap: () {
+                    AppBottomSheet.showImagePicker(
+                      context: context,
+                      onCamera: () async {
+                        Navigator.pop(context);
+                        await controller.takePhoto();
+                      },
+                      onGallery: () async {
+                        Navigator.pop(context);
+                        await controller.pickPhoto();
+                      },
+                    );
+                  },
+
+                  onRemove: () {
+                    controller.selectedImage.value = null;
+                  },
+                ),
               ),
               const SizedBox(height: AppSpacing.space20),
               const BuildAddMoodButton(),

@@ -33,7 +33,12 @@ class DatabaseHelper {
 
     final path = join(dbPath, 'mood_journal.db');
 
-    return await openDatabase(path, version: 1, onCreate: _onCreate);
+    return await openDatabase(
+      path,
+      version: 2,
+      onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
+    );
   }
 
   Future<void> _onCreate(Database db, int version) async {
@@ -47,8 +52,40 @@ class DatabaseHelper {
         title TEXT NOT NULL,
         notes TEXT NOT NULL,
         createdAt TEXT NOT NULL,
-        isFavorite INTEGER DEFAULT 0
+        isFavorite INTEGER DEFAULT 0,
+        imagePath TEXT
       )
     ''');
   }
+
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      await db.execute('ALTER TABLE mood_entries ADD COLUMN imagePath TEXT');
+    }
+  }
+  //As your app grows
+  //   Future<void> _onUpgrade(
+  //     Database db,
+  //     int oldVersion,
+  //     int newVersion,
+  // ) async {
+
+  //   if (oldVersion < 2) {
+  //     await db.execute(
+  //       'ALTER TABLE mood_entries ADD COLUMN imagePath TEXT'
+  //     );
+  //   }
+
+  //   if (oldVersion < 3) {
+  //     await db.execute(
+  //       'ALTER TABLE mood_entries ADD COLUMN location TEXT'
+  //     );
+  //   }
+
+  //   if (oldVersion < 4) {
+  //     await db.execute(
+  //       'ALTER TABLE mood_entries ADD COLUMN isSynced INTEGER DEFAULT 0'
+  //     );
+  //   }
+  // }
 }

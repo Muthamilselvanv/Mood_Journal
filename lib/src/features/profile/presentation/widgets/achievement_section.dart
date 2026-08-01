@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mood_journal_app/src/core/constants/app_spacing.dart';
+import 'package:mood_journal_app/src/features/journal/presentation/controllers/journal_controller.dart';
 import 'achievement_card.dart';
 
 class AchievementSection extends StatelessWidget {
@@ -7,6 +9,7 @@ class AchievementSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<JournalController>();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -17,30 +20,32 @@ class AchievementSection extends StatelessWidget {
 
         const SizedBox(height: AppSpacing.space8),
 
-        Row(
-          children: const [
-            Expanded(
-              child: AchievementCard(emoji: "🔥", title: "7 Day\nStreak"),
-            ),
-
-            SizedBox(width: 12),
-
-            Expanded(
-              child: AchievementCard(emoji: "📖", title: "10 Entries"),
-            ),
-
-            SizedBox(width: 12),
-
-            Expanded(
-              child: AchievementCard(emoji: "⭐", title: "First Entry"),
-            ),
-
-            SizedBox(width: 12),
-
-            Expanded(
-              child: AchievementCard(emoji: "💪", title: "Mood Master"),
-            ),
-          ],
+        Obx(
+          () => Row(
+            children: [
+              Expanded(
+                child: AchievementCard(emoji: "🔥", title: "${controller.activeDays.toString()} Day\nStreak"),
+              ),
+          
+              SizedBox(width: 12),
+          
+              Expanded(
+                child: AchievementCard(emoji: "📖", title: "${controller.moodEntries.length.toString()} Entries"),
+              ),
+          
+              SizedBox(width: 12),
+          
+              Expanded(
+                child: AchievementCard(emoji: "⭐", title: "First Entry"),
+              ),
+          
+              SizedBox(width: 12),
+          
+              Expanded(
+                child: AchievementCard(emoji: "💪", title: "Mood Master"),
+              ),
+            ],
+          ),
         ),
       ],
     );

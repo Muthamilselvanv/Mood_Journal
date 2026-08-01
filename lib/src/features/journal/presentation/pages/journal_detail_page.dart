@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:lucide_flutter/lucide_flutter.dart';
 import 'package:mood_journal_app/src/core/constants/app_spacing.dart';
 import 'package:mood_journal_app/src/features/home/presentation/models/mood_entry_model.dart';
 
@@ -65,7 +66,7 @@ class JournalDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
+    final hasActivities = entry.activities.any((e) => e.trim().isNotEmpty);
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       body: SafeArea(
@@ -271,29 +272,53 @@ class JournalDetailPage extends StatelessWidget {
               //---------------------------------------
               _InfoCard(
                 title: "Activities",
-                child: Wrap(
-                  spacing: 10,
-                  runSpacing: 10,
-                  children: entry.activities.map((activity) {
-                    return Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 18,
-                        vertical: 10,
-                      ),
-                      decoration: BoxDecoration(
-                        color: moodColor.withOpacity(.12),
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Text(
-                        activity,
-                        style: TextStyle(
-                          color: moodColor,
-                          fontWeight: FontWeight.w600,
+                child: hasActivities
+                    ? Wrap(
+                        spacing: 10,
+                        runSpacing: 10,
+                        children: entry.activities
+                            .where((e) => e.trim().isNotEmpty)
+                            .map(
+                              (activity) => Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 10,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: moodColor.withOpacity(.12),
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                child: Text(
+                                  activity,
+                                  style: TextStyle(
+                                    color: moodColor,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            )
+                            .toList(),
+                      )
+                    : Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          child: Column(
+                            children: [
+                              Icon(
+                                LucideIcons.activity,
+                                size: 40,
+                                color: Colors.grey.shade400,
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                "No activities added",
+                                style: Theme.of(context).textTheme.bodyMedium
+                                    ?.copyWith(color: Colors.grey),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    );
-                  }).toList(),
-                ),
               ),
 
               const SizedBox(height: AppSpacing.space16),
@@ -303,17 +328,36 @@ class JournalDetailPage extends StatelessWidget {
               //---------------------------------------
               _InfoCard(
                 title: "Journal",
-
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      entry.title,
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                    if (entry.title.isEmpty)
+                      Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              LucideIcons.searchX,
+                              size: 36,
+                              color: Colors.grey,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              "No journal entries",
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                      )
+                    else
+                      Text(
+                        entry.title,
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
 
                     const SizedBox(height: AppSpacing.space16),
 

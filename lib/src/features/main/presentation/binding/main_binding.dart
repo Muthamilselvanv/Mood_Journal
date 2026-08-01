@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:mood_journal_app/src/features/home/data/repositories/mood_repository.dart';
 import 'package:mood_journal_app/src/features/journal/presentation/controllers/journal_controller.dart';
 import 'package:mood_journal_app/src/features/main/presentation/controller/main_controller.dart';
-import 'package:mood_journal_app/src/features/home/presentation/controllers/mood_select_controller.dart';
+import 'package:mood_journal_app/src/features/home/presentation/controllers/home_controller.dart';
 
 class MainBinding extends Bindings {
   @override
