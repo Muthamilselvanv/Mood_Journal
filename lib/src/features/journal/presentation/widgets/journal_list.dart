@@ -9,14 +9,18 @@ class JournalList extends GetView<JournalController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
+      final entries = controller.filteredEntries;
+
+      if (entries.isEmpty) {
+        return const Center(child: Text("No journals found"));
+      }
+
       return ListView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: controller.moodEntries.length,
+        itemCount: entries.length,
         itemBuilder: (context, index) {
-          return JournalCard(
-            entry: controller.moodEntries[index],
-          );
+          return JournalCard(entry: entries[index]);
         },
       );
     });

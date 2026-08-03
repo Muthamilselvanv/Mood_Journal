@@ -2,13 +2,9 @@ import 'package:flutter/material.dart';
 
 class InsightTile extends StatelessWidget {
   final String emoji;
-  final String title;
+  final Widget title;
 
-  const InsightTile({
-    super.key,
-    required this.emoji,
-    required this.title,
-  });
+  const InsightTile({super.key, required this.emoji, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -21,22 +17,11 @@ class InsightTile extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Text(
-            emoji,
-            style: const TextStyle(fontSize: 22),
-          ),
+          Text(emoji, style: const TextStyle(fontSize: 22)),
 
           const SizedBox(width: 12),
 
-          Expanded(
-            child: Text(
-              title,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black87,
-                  ),
-            ),
-          ),
+          Expanded(child: title),
         ],
       ),
     );

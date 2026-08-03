@@ -25,13 +25,37 @@ class MoodRepository {
   }
 
   Future<void> updateMood(MoodEntry entry) async {
+  final db = await _databaseHelper.database;
+
+  await db.update(
+    "mood_entries",
+    entry.toMap(),
+    where: "id = ?",
+    whereArgs: [entry.id],
+  );
+}
+
+  Future<void> toggleFavorite(int id, bool isFavorite) async {
     final db = await _databaseHelper.database;
 
     await db.update(
       "mood_entries",
-      entry.toMap(),
+      {"isFavorite": isFavorite ? 1 : 0},
       where: "id = ?",
-      whereArgs: [entry.id],
+      whereArgs: [id],
     );
+  }
+
+  Future<List<MoodEntry>> getFavoriteMoods() async {
+    final db = await _databaseHelper.database;
+
+    final result = await db.query(
+      "mood_entries",
+      where: "isFavorite = ?",
+      whereArgs: [1],
+      orderBy: "createdAt DESC",
+    );
+
+    return result.map((e) => MoodEntry.fromMap(e)).toList();
   }
 }

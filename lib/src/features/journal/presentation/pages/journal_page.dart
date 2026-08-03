@@ -6,6 +6,7 @@ import 'package:mood_journal_app/src/features/journal/presentation/widgets/add_m
 import 'package:mood_journal_app/src/features/journal/presentation/widgets/empty_journal_view.dart';
 import 'package:mood_journal_app/src/features/journal/presentation/widgets/journal_list.dart';
 import 'package:mood_journal_app/src/features/journal/presentation/widgets/mood_filter.dart';
+import 'package:mood_journal_app/src/features/journal/presentation/widgets/mood_search_delegate.dart';
 
 class JournalPage extends StatelessWidget {
   const JournalPage({super.key});
@@ -30,8 +31,7 @@ class JournalPage extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              // Later:
-              // Open Search Delegate
+              showSearch(context: context, delegate: MoodSearchDelegate());
             },
             icon: Icon(
               Icons.search_rounded,

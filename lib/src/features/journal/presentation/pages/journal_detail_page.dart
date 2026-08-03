@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_flutter/lucide_flutter.dart';
+import 'package:mood_journal_app/src/app/routes/app_routes.dart';
 import 'package:mood_journal_app/src/core/constants/app_spacing.dart';
+import 'package:mood_journal_app/src/core/services/share_service.dart';
+import 'package:mood_journal_app/src/features/home/presentation/controllers/home_controller.dart';
 import 'package:mood_journal_app/src/features/home/presentation/models/mood_entry_model.dart';
+import 'package:mood_journal_app/src/features/journal/presentation/controllers/journal_controller.dart';
+import 'package:mood_journal_app/src/shared/widgets/app_snackbar.dart';
 
 class JournalDetailPage extends StatelessWidget {
   final MoodEntry entry;
@@ -65,6 +70,7 @@ class JournalDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<JournalController>();
     final theme = Theme.of(context);
     final hasActivities = entry.activities.any((e) => e.trim().isNotEmpty);
     return Scaffold(
@@ -91,14 +97,31 @@ class JournalDetailPage extends StatelessWidget {
 
                   const Spacer(),
 
-                  CircleAvatar(
-                    radius: 22,
-                    backgroundColor: theme.colorScheme.surface,
-                    child: IconButton(
-                      icon: const Icon(Icons.favorite_outline_sharp),
-                      onPressed: () {},
-                    ),
-                  ),
+                  Obx(() {
+                    final index = controller.moodEntries.indexWhere(
+                      (e) => e.id == entry.id,
+                    );
+
+                    if (index == -1) {
+                      return const SizedBox.shrink();
+                    }
+
+                    final current = controller.moodEntries[index];
+
+                    return CircleAvatar(
+                      radius: 22,
+                      backgroundColor: theme.colorScheme.surface,
+                      child: IconButton(
+                        onPressed: () => controller.toggleFavorite(current),
+                        icon: Icon(
+                          current.isFavorite
+                              ? Icons.favorite
+                              : Icons.favorite_outline,
+                          color: current.isFavorite ? Colors.red : Colors.grey,
+                        ),
+                      ),
+                    );
+                  }),
 
                   const SizedBox(width: AppSpacing.space8),
 
@@ -107,7 +130,9 @@ class JournalDetailPage extends StatelessWidget {
                     backgroundColor: theme.colorScheme.surface,
                     child: IconButton(
                       icon: const Icon(Icons.share_outlined),
-                      onPressed: () {},
+                      onPressed: () async {
+                        await ShareService.shareMood(entry);
+                      },
                     ),
                   ),
 
@@ -117,8 +142,19 @@ class JournalDetailPage extends StatelessWidget {
                     radius: 22,
                     backgroundColor: theme.colorScheme.surface,
                     child: IconButton(
-                      icon: const Icon(Icons.add_reaction_rounded),
-                      onPressed: () {},
+                      icon: const Icon(Icons.edit_outlined),
+                      onPressed: () async {
+                        final home = Get.find<HomeController>();
+
+                        home.loadMoodForEdit(entry);
+
+                        Get.toNamed(AppRoutes.addMoodEntry);
+
+                        // if (result == true) {
+                        //   // Reload updated data
+                        //   await controller.loadEntries();
+                        // }
+                      },
                     ),
                   ),
                 ],
@@ -384,12 +420,62 @@ class JournalDetailPage extends StatelessWidget {
                   ),
                 ),
               ),
+              const SizedBox(height: 20),
+              buildAddMoodButton(context, entry),
             ],
           ),
         ),
       ),
     );
   }
+}
+
+void _showDeleteDialog(BuildContext context, MoodEntry entry) {
+  Get.dialog(
+    AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      title: const Text("Delete Journal"),
+      content: const Text(
+        "Are you sure you want to delete this journal entry?\n\nThis action cannot be undone.",
+      ),
+      actions: [
+        TextButton(onPressed: Get.back, child: const Text("Cancel")),
+
+        FilledButton(
+          style: FilledButton.styleFrom(backgroundColor: Colors.red),
+          onPressed: () async {
+            Get.back();
+
+            await Get.find<JournalController>().deleteEntry(entry);
+
+            AppSnackbar.success("Journal deleted");
+
+            Get.offNamed(AppRoutes.journal);// Back to Journal Page
+          },
+          child: const Text("Delete"),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget buildAddMoodButton(BuildContext context, MoodEntry entry) {
+  return SizedBox(
+    width: double.infinity,
+    child: ElevatedButton.icon(
+      onPressed: () => _showDeleteDialog(context, entry),
+      label: const Text(
+        "Delete",
+        style: TextStyle(fontSize: 16, color: Colors.redAccent),
+      ),
+      icon: const Icon(Icons.delete, color: Colors.redAccent),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+    ),
+  );
 }
 
 class _InfoCard extends StatelessWidget {

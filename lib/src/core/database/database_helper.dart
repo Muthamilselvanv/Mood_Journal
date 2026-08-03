@@ -35,7 +35,7 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 2,
+      version: 2, // 3
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
@@ -60,9 +60,16 @@ class DatabaseHelper {
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < 2) {
-      await db.execute('ALTER TABLE mood_entries ADD COLUMN imagePath TEXT');
+      await db.execute("ALTER TABLE mood_entries ADD COLUMN imagePath TEXT");
     }
+
+    // if (oldVersion < 3) {
+    //   await db.execute(
+    //     "ALTER TABLE mood_entries ADD COLUMN isFavorite INTEGER DEFAULT 0",
+    //   );
+    // }
   }
+
   //As your app grows
   //   Future<void> _onUpgrade(
   //     Database db,

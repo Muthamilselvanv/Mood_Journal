@@ -58,13 +58,6 @@ class ProfileHeader extends StatelessWidget {
                       ),
                     ),
 
-                    SizedBox(height: 6),
-
-                    Text(
-                      "Flutter Developer",
-                      style: TextStyle(color: Colors.grey),
-                    ),
-
                     SizedBox(height: 4),
 
                     Text(
@@ -93,7 +86,7 @@ class ProfileHeader extends StatelessWidget {
 
                 Expanded(
                   child: _StatCard(
-                    value: controller.activeDays.toString(),
+                    value: controller.longestStreak.toString(),
                     title: "Day Streak",
                   ),
                 ),

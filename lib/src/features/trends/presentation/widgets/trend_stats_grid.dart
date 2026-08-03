@@ -27,12 +27,14 @@ class TrendStatsGrid extends StatelessWidget {
           ),
         ),
 
-        TrendStatCard(
-          emoji: "🔥",
-          title: "LONGEST STREAK",
-          value: "12 days",
-          backgroundColor: Color(0xffFFF2F2),
-          borderColor: Color(0xffFFD0D0),
+        Obx(
+          () => TrendStatCard(
+            emoji: "🔥",
+            title: "LONGEST STREAK",
+            value: "${controller.longestStreak} days",
+            backgroundColor: Color(0xffFFF2F2),
+            borderColor: Color(0xffFFD0D0),
+          ),
         ),
 
         Obx(
@@ -45,12 +47,14 @@ class TrendStatsGrid extends StatelessWidget {
           ),
         ),
 
-        TrendStatCard(
-          emoji: "😊",
-          title: "MOST COMMON",
-          value: "Happy",
-          backgroundColor: Color(0xffECFFF4),
-          borderColor: Color(0xffC8F1D8),
+        Obx(
+          () => TrendStatCard(
+            emoji: "😊",
+            title: "MOST COMMON",
+            value: controller.mostCommonMood,
+            backgroundColor: Color(0xffECFFF4),
+            borderColor: Color(0xffC8F1D8),
+          ),
         ),
       ],
     );

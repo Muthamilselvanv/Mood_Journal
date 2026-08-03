@@ -1,11 +1,17 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mood_journal_app/src/features/trends/presentation/controllers/trends_controller.dart';
 
 class MoodBreakdownChart extends StatelessWidget {
   const MoodBreakdownChart({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<TrendsController>();
+
+    final width = MediaQuery.of(context).size.width;
+    final chartSize = width < 400 ? 150.0 : 180.0;
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(26)),
@@ -29,99 +35,44 @@ class MoodBreakdownChart extends StatelessWidget {
             const SizedBox(height: 20),
 
             Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
                   child: SizedBox(
-                    height: 180,
-                    child: PieChart(
-                      PieChartData(
-                        centerSpaceRadius: 38,
-                        sectionsSpace: 4,
+                    height: chartSize,
+                    child: Obx(() {
+                      if (controller.moodSections.isEmpty) {
+                        return const Center(child: Text("No mood data"));
+                      }
 
-                        sections: [
-                          PieChartSectionData(
-                            value: 35,
-                            color: const Color(0xffFBBF24),
-                            showTitle: false,
-                            radius: 42,
-                          ),
-
-                          PieChartSectionData(
-                            value: 28,
-                            color: const Color(0xff34D399),
-                            showTitle: false,
-                            radius: 42,
-                          ),
-
-                          PieChartSectionData(
-                            value: 20,
-                            color: const Color(0xff60A5FA),
-                            showTitle: false,
-                            radius: 42,
-                          ),
-
-                          PieChartSectionData(
-                            value: 12,
-                            color: const Color(0xff8B5CF6),
-                            showTitle: false,
-                            radius: 42,
-                          ),
-
-                          PieChartSectionData(
-                            value: 5,
-                            color: const Color(0xffFB7185),
-                            showTitle: false,
-                            radius: 42,
-                          ),
-                        ],
-                      ),
-                    ),
+                      return PieChart(
+                        PieChartData(
+                          centerSpaceRadius: chartSize * .22,
+                          sectionsSpace: 4,
+                          sections: controller.moodSections,
+                        ),
+                      );
+                    }),
                   ),
                 ),
 
-                const SizedBox(width: 24),
+                const SizedBox(width: 20),
 
-                const Expanded(
-                  child: Column(
-                    children: [
-                      _LegendItem(
-                        color: Color(0xffFBBF24),
-                        title: "Happy",
-                        percent: "35%",
-                      ),
-
-                      SizedBox(height: 16),
-
-                      _LegendItem(
-                        color: Color(0xff34D399),
-                        title: "Calm",
-                        percent: "28%",
-                      ),
-
-                      SizedBox(height: 16),
-
-                      _LegendItem(
-                        color: Color(0xff60A5FA),
-                        title: "Neutral",
-                        percent: "20%",
-                      ),
-
-                      SizedBox(height: 16),
-
-                      _LegendItem(
-                        color: Color(0xff8B5CF6),
-                        title: "Sad",
-                        percent: "12%",
-                      ),
-
-                      SizedBox(height: 16),
-
-                      _LegendItem(
-                        color: Color(0xffFB7185),
-                        title: "Angry",
-                        percent: "5%",
-                      ),
-                    ],
+                Expanded(
+                  child: Obx(
+                    () => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: controller.moodColors.entries.map((item) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 14),
+                          child: _LegendItem(
+                            color: item.value,
+                            title: item.key,
+                            percent: controller.moodPercentage(item.key),
+                          ),
+                        );
+                      }).toList(),
+                    ),
                   ),
                 ),
               ],
@@ -148,13 +99,32 @@ class _LegendItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        CircleAvatar(radius: 8, backgroundColor: color),
+        Container(
+          width: 14,
+          height: 14,
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+        ),
 
-        const SizedBox(width: 12),
+        const SizedBox(width: 10),
 
-        Expanded(child: Text(title)),
+        Expanded(
+          child: Text(
+            title,
+            style: const TextStyle(fontWeight: FontWeight.w500),
+          ),
+        ),
 
-        Text(percent, style: const TextStyle(fontWeight: FontWeight.bold)),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          decoration: BoxDecoration(
+            color: color.withOpacity(.12),
+            borderRadius: BorderRadius.circular(30),
+          ),
+          child: Text(
+            percent,
+            style: TextStyle(color: color, fontWeight: FontWeight.bold),
+          ),
+        ),
       ],
     );
   }

@@ -1,12 +1,12 @@
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:lucide_flutter/lucide_flutter.dart';
 import 'package:mood_journal_app/src/core/constants/app_colors.dart';
 import 'package:mood_journal_app/src/core/services/permission_service.dart';
 import 'package:mood_journal_app/src/core/services/image_picker_service.dart';
 import 'package:mood_journal_app/src/features/home/data/repositories/mood_repository.dart';
+import 'package:mood_journal_app/src/features/home/presentation/models/mood_entry_model.dart';
 import 'package:mood_journal_app/src/features/home/presentation/models/weather_model.dart';
 import 'package:mood_journal_app/src/features/home/presentation/models/activity_model.dart';
 import 'package:mood_journal_app/src/features/home/presentation/models/mood_select_model.dart';
@@ -110,31 +110,8 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
     loadMood();
   }
-
-  Future<void> loadMood() async {
-    final repository = Get.find<MoodRepository>();
-
-    final moods = await repository.getAllMoods();
-
-    print("Total entries: ${moods.length}");
-  }
-
-  final selectedIndex = 0.obs;
-
-  final intensity = 1.0.obs;
-
-  final selectedWeather = 0.obs;
-
-  final selectedActivities = <String>[].obs;
-  
-  final formKey = GlobalKey<FormState>();
-  final titleController = TextEditingController();
-  final notesController = TextEditingController();
-
-  final selectedImage = Rx<File?>(null);
 
   @override
   void onClose() {
@@ -143,9 +120,41 @@ class HomeController extends GetxController {
     super.onClose();
   }
 
+  final editingEntry = Rxn<MoodEntry>();
+
+  bool get isEditing => editingEntry.value != null;
+
+  final selectedIndex = 0.obs;
+
+  final intensity = 1.0.obs;
+
+  final selectedWeather = 0.obs;
+
+  final selectedActivities = <String>[].obs;
+
+  final formKey = GlobalKey<FormState>();
+  final titleController = TextEditingController();
+  final notesController = TextEditingController();
+
+  final selectedImage = Rx<File?>(null);
+
+  final MoodRepository repository = Get.find<MoodRepository>();
+
+  final latestMood = Rxn<MoodEntry>();
+
   MoodModel get selectedMood => moods[selectedIndex.value];
 
   WeatherModel get weather => weathers[selectedWeather.value];
+
+  Future<void> loadMood() async {
+    final moods = await repository.getAllMoods();
+
+    if (moods.isNotEmpty) {
+      latestMood.value = moods.first;
+    } else {
+      latestMood.value = null;
+    }
+  }
 
   void selectMood(int index) {
     selectedIndex.value = index;
@@ -171,16 +180,40 @@ class HomeController extends GetxController {
     return selectedActivities.contains(activity);
   }
 
+  void loadMoodForEdit(MoodEntry entry) {
+    editingEntry.value = entry;
+
+    selectedIndex.value = moods.indexWhere((e) => e.title == entry.mood);
+
+    selectedWeather.value = weathers.indexWhere(
+      (e) => e.title == entry.weather,
+    );
+
+    selectedActivities.assignAll(entry.activities);
+
+    intensity.value = entry.intensity.toDouble();
+
+    titleController.text = entry.title;
+    notesController.text = entry.notes;
+
+    if (entry.imagePath != null) {
+      selectedImage.value = File(entry.imagePath!);
+    }
+  }
+
   void resetForm() {
+    editingEntry.value = null;
+
     titleController.clear();
     notesController.clear();
 
-    selectMood(0);
-    selectedWeather(0);
+    selectedIndex.value = 0;
+    selectedWeather.value = 0;
 
     selectedActivities.clear();
 
     intensity.value = 5;
+
     selectedImage.value = null;
   }
 
@@ -210,5 +243,27 @@ class HomeController extends GetxController {
 
   void removePhoto() {
     selectedImage.value = null;
+  }
+
+  String get snapshotTitle {
+    if (latestMood.value == null) {
+      return "TODAY'S SNAPSHOT";
+    }
+
+    final now = DateTime.now();
+    final moodDate = latestMood.value!.createdAt;
+
+    final today = DateTime(now.year, now.month, now.day);
+    final entryDay = DateTime(moodDate.year, moodDate.month, moodDate.day);
+
+    if (entryDay == today) {
+      return "TODAY'S SNAPSHOT";
+    }
+
+    if (entryDay == today.subtract(const Duration(days: 1))) {
+      return "YESTERDAY'S SNAPSHOT";
+    }
+
+    return "LAST SNAPSHOT";
   }
 }

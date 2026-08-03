@@ -267,26 +267,58 @@ Widget buildAddMoodButton(BuildContext context) {
   );
 }
 
-//final controller = Get.find<HomeController>();
 //Today's Snapshot
 Widget buildTodaySnapshot(BuildContext context) {
   final controller = Get.find<HomeController>();
+
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(
-        "TODAY'S SNAPSHOT",
-        style: Theme.of(context).textTheme.labelMedium?.copyWith(
-          fontWeight: FontWeight.bold,
-          fontSize: AppIconSizes.small,
-          color: Theme.of(context).colorScheme.onSurface
+      Obx(
+        () => Text(
+          controller.snapshotTitle,
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+            fontSize: AppIconSizes.small,
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
         ),
       ),
       const SizedBox(height: AppSpacing.space8),
 
       Obx(() {
-        final mood = controller.selectedMood;
-        final weather = controller.weather;
+        final latest = controller.latestMood.value;
+
+        if (latest == null) {
+          return Card(
+            elevation: 0,
+            child: Padding(
+              padding: AppSpacing.card,
+              child: Center(
+                child: Column(
+                  children: [
+                    Icon(
+                      LucideIcons.notebookText,
+                      size: AppIconSizes.large,
+                      color: Colors.grey,
+                    ),
+                    const SizedBox(height: AppSpacing.space8),
+                    Text(
+                      "No mood recorded yet",
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }
+
+        final mood = controller.moods.firstWhere((e) => e.title == latest.mood);
+
+        final weather = controller.weathers.firstWhere(
+          (e) => e.title == latest.weather,
+        );
 
         return Card(
           elevation: 0,
@@ -319,7 +351,7 @@ Widget buildTodaySnapshot(BuildContext context) {
                       Row(
                         children: [
                           Text(
-                            mood.title,
+                            latest.mood,
                             style: Theme.of(context).textTheme.titleMedium
                                 ?.copyWith(
                                   fontWeight: FontWeight.bold,
@@ -328,9 +360,11 @@ Widget buildTodaySnapshot(BuildContext context) {
                                   color: Colors.black,
                                 ),
                           ),
+
                           const Spacer(),
+
                           Text(
-                            "${controller.intensity.value.toInt()}/10",
+                            "${latest.intensity}/10",
                             style: Theme.of(context).textTheme.titleMedium
                                 ?.copyWith(color: mood.color),
                           ),
@@ -340,8 +374,7 @@ Widget buildTodaySnapshot(BuildContext context) {
                       const SizedBox(height: 4),
 
                       Text(
-                        controller.selectedMood.message,
-                        //controller.moodMessage,
+                        mood.message,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           fontSize: AppIconSizes.tiny,
@@ -355,9 +388,11 @@ Widget buildTodaySnapshot(BuildContext context) {
                       Row(
                         children: [
                           Text(weather.emoji),
+
                           const SizedBox(width: 6),
+
                           Text(
-                            weather.title,
+                            latest.weather,
                             style: const TextStyle(color: Colors.black),
                           ),
 
@@ -371,7 +406,9 @@ Widget buildTodaySnapshot(BuildContext context) {
                           const SizedBox(width: AppSpacing.space4),
 
                           Text(
-                            TimeOfDay.now().format(context),
+                            TimeOfDay.fromDateTime(
+                              latest.createdAt,
+                            ).format(context),
                             style: Theme.of(context).textTheme.bodyMedium
                                 ?.copyWith(color: Colors.black),
                           ),
@@ -444,7 +481,7 @@ Widget buildQuickStats(BuildContext context) {
         style: Theme.of(context).textTheme.labelMedium?.copyWith(
           fontWeight: FontWeight.bold,
           fontSize: AppIconSizes.small,
-          color: Theme.of(context).colorScheme.onSurface
+          color: Theme.of(context).colorScheme.onSurface,
         ),
       ),
 
@@ -454,19 +491,31 @@ Widget buildQuickStats(BuildContext context) {
         () => Row(
           children: [
             Expanded(
-              child: StatsCard(emoji: "🔥", value: controller.activeDays.toString(), label: "Day Streak"),
+              child: StatsCard(
+                emoji: "🔥",
+                value: controller.activeDays.toString(),
+                label: "Day Streak",
+              ),
             ),
-        
+
             const SizedBox(width: AppSpacing.space12),
-        
+
             Expanded(
-              child: StatsCard(emoji: "📖", value: controller.moodEntries.length.toString(), label: "Total Entries"),
+              child: StatsCard(
+                emoji: "📖",
+                value: controller.moodEntries.length.toString(),
+                label: "Total Entries",
+              ),
             ),
-        
+
             const SizedBox(width: AppSpacing.space12),
-        
+
             Expanded(
-              child: StatsCard(emoji: "⭐", value: controller.averageMood.toStringAsFixed(1), label: "Avg Mood"),
+              child: StatsCard(
+                emoji: "⭐",
+                value: controller.averageMood.toStringAsFixed(1),
+                label: "Avg Mood",
+              ),
             ),
           ],
         ),

@@ -1,16 +1,26 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mood_journal_app/src/features/trends/presentation/controllers/trends_controller.dart';
 
 class WeeklyMoodChart extends StatelessWidget {
   const WeeklyMoodChart({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<TrendsController>();
+
+    final size = MediaQuery.of(context).size;
+    final isTablet = size.width >= 600;
+
+    final chartHeight = isTablet ? 320.0 : size.height * 0.28;
+    final padding = isTablet ? 24.0 : 16.0;
+
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(padding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -23,71 +33,152 @@ class WeeklyMoodChart extends StatelessWidget {
               style: Theme.of(context).textTheme.titleLarge,
             ),
 
-            const SizedBox(height: 30),
+            SizedBox(height: padding),
 
             SizedBox(
-              height: 220,
-              child: LineChart(
-                LineChartData(
-                  minY: 0,
-                  maxY: 10,
-
-                  gridData: FlGridData(show: true, drawVerticalLine: true),
-
-                  borderData: FlBorderData(show: false),
-
-                  lineBarsData: [
-                    LineChartBarData(
-                      isCurved: true,
-
-                      barWidth: 4,
-
-                      color: const Color(0xff7B61FF),
-
-                      spots: const [
-                        FlSpot(0, 6),
-                        FlSpot(1, 7),
-                        FlSpot(2, 5),
-                        FlSpot(3, 3),
-                        FlSpot(4, 7),
-                        FlSpot(5, 9),
-                        FlSpot(6, 8),
-                      ],
-
-                      dotData: FlDotData(show: true),
+              height: chartHeight,
+              width: double.infinity,
+              child: Obx(() {
+                if (controller.weeklyMoodSpots.every((e) => e.y == 0)) {
+                  return const Center(
+                    child: Text(
+                      "No mood entries this week",
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                  ],
+                  );
+                }
 
-                  titlesData: FlTitlesData(
-                    topTitles: const AxisTitles(),
+                return LineChart(
+                  LineChartData(
+                    minY: 0,
+                    maxY: 10,
 
-                    rightTitles: const AxisTitles(),
+                    clipData: const FlClipData.all(),
 
-                    bottomTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
+                    borderData: FlBorderData(
+                      show: true,
+                      border: Border.all(color: Colors.grey.shade200),
+                    ),
 
-                        getTitlesWidget: (value, meta) {
-                          const days = [
-                            "Mon",
-                            "Tue",
-                            "Wed",
-                            "Thu",
-                            "Fri",
-                            "Sat",
-                            "Sun",
-                          ];
+                    gridData: FlGridData(
+                      show: true,
+                      drawVerticalLine: false,
+                      horizontalInterval: 2,
+                      getDrawingHorizontalLine: (value) {
+                        return FlLine(
+                          color: Colors.grey.shade200,
+                          strokeWidth: 1,
+                        );
+                      },
+                    ),
 
-                          return Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: Text(days[value.toInt()]),
-                          );
+                    lineTouchData: LineTouchData(
+                      enabled: true,
+                      touchTooltipData: LineTouchTooltipData(
+                        getTooltipItems: (spots) {
+                          return spots.map((spot) {
+                            return LineTooltipItem(
+                              "${spot.y.toStringAsFixed(1)}/10",
+                              const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            );
+                          }).toList();
                         },
                       ),
                     ),
+
+                    lineBarsData: [
+                      LineChartBarData(
+                        spots: controller.weeklyMoodSpots,
+
+                        isCurved: true,
+                        curveSmoothness: 0.35,
+
+                        barWidth: isTablet ? 5 : 4,
+
+                        isStrokeCapRound: true,
+
+                        color: const Color(0xff7B61FF),
+
+                        belowBarData: BarAreaData(
+                          show: true,
+                          color: const Color(0xff7B61FF).withOpacity(.12),
+                        ),
+
+                        dotData: FlDotData(
+                          show: true,
+                          getDotPainter: (spot, percent, bar, index) {
+                            final isLast =
+                                index == controller.weeklyMoodSpots.length - 1;
+
+                            return FlDotCirclePainter(
+                              radius: isLast ? 6 : 4,
+                              color: const Color(0xff7B61FF),
+                              strokeWidth: 2,
+                              strokeColor: Colors.white,
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+
+                    titlesData: FlTitlesData(
+                      topTitles: const AxisTitles(),
+                      rightTitles: const AxisTitles(),
+
+                      leftTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 30,
+                          interval: 2,
+                          getTitlesWidget: (value, meta) {
+                            if (value == 0) {
+                              return const SizedBox();
+                            }
+
+                            return Text(
+                              value.toInt().toString(),
+                              style: const TextStyle(
+                                fontSize: 11,
+                                color: Colors.grey,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+
+                      bottomTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 34,
+                          getTitlesWidget: (value, meta) {
+                            if (value < 0 ||
+                                value >= controller.last7Days.length) {
+                              return const SizedBox();
+                            }
+
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 8),
+                              child: Text(
+                                controller.last7Days[value.toInt()],
+                                style: TextStyle(
+                                  fontSize: isTablet ? 13 : 11,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
+                );
+              }),
             ),
           ],
         ),

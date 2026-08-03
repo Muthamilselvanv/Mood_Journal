@@ -8,6 +8,7 @@ class MoodEntry {
   final String notes;
   final DateTime createdAt;
   final String? imagePath;
+  final bool isFavorite;
 
   const MoodEntry({
     this.id,
@@ -18,8 +19,35 @@ class MoodEntry {
     required this.title,
     required this.notes,
     required this.createdAt,
-    this.imagePath
+    this.imagePath,
+    this.isFavorite = false,
   });
+
+  MoodEntry copyWith({
+    int? id,
+    String? mood,
+    String? weather,
+    List<String>? activities,
+    int? intensity,
+    String? title,
+    String? notes,
+    DateTime? createdAt,
+    String? imagePath,
+    bool? isFavorite,
+  }) {
+    return MoodEntry(
+      id: id ?? this.id,
+      mood: mood ?? this.mood,
+      weather: weather ?? this.weather,
+      activities: activities ?? this.activities,
+      intensity: intensity ?? this.intensity,
+      title: title ?? this.title,
+      notes: notes ?? this.notes,
+      createdAt: createdAt ?? this.createdAt,
+      imagePath: imagePath ?? this.imagePath,
+      isFavorite: isFavorite ?? this.isFavorite,
+    );
+  }
 
   //Convert to JSON / SQLite Map
   Map<String, dynamic> toMap() {
@@ -33,6 +61,7 @@ class MoodEntry {
       "notes": notes,
       "createdAt": createdAt.toIso8601String(),
       "imagePath": imagePath,
+      "isFavorite": isFavorite ? 1 : 0,
     };
   }
 
@@ -47,6 +76,7 @@ class MoodEntry {
       notes: map["notes"],
       createdAt: DateTime.parse(map["createdAt"]),
       imagePath: map["imagePath"],
+      isFavorite: map["isFavorite"] == 1,
     );
   }
 }

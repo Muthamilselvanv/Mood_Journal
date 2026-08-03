@@ -125,11 +125,8 @@ class JournalCard extends StatelessWidget {
                           ),
                         ),
 
-                        // Icon(
-                        //   Icons.favorite_outline_sharp,
-                        //   color: Colors.pink.shade300,
-                        //   size: AppIconSizes.large,
-                        // ),
+                        if (entry.isFavorite)
+                          const Icon(Icons.favorite, color: Colors.red),
 
                         const SizedBox(width: 8),
 
