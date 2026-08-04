@@ -1,3 +1,4 @@
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 
 String formattedDate() {
@@ -5,19 +6,23 @@ String formattedDate() {
   //return DateFormat('EEEE, dd MMMM yyyy').format(DateTime.now());
 }
 
-String formateaddDate(){
+String formateaddDate() {
   return DateFormat('dd-mm-yyyy').format(DateTime.now());
 }
+
 String greeting() {
   final hour = DateTime.now().hour;
 
-  final String userName = 'Muthu';
+ // final String userName = 'Muthu';
+  final box = GetStorage();
+
+  final name = box.read("userName") ?? "Guest";
 
   if (hour < 12) {
-    return "Good Morning $userName 👋";
+    return "Good Morning $name 👋";
   } else if (hour < 17) {
-    return "Good Afternoon $userName ☀️";
+    return "Good Afternoon $name ☀️";
   } else {
-    return "Good Evening $userName 🌙";
+    return "Good Evening $name 🌙";
   }
 }

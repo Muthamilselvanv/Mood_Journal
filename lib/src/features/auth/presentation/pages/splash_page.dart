@@ -1,0 +1,78 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mood_journal_app/src/core/constants/app_assets.dart';
+import 'package:mood_journal_app/src/features/auth/presentation/controllers/splash_controller.dart';
+
+class SplashPage extends GetView<SplashController> {
+  const SplashPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xffEEF4FF), Color(0xffF7F5FF), Color(0xffEAFBF8)],
+          ),
+        ),
+        child: Stack(
+          children: [
+            Positioned(
+              top: -120,
+              right: -80,
+              child: Container(
+                width: 260,
+                height: 260,
+                decoration: BoxDecoration(
+                  color: const Color(0xff7C4DFF).withOpacity(.08),
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+
+            Positioned(
+              bottom: -120,
+              left: -60,
+              child: Container(
+                width: 240,
+                height: 240,
+                decoration: BoxDecoration(
+                  color: const Color(0xff5AA9FF).withOpacity(.08),
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+
+            Positioned.fill(
+              child: SafeArea(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TweenAnimationBuilder(
+                      duration: const Duration(milliseconds: 1200),
+                      tween: Tween<double>(begin: 0.7, end: 1.0),
+                      builder: (_, value, child) {
+                        return Transform.scale(
+                          scale: value,
+                          child: Opacity(opacity: value, child: child),
+                        );
+                      },
+                      child: Image.asset(AppAssets.appLogo, width: 170),
+                    ),
+
+                    const SizedBox(height: 30),
+
+                    const CircularProgressIndicator(color: Color(0xff7C4DFF)),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

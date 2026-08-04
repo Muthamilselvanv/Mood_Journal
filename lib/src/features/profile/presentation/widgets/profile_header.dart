@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:mood_journal_app/src/features/journal/presentation/controllers/journal_controller.dart';
+import 'package:mood_journal_app/src/features/profile/presentation/controllers/profile_controller.dart';
 
 class ProfileHeader extends StatelessWidget {
   const ProfileHeader({super.key});
@@ -8,6 +10,10 @@ class ProfileHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<JournalController>();
+    final profileController = Get.find<ProfileController>();
+    final box = GetStorage();
+    final name = box.read("userName") ?? "Mood Explorer";
+
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -48,9 +54,9 @@ class ProfileHeader extends StatelessWidget {
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     Text(
-                      "Muthu",
+                      name,
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -61,7 +67,9 @@ class ProfileHeader extends StatelessWidget {
                     SizedBox(height: 4),
 
                     Text(
-                      "Member since Jul 2026",
+                      profileController.memberSince.isEmpty
+                          ? "Member since: N/A"
+                          : "Member since: ${profileController.memberSince}",
                       style: TextStyle(color: Colors.grey),
                     ),
                   ],

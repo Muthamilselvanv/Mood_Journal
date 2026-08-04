@@ -1,5 +1,6 @@
 class MoodEntry {
   final int? id;
+  final int userId;
   final String mood;
   final String weather;
   final List<String> activities;
@@ -12,6 +13,7 @@ class MoodEntry {
 
   const MoodEntry({
     this.id,
+    required this.userId,
     required this.mood,
     required this.weather,
     required this.activities,
@@ -25,6 +27,7 @@ class MoodEntry {
 
   MoodEntry copyWith({
     int? id,
+    int? userId,
     String? mood,
     String? weather,
     List<String>? activities,
@@ -37,6 +40,7 @@ class MoodEntry {
   }) {
     return MoodEntry(
       id: id ?? this.id,
+      userId: userId ?? this.userId,
       mood: mood ?? this.mood,
       weather: weather ?? this.weather,
       activities: activities ?? this.activities,
@@ -53,6 +57,7 @@ class MoodEntry {
   Map<String, dynamic> toMap() {
     return {
       "id": id,
+      "userId": userId,
       "mood": mood, //happy, angry, sad
       "weather": weather, //sunny, cloud
       "activities": activities.join(","), // Exercise,Reading,Work
@@ -68,6 +73,7 @@ class MoodEntry {
   factory MoodEntry.fromMap(Map<String, dynamic> map) {
     return MoodEntry(
       id: map["id"],
+      userId: map["userId"],
       mood: map["mood"],
       weather: map["weather"],
       activities: map["activities"].toString().split(","),

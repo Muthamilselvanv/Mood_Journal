@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mood_journal_app/src/features/home/presentation/models/mood_entry_model.dart';
 import 'package:mood_journal_app/src/features/journal/presentation/controllers/journal_controller.dart';
-import 'package:mood_journal_app/src/features/journal/presentation/pages/journal_detail_page.dart';
 import 'package:mood_journal_app/src/features/journal/presentation/widgets/journal_card.dart';
 
 class MoodSearchDelegate extends SearchDelegate {

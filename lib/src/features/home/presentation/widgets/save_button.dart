@@ -28,6 +28,7 @@ class BuildAddMoodButton extends StatelessWidget {
 
             final entry = MoodEntry(
               id: controller.editingEntry.value?.id,
+              userId: 2501,//controller.userId.value,
               mood: controller.selectedMood.title,
               weather: controller.weather.title,
               activities: controller.selectedActivities.toList(),

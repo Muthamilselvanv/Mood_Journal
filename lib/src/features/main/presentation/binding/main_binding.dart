@@ -3,6 +3,7 @@ import 'package:mood_journal_app/src/features/home/data/repositories/mood_reposi
 import 'package:mood_journal_app/src/features/journal/presentation/controllers/journal_controller.dart';
 import 'package:mood_journal_app/src/features/main/presentation/controller/main_controller.dart';
 import 'package:mood_journal_app/src/features/home/presentation/controllers/home_controller.dart';
+import 'package:mood_journal_app/src/features/profile/presentation/controllers/profile_controller.dart';
 import 'package:mood_journal_app/src/features/trends/presentation/controllers/trends_controller.dart';
 
 class MainBinding extends Bindings {
@@ -13,5 +14,6 @@ class MainBinding extends Bindings {
     Get.lazyPut<MoodRepository>(() => MoodRepository(), fenix: true);
     Get.lazyPut(() => JournalController());
     Get.lazyPut(() => TrendsController());
+    Get.lazyPut(() => ProfileController());
   }
 }

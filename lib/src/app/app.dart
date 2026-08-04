@@ -13,12 +13,12 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Mood Journal',
+      title: 'Nilora',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system, // this command will use the system theme (light or dark) based on the device settings
       initialBinding: InitialBinding(), // register global dependencies for the entire app
-      initialRoute: AppRoutes.home, // open the home page ( / ) when the app starts
+      initialRoute: AppRoutes.onboarding, // open the onboarding page ( /onboarding ) when the app starts
       getPages: AppPages.pages,
       unknownRoute: AppPages.unknownRoute,
     );

@@ -35,27 +35,41 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 2, // 3
+      version: 3, // 4
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
   }
 
   Future<void> _onCreate(Database db, int version) async {
+    // Users Table
     await db.execute('''
-      CREATE TABLE mood_entries(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        mood TEXT NOT NULL,
-        weather TEXT NOT NULL,
-        activities TEXT NOT NULL,
-        intensity INTEGER NOT NULL,
-        title TEXT NOT NULL,
-        notes TEXT NOT NULL,
-        createdAt TEXT NOT NULL,
-        isFavorite INTEGER DEFAULT 0,
-        imagePath TEXT
-      )
-    ''');
+    CREATE TABLE users(
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      username TEXT NOT NULL UNIQUE,
+      password TEXT NOT NULL,
+      createdAt TEXT NOT NULL
+    )
+  ''');
+
+    // Mood Entries Table
+    await db.execute('''
+    CREATE TABLE mood_entries(
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      userId INTEGER NOT NULL,
+      mood TEXT NOT NULL,
+      weather TEXT NOT NULL,
+      activities TEXT NOT NULL,
+      intensity INTEGER NOT NULL,
+      title TEXT NOT NULL,
+      notes TEXT NOT NULL,
+      createdAt TEXT NOT NULL,
+      isFavorite INTEGER DEFAULT 0,
+      imagePath TEXT,
+      FOREIGN KEY(userId) REFERENCES users(id)
+    )
+  ''');
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
@@ -63,36 +77,16 @@ class DatabaseHelper {
       await db.execute("ALTER TABLE mood_entries ADD COLUMN imagePath TEXT");
     }
 
-    // if (oldVersion < 3) {
-    //   await db.execute(
-    //     "ALTER TABLE mood_entries ADD COLUMN isFavorite INTEGER DEFAULT 0",
-    //   );
-    // }
+    if (oldVersion < 3) {
+      await db.execute('''
+      CREATE TABLE IF NOT EXISTS users(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        username TEXT NOT NULL UNIQUE,
+        password TEXT NOT NULL,
+        createdAt TEXT NOT NULL
+      )
+    ''');
+    }
   }
-
-  //As your app grows
-  //   Future<void> _onUpgrade(
-  //     Database db,
-  //     int oldVersion,
-  //     int newVersion,
-  // ) async {
-
-  //   if (oldVersion < 2) {
-  //     await db.execute(
-  //       'ALTER TABLE mood_entries ADD COLUMN imagePath TEXT'
-  //     );
-  //   }
-
-  //   if (oldVersion < 3) {
-  //     await db.execute(
-  //       'ALTER TABLE mood_entries ADD COLUMN location TEXT'
-  //     );
-  //   }
-
-  //   if (oldVersion < 4) {
-  //     await db.execute(
-  //       'ALTER TABLE mood_entries ADD COLUMN isSynced INTEGER DEFAULT 0'
-  //     );
-  //   }
-  // }
 }
