@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:mood_journal_app/src/app/routes/app_routes.dart';
+import 'package:mood_journal_app/src/core/constants/app_assets.dart';
 import 'package:mood_journal_app/src/features/auth/presentation/models/onboarding_model.dart';
 
 class OnboardingController extends GetxController {
@@ -10,22 +12,20 @@ class OnboardingController extends GetxController {
 
   final pages = [
     OnboardingModel(
-      emoji: "😊",
-      title: "Track Your Mood",
-      subtitle:
-          "Understand your emotions one day at a time with beautiful journaling.",
-    ),
+  image: AppAssets.onboardingScreen1,
+  title: "Track Your Mood",
+  subtitle: "Write down your thoughts and feelings in a calm, private space made just for you.",
+),
     OnboardingModel(
-      emoji: "📖",
-      title: "Write Your Journal",
-      subtitle:
-          "Capture your thoughts, activities and memories every single day.",
-    ),
+  image: AppAssets.onboardingScreen2,
+  title: "Track Your Mood",
+  subtitle: "Turn everyday feelings into little notes, stickers, and memories worth keeping.",
+),
     OnboardingModel(
-      emoji: "📈",
-      title: "Discover Your Trends",
-      subtitle: "Learn emotional patterns and improve your mental wellbeing.",
-    ),
+  image: AppAssets.onboardingScreen3,
+  title: "Track Your Mood",
+  subtitle: "See your mood trends over time and discover what truly makes you feel your best.",
+),
   ];
 
   void onPageChanged(int index) {
@@ -39,6 +39,8 @@ class OnboardingController extends GetxController {
         curve: Curves.easeInOut,
       );
     } else {
+      final box = GetStorage();
+      box.write("seenOnboarding", true);
       Get.offAllNamed(AppRoutes.login);
     }
   }

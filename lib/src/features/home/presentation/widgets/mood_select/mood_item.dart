@@ -15,6 +15,7 @@ class MoodItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: onTap,
 
@@ -26,10 +27,14 @@ class MoodItem extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 16),
 
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,// Always white
+          color: Theme.of(context).colorScheme.surface, // Always white
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: selected ? mood.color : Colors.grey,
+            color: selected
+                ? mood.color
+                : isDark
+                ? Colors.grey
+                : Colors.white,
             width: selected ? 2 : 1,
           ),
           boxShadow: [
@@ -52,7 +57,11 @@ class MoodItem extends StatelessWidget {
               style: TextStyle(
                 fontSize: 15,
                 fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-                color: selected ? mood.color : Colors.grey,
+                color: selected
+                    ? mood.color
+                    : isDark
+                    ? Colors.white
+                    : Colors.black,
               ),
             ),
           ],

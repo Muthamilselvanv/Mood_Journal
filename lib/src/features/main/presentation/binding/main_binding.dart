@@ -14,6 +14,6 @@ class MainBinding extends Bindings {
     Get.lazyPut<MoodRepository>(() => MoodRepository(), fenix: true);
     Get.lazyPut(() => JournalController());
     Get.lazyPut(() => TrendsController());
-    Get.lazyPut(() => ProfileController());
+    Get.lazyPut(() => ProfileController(), fenix: true);
   }
 }

@@ -56,7 +56,10 @@ class LoginController extends GetxController {
 
     box.write("isLoggedIn", true);
     box.write("userId", user.id);
-    box.write("userName", user.name);
+    box.write("name", user.name);
+    box.write("userName", user.username);
+    box.write("password", user.password);
+    box.write("bio", user.bio);
     box.write("isGuest", false);
 
     Get.offAllNamed(AppRoutes.home);

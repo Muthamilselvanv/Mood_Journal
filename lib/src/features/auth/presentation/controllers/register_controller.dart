@@ -100,6 +100,8 @@ class RegisterController extends GetxController {
         name: name,
         username: username,
         password: password,
+        profileImage: null,
+        bio: "",
         createdAt: DateTime.now(),
       );
 

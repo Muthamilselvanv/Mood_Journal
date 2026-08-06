@@ -8,14 +8,26 @@ class SplashPage extends GetView<SplashController> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Scaffold(
       body: Container(
         width: double.infinity,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Color(0xffEEF4FF), Color(0xffF7F5FF), Color(0xffEAFBF8)],
+            colors: isDark
+                ? const [
+                    Color(0xff171923),
+                    Color(0xff1F2937),
+                    Color(0xff16213E),
+                  ]
+                : const [
+                    Color(0xffEEF4FF),
+                    Color(0xffF7F5FF),
+                    Color(0xffEAFBF8),
+                  ],
           ),
         ),
         child: Stack(
@@ -27,7 +39,9 @@ class SplashPage extends GetView<SplashController> {
                 width: 260,
                 height: 260,
                 decoration: BoxDecoration(
-                  color: const Color(0xff7C4DFF).withOpacity(.08),
+                  color: isDark
+                      ? const Color(0xff7C4DFF).withOpacity(.18)
+                      : const Color(0xff7C4DFF).withOpacity(.08),
                   shape: BoxShape.circle,
                 ),
               ),
@@ -40,7 +54,9 @@ class SplashPage extends GetView<SplashController> {
                 width: 240,
                 height: 240,
                 decoration: BoxDecoration(
-                  color: const Color(0xff5AA9FF).withOpacity(.08),
+                  color: isDark
+                      ? const Color(0xff5AA9FF).withOpacity(.18)
+                      : const Color(0xff5AA9FF).withOpacity(.08),
                   shape: BoxShape.circle,
                 ),
               ),
@@ -60,12 +76,28 @@ class SplashPage extends GetView<SplashController> {
                           child: Opacity(opacity: value, child: child),
                         );
                       },
-                      child: Image.asset(AppAssets.appLogo, width: 170),
+                      child: Builder(
+                        builder: (context) {
+                          // final isDark =
+                          //     Theme.of(context).brightness == Brightness.dark;
+
+                          return Image.asset(
+                            isDark
+                                ? AppAssets.logoHorizontalDark
+                                : AppAssets.logoHorizontalLight,
+                            width: 230,
+                            fit: BoxFit.contain,
+                          );
+                        },
+                      ),
                     ),
 
                     const SizedBox(height: 30),
 
-                    const CircularProgressIndicator(color: Color(0xff7C4DFF)),
+                    CircularProgressIndicator(
+                      color: theme.colorScheme.primary,
+                      strokeWidth: 3,
+                    ),
                   ],
                 ),
               ),

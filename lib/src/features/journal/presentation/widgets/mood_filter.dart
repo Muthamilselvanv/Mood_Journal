@@ -7,6 +7,7 @@ class MoodFilter extends GetView<JournalController> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return SizedBox(
       height: 42,
       child: ListView.separated(
@@ -28,7 +29,11 @@ class MoodFilter extends GetView<JournalController> {
                   vertical: 10,
                 ),
                 decoration: BoxDecoration(
-                  color: selected ? const Color(0xff7C4DFF) : Colors.white,
+                  color: selected
+                      ? const Color(0xff7C4DFF)
+                      : isDark
+                      ? Colors.black
+                      : Colors.white,
                   borderRadius: BorderRadius.circular(24),
                   border: Border.all(
                     color: selected
@@ -46,7 +51,11 @@ class MoodFilter extends GetView<JournalController> {
                       mood,
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
-                        color: selected ? Colors.white : Colors.black87,
+                        color: selected
+                            ? Colors.white
+                            : isDark
+                            ? Colors.white
+                            : Colors.black87,
                       ),
                     ),
                   ],

@@ -9,7 +9,7 @@ class MonthlyAverageChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<TrendsController>();
-
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final width = MediaQuery.of(context).size.width;
     final isTablet = width > 600;
 
@@ -84,7 +84,7 @@ class MonthlyAverageChart extends StatelessWidget {
                         getTooltipItem: (group, groupIndex, rod, rodIndex) {
                           return BarTooltipItem(
                             "${rod.toY.toStringAsFixed(1)}/10",
-                            const TextStyle(
+                            TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),

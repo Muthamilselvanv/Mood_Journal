@@ -14,7 +14,6 @@ class LoginPage extends GetView<LoginController> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     return Scaffold(
       body: SafeArea(
         child: GestureDetector(
@@ -30,9 +29,12 @@ class LoginPage extends GetView<LoginController> {
               children: [
                 const SizedBox(height: 40),
 
-                Image.asset(AppAssets.appLogo, width: 110),
+                Image.asset(
+                  Get.isDarkMode ? AppAssets.logoDark : AppAssets.logoLight,
+                  width: 120,
+                ),
 
-                const SizedBox(height: 30),
+                const SizedBox(height: AppSpacing.space8),
 
                 Text("Welcome Back", style: theme.textTheme.headlineMedium),
 

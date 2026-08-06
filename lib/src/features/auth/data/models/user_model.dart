@@ -3,6 +3,8 @@ class UserModel {
   final String name;
   final String username;
   final String password;
+  final String? profileImage;
+  final String? bio;
   final DateTime createdAt;
 
   const UserModel({
@@ -10,6 +12,8 @@ class UserModel {
     required this.name,
     required this.username,
     required this.password,
+    this.profileImage,
+    this.bio,
     required this.createdAt,
   });
 
@@ -18,6 +22,8 @@ class UserModel {
     String? name,
     String? username,
     String? password,
+    String? profileImage,
+    String? bio,
     DateTime? createdAt,
   }) {
     return UserModel(
@@ -25,6 +31,8 @@ class UserModel {
       name: name ?? this.name,
       username: username ?? this.username,
       password: password ?? this.password,
+      profileImage: profileImage ?? this.profileImage,
+      bio: bio ?? this.bio,
       createdAt: createdAt ?? this.createdAt,
     );
   }
@@ -35,6 +43,8 @@ class UserModel {
       "name": name,
       "username": username,
       "password": password,
+      "profileImage": profileImage,
+      "bio": bio,
       "createdAt": createdAt.toIso8601String(),
     };
   }
@@ -45,6 +55,8 @@ class UserModel {
       name: map["name"],
       username: map["username"],
       password: map["password"],
+      profileImage: map["profileImage"],
+      bio: map["bio"],
       createdAt: DateTime.parse(map["createdAt"]),
     );
   }

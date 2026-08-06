@@ -3,9 +3,11 @@ import 'package:mood_journal_app/src/app/routes/app_routes.dart';
 import 'package:mood_journal_app/src/features/auth/bindings/login_binding.dart';
 import 'package:mood_journal_app/src/features/auth/bindings/onboarding_binding.dart';
 import 'package:mood_journal_app/src/features/auth/bindings/register_binding.dart';
+import 'package:mood_journal_app/src/features/auth/bindings/splash_binding.dart';
 import 'package:mood_journal_app/src/features/auth/presentation/pages/login_page.dart';
 import 'package:mood_journal_app/src/features/auth/presentation/pages/onboarding_page.dart';
 import 'package:mood_journal_app/src/features/auth/presentation/pages/register_page.dart';
+import 'package:mood_journal_app/src/features/auth/presentation/pages/splash_page.dart';
 import 'package:mood_journal_app/src/features/home/presentation/pages/home_page.dart';
 import 'package:mood_journal_app/src/features/main/presentation/pages/main_page.dart';
 import 'package:mood_journal_app/src/features/main/presentation/binding/main_binding.dart';
@@ -15,6 +17,11 @@ class AppPages {
   AppPages._(); // private constructor to prevent instantiation
 
   static final List<GetPage<dynamic>> pages = [
+    GetPage(
+      name: AppRoutes.splash,
+      page: () => const SplashPage(),
+      binding: SplashBinding(),
+    ),
     GetPage(
       name: AppRoutes.onboarding,
       page: () => const OnboardingPage(),

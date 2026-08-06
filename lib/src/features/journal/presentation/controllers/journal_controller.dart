@@ -10,6 +10,10 @@ class JournalController extends GetxController {
 
   final MoodRepository repository = Get.find();
 
+  bool get hasFirstEntry => moodEntries.isNotEmpty;
+
+  bool get isMoodMaster => moodEntries.length >= 10;
+
   @override
   void onInit() {
     super.onInit();
@@ -160,7 +164,7 @@ class JournalController extends GetxController {
 
   //trend stats calculation
   String get mostCommonMood {
-    if (moodEntries.isEmpty) return "-";
+    if (moodEntries.isEmpty) return "🔒";
 
     final Map<String, int> counts = {};
 

@@ -65,15 +65,23 @@ class JournalCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return GestureDetector(
       onTap: () {
         Get.to(() => JournalDetailPage(entry: entry));
       },
       child: Card(
-        elevation: 0,
+        elevation: isDark ? 2 : 0,
+        shadowColor: Colors.black.withOpacity(.35),
         margin: const EdgeInsets.only(bottom: 18),
-        color: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        color: theme.colorScheme.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
+          side: isDark
+              ? BorderSide(color: Colors.white.withOpacity(.1))
+              : BorderSide.none,
+        ),
         child: Container(
           padding: const EdgeInsets.all(18),
           child: Row(
@@ -96,7 +104,9 @@ class JournalCard extends StatelessWidget {
                 width: 64,
                 height: 64,
                 decoration: BoxDecoration(
-                  color: moodColor.withOpacity(.12),
+                  color: isDark
+                      ? moodColor.withOpacity(.20)
+                      : moodColor.withOpacity(.12),
                   borderRadius: BorderRadius.circular(18),
                 ),
                 child: Center(
@@ -120,7 +130,7 @@ class JournalCard extends StatelessWidget {
                             style: Theme.of(context).textTheme.titleMedium
                                 ?.copyWith(
                                   fontWeight: FontWeight.w700,
-                                  color: Colors.black,
+                                  color: theme.colorScheme.onSurface,
                                 ),
                           ),
                         ),
@@ -144,7 +154,9 @@ class JournalCard extends StatelessWidget {
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: moodColor.withOpacity(.12),
+                            color: isDark
+                                ? moodColor.withOpacity(.20)
+                                : moodColor.withOpacity(.12),
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(
@@ -171,7 +183,7 @@ class JournalCard extends StatelessWidget {
                         Text(
                           DateFormat("MMM dd, yyyy").format(entry.createdAt),
                           style: TextStyle(
-                            color: Colors.grey.shade500,
+                            color: theme.colorScheme.onSurface.withOpacity(.65),
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -186,7 +198,7 @@ class JournalCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         height: 1.45,
-                        color: Colors.grey.shade600,
+                        color: theme.colorScheme.onSurface.withOpacity(.75),
                       ),
                     ),
                   ],

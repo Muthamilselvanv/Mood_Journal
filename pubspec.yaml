@@ -80,6 +80,15 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/moodLogo.png
+    - assets/images/nilora-app-icon.png
+    - assets/images/nilora-full-logo-dark.png
+    - assets/images/nilora-full-logo-light.png
+    - assets/images/nilora-horizontal-dark.png
+    - assets/images/nilora-horizontal-light.png
+    - assets/images/nilora-icon.png
+    - assets/images/screen1.png
+    - assets/images/screen2.png
+    - assets/images/screen3.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

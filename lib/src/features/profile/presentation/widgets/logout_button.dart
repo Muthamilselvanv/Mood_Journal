@@ -7,28 +7,28 @@ class LogoutButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return SizedBox(
       width: double.infinity,
-      height: 58,
-      child: ElevatedButton.icon(
-        onPressed: () {
-          showLogoutDialog();
-        },
-
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xffFFF1F2),
-          foregroundColor: Colors.redAccent,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-        ),
-
-        icon: const Icon(Icons.logout),
-
+      height: 56,
+      child: OutlinedButton.icon(
+        onPressed: showLogoutDialog,
+        icon: const Icon(Icons.logout_rounded),
         label: const Text(
           "Log Out",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+        ),
+        style: OutlinedButton.styleFrom(
+          foregroundColor: Colors.redAccent,
+          backgroundColor: isDark
+              ? Colors.redAccent.withOpacity(.08)
+              : const Color(0xffFFF5F5),
+          side: BorderSide(color: Colors.redAccent.withOpacity(.35)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18),
+          ),
         ),
       ),
     );
@@ -36,49 +36,57 @@ class LogoutButton extends StatelessWidget {
 }
 
 void showLogoutDialog() {
+  final context = Get.context!;
+  final theme = Theme.of(context);
+  final isDark = theme.brightness == Brightness.dark;
+
   Get.dialog(
     Dialog(
+      elevation: 0,
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.symmetric(horizontal: 24),
       child: Container(
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(28),
+          border: Border.all(
+            color: isDark ? Colors.white.withOpacity(.08) : Colors.transparent,
+          ),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Icon
             Container(
-              width: 74,
-              height: 74,
+              width: 76,
+              height: 76,
               decoration: BoxDecoration(
-                color: const Color(0xffFFF4F4),
-                borderRadius: BorderRadius.circular(22),
+                color: Colors.redAccent.withOpacity(.12),
+                shape: BoxShape.circle,
               ),
               child: const Icon(
                 Icons.logout_rounded,
-                color: Color(0xffFF5A6E),
+                color: Colors.redAccent,
                 size: 38,
               ),
             ),
 
-            const SizedBox(height: 22),
+            const SizedBox(height: 24),
 
-            const Text(
-              "Logout",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            Text(
+              "Log Out",
+              style: theme.textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
 
             const SizedBox(height: 12),
 
             Text(
-              "Are you sure you want to logout?\nYou can sign in again anytime.",
+              "Are you sure you want to log out?\nYou'll need to sign in again to continue.",
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.grey.shade600,
-                fontSize: 15,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurface.withOpacity(.7),
                 height: 1.5,
               ),
             ),
@@ -89,50 +97,33 @@ void showLogoutDialog() {
               children: [
                 Expanded(
                   child: OutlinedButton(
-                    onPressed: () => Get.back(),
+                    onPressed: Get.back,
                     style: OutlinedButton.styleFrom(
                       minimumSize: const Size.fromHeight(52),
-                      side: const BorderSide(color: Color(0xff7C4DFF)),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18),
+                        borderRadius: BorderRadius.circular(16),
                       ),
                     ),
-                    child: const Text(
-                      "Cancel",
-                      style: TextStyle(
-                        color: Color(0xff7C4DFF),
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                    child: const Text("Cancel"),
                   ),
                 ),
 
                 const SizedBox(width: 14),
 
                 Expanded(
-                  child: ElevatedButton.icon(
+                  child: FilledButton.icon(
                     onPressed: () {
                       Get.back();
                       Get.offAllNamed(AppRoutes.login);
                     },
-                    icon: const Icon(
-                      Icons.logout_rounded,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                    label: const Text(
-                      "Logout",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
+                    icon: const Icon(Icons.logout_rounded),
+                    label: const Text("Log Out"),
+                    style: FilledButton.styleFrom(
                       minimumSize: const Size.fromHeight(52),
-                      elevation: 0,
-                      backgroundColor: const Color(0xffFF5A6E),
+                      backgroundColor: Colors.redAccent,
+                      foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18),
+                        borderRadius: BorderRadius.circular(16),
                       ),
                     ),
                   ),

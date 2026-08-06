@@ -24,25 +24,37 @@ class AchievementSection extends StatelessWidget {
           () => Row(
             children: [
               Expanded(
-                child: AchievementCard(emoji: "🔥", title: "${controller.activeDays.toString()} Day\nStreak"),
+                child: AchievementCard(
+                  emoji: "🔥",
+                  title: "${controller.activeDays.toString()} Day\nStreak",
+                ),
               ),
-          
+
               SizedBox(width: 12),
-          
+
               Expanded(
-                child: AchievementCard(emoji: "📖", title: "${controller.moodEntries.length.toString()} Entries"),
+                child: AchievementCard(
+                  emoji: "📖",
+                  title: "${controller.moodEntries.length.toString()} Entries",
+                ),
               ),
-          
+
               SizedBox(width: 12),
-          
+
               Expanded(
-                child: AchievementCard(emoji: "⭐", title: "First Entry"),
+                child: AchievementCard(
+                  emoji: controller.hasFirstEntry ? "⭐" : "🔒",
+                  title: controller.hasFirstEntry ? "First Entry" : "Locked",
+                ),
               ),
-          
-              SizedBox(width: 12),
-          
+
+              const SizedBox(width: 12),
+
               Expanded(
-                child: AchievementCard(emoji: "💪", title: "Mood Master"),
+                child: AchievementCard(
+                  emoji: controller.isMoodMaster ? "💪" : "🔒",
+                  title: controller.isMoodMaster ? "Mood Master" : "Locked",
+                ),
               ),
             ],
           ),

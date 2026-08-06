@@ -35,7 +35,7 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 3, // 4
+      version: 4, // 5
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
@@ -49,6 +49,8 @@ class DatabaseHelper {
       name TEXT NOT NULL,
       username TEXT NOT NULL UNIQUE,
       password TEXT NOT NULL,
+      profileImage TEXT,
+      bio TEXT,
       createdAt TEXT NOT NULL
     )
   ''');
@@ -87,6 +89,12 @@ class DatabaseHelper {
         createdAt TEXT NOT NULL
       )
     ''');
+    }
+    
+    if (oldVersion < 4) {
+      await db.execute("ALTER TABLE users ADD COLUMN profileImage TEXT");
+
+      await db.execute("ALTER TABLE users ADD COLUMN bio TEXT");
     }
   }
 }

@@ -4,56 +4,64 @@ import 'package:mood_journal_app/src/core/constants/app_spacing.dart';
 
 /// Use for the design system's prominent primary actions.
 class AppGradientButton extends StatelessWidget {
+  final String text;
+  final IconData icon;
+  final VoidCallback? onPressed;
+  final bool isLoading;
+
   const AppGradientButton({
     super.key,
-    required this.label,
+    required this.text,
+    required this.icon,
     required this.onPressed,
-    this.icon,
+    this.isLoading = false,
   });
-
-  final String label;
-  final VoidCallback? onPressed;
-  final IconData? icon;
 
   @override
   Widget build(BuildContext context) {
-    final isEnabled = onPressed != null;
-    final double size = MediaQuery.of(context).size.width;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        gradient: isEnabled ? AppGradients.primary : null,
-        color: isEnabled ? null : Theme.of(context).disabledColor,
-        borderRadius: AppRadii.medium,
-        boxShadow: isEnabled ? AppShadows.primary : null,
-      ),
-      child: Material(
-        type: MaterialType.transparency,
-        child: InkWell(
-          onTap: onPressed,
-          borderRadius: AppRadii.medium,
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: size * 0.03,
-              vertical: size * 0.03,
+    return SizedBox(
+      width: double.infinity,
+      height: 50,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(18),
+          gradient: const LinearGradient(
+            colors: [Color(0xff7C4DFF), Color(0xff5AA9FF)],
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xff7C4DFF).withOpacity(.25),
+              blurRadius: 18,
+              offset: const Offset(0, 8),
             ),
-            child: Center(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (icon != null) ...[
-                    Icon(icon, color: Colors.white),
-                    const SizedBox(width: 8),
-                  ],
-                  Text(
-                    label,
-                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: AppIconSizes.small,
-                    ),
+          ],
+        ),
+        child: ElevatedButton.icon(
+          onPressed: isLoading ? null : onPressed,
+          style: ElevatedButton.styleFrom(
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            shadowColor: Colors.transparent,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18),
+            ),
+          ),
+          icon: isLoading
+              ? const SizedBox(
+                  width: 18,
+                  height: 18,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: Colors.white,
                   ),
-                ],
-              ),
+                )
+              : Icon(icon, color: Colors.white),
+          label: Text(
+            isLoading ? "Please wait..." : text,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
             ),
           ),
         ),

@@ -1,10 +1,10 @@
 class OnboardingModel {
-  final String emoji;
+  final String image;
   final String title;
   final String subtitle;
 
-  OnboardingModel({
-    required this.emoji,
+  const OnboardingModel({
+    required this.image,
     required this.title,
     required this.subtitle,
   });

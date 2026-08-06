@@ -23,5 +23,7 @@ class DatabaseTables {
   static const name = "name";
   static const username = "username";
   static const password = "password";
+  static const profileImage = "profileImage";
+  static const bio = "bio";
   static const userCreatedAt = "createdAt";
 }

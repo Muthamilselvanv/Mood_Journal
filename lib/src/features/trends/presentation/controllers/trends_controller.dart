@@ -1,6 +1,5 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mood_journal_app/src/features/journal/presentation/controllers/journal_controller.dart';
@@ -10,7 +9,7 @@ class TrendsController extends GetxController {
   final now = DateTime.now();
 
   String get favoriteWeather {
-    if (controller.moodEntries.isEmpty) return "No data";
+    if (controller.moodEntries.isEmpty) return "🔒";
 
     final map = <String, int>{};
 
@@ -22,7 +21,7 @@ class TrendsController extends GetxController {
   }
 
   String get happiestDay {
-    if (controller.moodEntries.isEmpty) return "No data";
+    if (controller.moodEntries.isEmpty) return "🔒";
 
     final scores = <String, List<int>>{};
 
@@ -50,7 +49,7 @@ class TrendsController extends GetxController {
   }
 
   String get weekendInsight {
-    if (controller.moodEntries.isEmpty) return "No mood data";
+    if (controller.moodEntries.isEmpty) return "🔒";
 
     double weekend = 0;
     double weekday = 0;
@@ -89,7 +88,7 @@ class TrendsController extends GetxController {
       }
     }
 
-    if (map.isEmpty) return "No activity data";
+    if (map.isEmpty) return "🔒";
 
     return map.entries.reduce((a, b) => a.value > b.value ? a : b).key;
   }

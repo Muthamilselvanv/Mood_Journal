@@ -1,10 +1,14 @@
+import 'dart:io';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_flutter/lucide_flutter.dart';
 import 'package:mood_journal_app/src/app/routes/app_routes.dart';
+import 'package:mood_journal_app/src/core/constants/app_assets.dart';
 import 'package:mood_journal_app/src/core/constants/app_colors.dart';
 import 'package:mood_journal_app/src/core/constants/app_spacing.dart';
 import 'package:mood_journal_app/src/core/constants/app_text_style.dart';
+import 'package:mood_journal_app/src/features/main/presentation/controller/main_controller.dart';
+import 'package:mood_journal_app/src/features/profile/presentation/controllers/profile_controller.dart';
 import 'package:mood_journal_app/src/shared/widgets/app_gradient_button.dart';
 import 'package:mood_journal_app/src/features/home/presentation/widgets/greeting.dart';
 import 'package:mood_journal_app/src/features/home/presentation/controllers/home_controller.dart';
@@ -17,6 +21,9 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // final width = MediaQuery.of(context).size.width;
+    final profileController = Get.find<ProfileController>();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       //Appbar
       appBar: AppBar(
@@ -51,40 +58,58 @@ class HomePage extends StatelessWidget {
               ),
             ),
 
-            Stack(
-              clipBehavior: Clip.none,
-              children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(LucideIcons.bell, size: AppIconSizes.medium),
-                ),
-                Positioned(
-                  top: 12,
-                  right: 15,
-                  child: Container(
-                    width: 8,
-                    height: 8,
-                    decoration: BoxDecoration(
-                      color: Colors.redAccent,
-                      shape: BoxShape.circle,
-                    ),
+            // Stack(
+            //   clipBehavior: Clip.none,
+            //   children: [
+            //     IconButton(
+            //       onPressed: () {},
+            //       icon: Icon(LucideIcons.bell, size: AppIconSizes.medium),
+            //     ),
+            //     Positioned(
+            //       top: 12,
+            //       right: 15,
+            //       child: Container(
+            //         width: 8,
+            //         height: 8,
+            //         decoration: BoxDecoration(
+            //           color: Colors.redAccent,
+            //           shape: BoxShape.circle,
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
+            // const SizedBox(width: AppSpacing.space8),
+            Obx(() {
+              final user = profileController.user.value;
+              return GestureDetector(
+                onTap: () {
+                  Get.find<MainController>().changeTap(3);
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: isDark ? Colors.white : Colors.white,
+                  ),
+                  child: CircleAvatar(
+                    radius: 18,
+                    backgroundColor: AppColors.primary.withOpacity(.15),
+                    backgroundImage: user?.profileImage != null
+                        ? FileImage(File(user!.profileImage!))
+                        : null,
+                    child: user?.profileImage == null
+                        ? Image.asset(
+                            AppAssets.niloraIcon,
+                            width: 230,
+                            fit: BoxFit.contain,
+                            color: AppColors.primary,
+                          )
+                        : null,
                   ),
                 ),
-              ],
-            ),
-            const SizedBox(width: AppSpacing.space8),
-            GestureDetector(
-              onTap: () {},
-              child: CircleAvatar(
-                radius: 18,
-                backgroundColor: AppColors.primary.withOpacity(0.15),
-                child: const Icon(
-                  Icons.person_outline_rounded,
-                  size: AppIconSizes.medium,
-                  color: AppColors.primary,
-                ),
-              ),
-            ),
+              );
+            }),
           ],
         ),
       ),
@@ -113,6 +138,7 @@ class HomePage extends StatelessWidget {
 }
 
 Widget buildMoodCard(BuildContext context) {
+  final isDark = Theme.of(context).brightness == Brightness.dark;
   final width = MediaQuery.sizeOf(context).width;
 
   final cardHeight = (width * 0.48).clamp(
@@ -128,10 +154,12 @@ Widget buildMoodCard(BuildContext context) {
     height: cardHeight,
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(28),
-      gradient: const LinearGradient(
+      gradient: LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
-        colors: [Color(0xffEEF1FF), Color(0xffDDF8F1)],
+        colors: isDark
+            ? const [Color(0xff2D2A4A), Color(0xff1F2937)]
+            : const [Color(0xffEEF1FF), Color(0xffDDF8F1)],
       ),
     ),
     child: ClipRRect(
@@ -147,7 +175,9 @@ Widget buildMoodCard(BuildContext context) {
               width: bigCircle,
               height: bigCircle,
               decoration: BoxDecoration(
-                color: Colors.purple.withOpacity(0.10),
+                color: isDark
+                    ? Colors.deepPurpleAccent.withOpacity(.18)
+                    : Colors.purple.withOpacity(.10),
                 shape: BoxShape.circle,
               ),
             ),
@@ -161,7 +191,9 @@ Widget buildMoodCard(BuildContext context) {
               width: smallCircle,
               height: smallCircle,
               decoration: BoxDecoration(
-                color: Colors.teal.withOpacity(0.25),
+                color: isDark
+                    ? Colors.tealAccent.withOpacity(.15)
+                    : Colors.teal.withOpacity(.25),
                 shape: BoxShape.circle,
               ),
             ),
@@ -175,7 +207,9 @@ Widget buildMoodCard(BuildContext context) {
               width: bigCircle,
               height: bigCircle,
               decoration: BoxDecoration(
-                color: Colors.lightBlue.withOpacity(0.15),
+                color: isDark
+                    ? Colors.blueAccent.withOpacity(.12)
+                    : Colors.lightBlue.withOpacity(.15),
                 shape: BoxShape.circle,
               ),
             ),
@@ -195,7 +229,9 @@ Widget buildMoodCard(BuildContext context) {
                 Text(
                   "DAILY CHECK-IN",
                   style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                    color: const Color(0xff7B61FF),
+                    color: isDark
+                        ? const Color(0xffB9A8FF)
+                        : const Color(0xff7B61FF),
                     fontWeight: FontWeight.w700,
                     letterSpacing: 1.5,
                   ),
@@ -206,7 +242,7 @@ Widget buildMoodCard(BuildContext context) {
                 Text(
                   "How are you\nfeeling today?",
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    color: const Color(0xFF000000),
+                    color: isDark ? Colors.white : Colors.black,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -222,15 +258,19 @@ Widget buildMoodCard(BuildContext context) {
                         width: 42,
                         height: 42,
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: isDark
+                              ? const Color(0xff374151)
+                              : Colors.white,
                           shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(.08),
-                              blurRadius: 10,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
+                          boxShadow: isDark
+                              ? []
+                              : [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(.08),
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
                         ),
                         child: Center(
                           child: Text(
@@ -258,7 +298,7 @@ Widget buildAddMoodButton(BuildContext context) {
   return SizedBox(
     width: double.infinity,
     child: AppGradientButton(
-      label: "Add Today's Mood",
+      text: "Add Today's Mood",
       icon: Icons.add,
       onPressed: () {
         Get.toNamed(AppRoutes.addMoodEntry);
@@ -270,7 +310,7 @@ Widget buildAddMoodButton(BuildContext context) {
 //Today's Snapshot
 Widget buildTodaySnapshot(BuildContext context) {
   final controller = Get.find<HomeController>();
-
+  final isDark = Theme.of(context).brightness == Brightness.dark;
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -291,7 +331,8 @@ Widget buildTodaySnapshot(BuildContext context) {
 
         if (latest == null) {
           return Card(
-            elevation: 0,
+            elevation: isDark ? 2 : 0,
+            shadowColor: Colors.black.withOpacity(.35),
             child: Padding(
               padding: AppSpacing.card,
               child: Center(
@@ -322,7 +363,11 @@ Widget buildTodaySnapshot(BuildContext context) {
 
         return Card(
           elevation: 0,
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
+          shape: RoundedRectangleBorder(
+            side: BorderSide(color: isDark ? Colors.grey : Colors.white),
+            borderRadius: BorderRadius.circular(18),
+          ),
           child: Padding(
             padding: AppSpacing.card,
             child: Row(
@@ -331,7 +376,7 @@ Widget buildTodaySnapshot(BuildContext context) {
                   width: 72,
                   height: 72,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.surface,
                     borderRadius: BorderRadius.circular(18),
                   ),
                   child: Center(
@@ -357,7 +402,7 @@ Widget buildTodaySnapshot(BuildContext context) {
                                   fontWeight: FontWeight.bold,
                                   fontSize: AppIconSizes.medium,
                                   fontFamily: AppTextStyles.heading1.fontFamily,
-                                  color: Colors.black,
+                                  color: isDark ? Colors.white : Colors.black,
                                 ),
                           ),
 
@@ -393,14 +438,18 @@ Widget buildTodaySnapshot(BuildContext context) {
 
                           Text(
                             latest.weather,
-                            style: const TextStyle(color: Colors.black),
+                            style: TextStyle(
+                              color: isDark ? Colors.white : Colors.black,
+                            ),
                           ),
 
                           const SizedBox(width: AppSpacing.space8),
 
-                          const Text(
+                          Text(
                             "•",
-                            style: TextStyle(color: Colors.black),
+                            style: TextStyle(
+                              color: isDark ? Colors.white : Colors.black,
+                            ),
                           ),
 
                           const SizedBox(width: AppSpacing.space4),
@@ -410,7 +459,9 @@ Widget buildTodaySnapshot(BuildContext context) {
                               latest.createdAt,
                             ).format(context),
                             style: Theme.of(context).textTheme.bodyMedium
-                                ?.copyWith(color: Colors.black),
+                                ?.copyWith(
+                                  color: isDark ? Colors.white : Colors.black,
+                                ),
                           ),
                         ],
                       ),
@@ -441,9 +492,14 @@ class StatsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Card(
       elevation: 0,
-      color: Colors.white,
+      color: Theme.of(context).colorScheme.surface,
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: isDark ? Colors.grey : Colors.white),
+        borderRadius: BorderRadius.circular(18),
+      ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 18),
         child: Column(
@@ -452,16 +508,16 @@ class StatsCard extends StatelessWidget {
             const SizedBox(height: AppSpacing.space8),
             Text(
               value,
-              style: Theme.of(
-                context,
-              ).textTheme.headlineSmall?.copyWith(color: Colors.black87),
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                color: isDark ? Colors.white : Colors.black87,
+              ),
             ),
             const SizedBox(height: AppSpacing.space8),
             Text(
               label,
-              style: Theme.of(
-                context,
-              ).textTheme.bodySmall?.copyWith(color: Colors.black87),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: isDark ? Colors.white : Colors.black87,
+              ),
               textAlign: TextAlign.center,
             ),
           ],

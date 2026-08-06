@@ -14,6 +14,7 @@ class JournalPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<JournalController>();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -35,7 +36,7 @@ class JournalPage extends StatelessWidget {
             },
             icon: Icon(
               Icons.search_rounded,
-              color: Theme.of(context).colorScheme.primary,
+              color: isDark? Colors.white:Colors.black,
             ),
           ),
           const SizedBox(width: AppSpacing.space8),

@@ -72,6 +72,7 @@ class JournalDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<JournalController>();
     final theme = Theme.of(context);
+    //final isDark = Theme.of(context).brightness == Brightness.dark;
     final hasActivities = entry.activities.any((e) => e.trim().isNotEmpty);
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,

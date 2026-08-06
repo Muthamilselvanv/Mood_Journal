@@ -32,11 +32,14 @@ class RegisterPage extends GetView<RegisterController> {
             ),
             child: Column(
               children: [
-                const SizedBox(height: 20),
+                const SizedBox(height: AppSpacing.space8),
 
-                Image.asset(AppAssets.appLogo, width: 100),
+                Image.asset(
+                  Get.isDarkMode ? AppAssets.logoDark : AppAssets.logoLight,
+                  width: 120,
+                ),
 
-                const SizedBox(height: 24),
+                const SizedBox(height: AppSpacing.space8),
 
                 Text(
                   "Create Your Account",

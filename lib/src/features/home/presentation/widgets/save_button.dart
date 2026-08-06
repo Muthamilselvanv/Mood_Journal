@@ -21,7 +21,7 @@ class BuildAddMoodButton extends StatelessWidget {
       width: double.infinity,
       child: Obx(
         () => AppGradientButton(
-          label: controller.isEditing ? "Update" : "Save",
+          text: controller.isEditing ? "Update" : "Save",
           icon: controller.isEditing ? Icons.edit : Icons.save,
           onPressed: () async {
             if (!controller.formKey.currentState!.validate()) return;
