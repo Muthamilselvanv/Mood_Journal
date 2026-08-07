@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mood_journal_app/src/core/constants/app_spacing.dart';
 import 'package:mood_journal_app/src/features/trends/presentation/widgets/insights_card/insights_card.dart';
 import 'package:mood_journal_app/src/features/trends/presentation/widgets/monthly_average_chart.dart';
@@ -27,7 +28,7 @@ class _TrendsPagesState extends State<TrendsPages> {
 
         title: Text(
           "Mood Trends",
-          style: Theme.of(context).textTheme.headlineSmall,
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontFamily: GoogleFonts.poppins().fontFamily,),
         ),
       ),
       body: SafeArea(

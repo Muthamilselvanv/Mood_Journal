@@ -1,11 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:mood_journal_app/src/features/auth/data/models/user_model.dart';
 import 'package:mood_journal_app/src/features/profile/data/repositories/profile_repository.dart';
 import 'package:mood_journal_app/src/core/services/image_picker_service.dart';
 import 'package:mood_journal_app/src/features/profile/presentation/widgets/edit_profile_page.dart';
-import 'package:mood_journal_app/src/features/profile/presentation/widgets/edit_profile_sheet.dart';
 
 class ProfileController extends GetxController {
   final ProfileRepository _repository = Get.find<ProfileRepository>();
@@ -58,10 +56,7 @@ class ProfileController extends GetxController {
   }
 
   void editProfile() {
-  Get.to(
-    () => EditProfilePage(
-      user: user.value!,
-    ),
-  );
-}
+    Get.to(() => EditProfilePage(user: user.value!));
+  }
+
 }

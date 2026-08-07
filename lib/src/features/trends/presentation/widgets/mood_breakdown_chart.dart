@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mood_journal_app/src/features/trends/presentation/controllers/trends_controller.dart';
 
 class MoodBreakdownChart extends StatelessWidget {
@@ -22,14 +23,14 @@ class MoodBreakdownChart extends StatelessWidget {
           children: [
             Text(
               "DISTRIBUTION",
-              style: Theme.of(context).textTheme.labelMedium,
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(fontFamily: GoogleFonts.poppins().fontFamily,),
             ),
 
             const SizedBox(height: 4),
 
             Text(
               "Mood Breakdown",
-              style: Theme.of(context).textTheme.titleLarge,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: GoogleFonts.poppins().fontFamily,),
             ),
 
             const SizedBox(height: 20),
@@ -110,7 +111,7 @@ class _LegendItem extends StatelessWidget {
         Expanded(
           child: Text(
             title,
-            style: const TextStyle(fontWeight: FontWeight.w500),
+            style: TextStyle(fontWeight: FontWeight.w500,fontFamily: GoogleFonts.poppins().fontFamily,),
           ),
         ),
 
@@ -122,7 +123,7 @@ class _LegendItem extends StatelessWidget {
           ),
           child: Text(
             percent,
-            style: TextStyle(color: color, fontWeight: FontWeight.bold),
+            style: TextStyle(color: color, fontWeight: FontWeight.bold,fontFamily: GoogleFonts.poppins().fontFamily,),
           ),
         ),
       ],

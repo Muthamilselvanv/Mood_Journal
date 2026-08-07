@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mood_journal_app/src/app/routes/app_routes.dart';
 import 'package:mood_journal_app/src/features/auth/data/repositories/user_repository.dart';
 
@@ -96,21 +97,26 @@ class LoginController extends GetxController {
 
               const SizedBox(height: 22),
 
-              const Text(
+              Text(
                 "Forgot Password?",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: GoogleFonts.poppins().fontFamily,
+                ),
               ),
 
               const SizedBox(height: 14),
 
               Text(
-                "Mood Journal works completely offline.\n"
+                "Nilora works completely offline.\n"
                 "Password recovery isn't available because your account is stored only on this device.",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.grey.shade700,
                   height: 1.5,
                   fontSize: 15,
+                  fontFamily: GoogleFonts.poppins().fontFamily,
                 ),
               ),
 
@@ -130,12 +136,13 @@ class LoginController extends GetxController {
                       borderRadius: BorderRadius.circular(18),
                     ),
                   ),
-                  child: const Text(
+                  child: Text(
                     "Create New Account",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
+                      fontFamily: GoogleFonts.poppins().fontFamily,
                     ),
                   ),
                 ),
@@ -154,11 +161,12 @@ class LoginController extends GetxController {
                       borderRadius: BorderRadius.circular(18),
                     ),
                   ),
-                  child: const Text(
+                  child: Text(
                     "Close",
                     style: TextStyle(
-                      color: Color(0xff7C4DFF),
+                      color: const Color(0xff7C4DFF),
                       fontWeight: FontWeight.bold,
+                      fontFamily: GoogleFonts.poppins().fontFamily,
                     ),
                   ),
                 ),

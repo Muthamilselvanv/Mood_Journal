@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_flutter/lucide_flutter.dart';
 import 'package:mood_journal_app/src/core/constants/app_colors.dart';
 import 'package:mood_journal_app/src/core/constants/app_spacing.dart';
@@ -22,7 +23,7 @@ class EmptyJournalView extends StatelessWidget {
           Text(
             "No journal entries yet",
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.titleMedium,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(fontFamily: GoogleFonts.poppins().fontFamily,),
           ),
         ],
       ),

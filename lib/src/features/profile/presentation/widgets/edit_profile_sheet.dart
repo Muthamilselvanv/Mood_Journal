@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mood_journal_app/src/core/constants/app_assets.dart';
 
 class EditProfileSheet extends StatelessWidget {
@@ -54,7 +55,7 @@ class EditProfileSheet extends StatelessWidget {
 
               Text(
                 "Edit Profile",
-                style: Theme.of(context).textTheme.headlineSmall,
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontFamily: GoogleFonts.poppins().fontFamily,),
               ),
 
               const SizedBox(height: 24),

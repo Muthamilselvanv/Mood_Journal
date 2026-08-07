@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:mood_journal_app/src/core/constants/app_spacing.dart';
 import 'package:mood_journal_app/src/features/home/presentation/models/mood_entry_model.dart';
@@ -131,6 +132,7 @@ class JournalCard extends StatelessWidget {
                                 ?.copyWith(
                                   fontWeight: FontWeight.w700,
                                   color: theme.colorScheme.onSurface,
+                                  fontFamily: GoogleFonts.poppins().fontFamily,
                                 ),
                           ),
                         ),
@@ -165,6 +167,7 @@ class JournalCard extends StatelessWidget {
                               color: moodColor,
                               fontWeight: FontWeight.w600,
                               fontSize: AppIconSizes.small,
+                              fontFamily: GoogleFonts.poppins().fontFamily,
                             ),
                           ),
                         ),
@@ -185,6 +188,7 @@ class JournalCard extends StatelessWidget {
                           style: TextStyle(
                             color: theme.colorScheme.onSurface.withOpacity(.65),
                             fontWeight: FontWeight.w500,
+                            fontFamily: GoogleFonts.poppins().fontFamily,
                           ),
                         ),
                       ],
@@ -199,6 +203,7 @@ class JournalCard extends StatelessWidget {
                       style: TextStyle(
                         height: 1.45,
                         color: theme.colorScheme.onSurface.withOpacity(.75),
+                        fontFamily: GoogleFonts.poppins().fontFamily,
                       ),
                     ),
                   ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mood_journal_app/src/app/routes/app_routes.dart';
 
 class LogoutButton extends StatelessWidget {
@@ -16,9 +17,9 @@ class LogoutButton extends StatelessWidget {
       child: OutlinedButton.icon(
         onPressed: showLogoutDialog,
         icon: const Icon(Icons.logout_rounded),
-        label: const Text(
+        label: Text(
           "Log Out",
-          style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+          style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600,fontFamily: GoogleFonts.poppins().fontFamily,),
         ),
         style: OutlinedButton.styleFrom(
           foregroundColor: Colors.redAccent,
@@ -77,6 +78,7 @@ void showLogoutDialog() {
               "Log Out",
               style: theme.textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
+                fontFamily: GoogleFonts.poppins().fontFamily,
               ),
             ),
 
@@ -88,6 +90,7 @@ void showLogoutDialog() {
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurface.withOpacity(.7),
                 height: 1.5,
+                fontFamily: GoogleFonts.poppins().fontFamily,
               ),
             ),
 

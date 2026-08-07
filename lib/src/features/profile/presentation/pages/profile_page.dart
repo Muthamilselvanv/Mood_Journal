@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mood_journal_app/src/core/constants/app_spacing.dart';
+import 'package:mood_journal_app/src/features/profile/presentation/widgets/about/about_app_section.dart';
 import 'package:mood_journal_app/src/features/profile/presentation/widgets/achievement_section.dart';
 import 'package:mood_journal_app/src/features/profile/presentation/widgets/logout_button.dart';
 import 'package:mood_journal_app/src/features/profile/presentation/widgets/profile_header.dart';
@@ -26,6 +27,10 @@ class ProfilePage extends StatelessWidget {
               SizedBox(height: AppSpacing.space24),
 
               AchievementSection(),
+
+              SizedBox(height: AppSpacing.space24),
+              
+              AboutAppSection(),
 
               SizedBox(height: AppSpacing.space24),
 

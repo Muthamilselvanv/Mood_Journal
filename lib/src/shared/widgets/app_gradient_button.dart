@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mood_journal_app/src/core/constants/app_design_tokens.dart';
-import 'package:mood_journal_app/src/core/constants/app_spacing.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 /// Use for the design system's prominent primary actions.
 class AppGradientButton extends StatelessWidget {
@@ -58,9 +57,10 @@ class AppGradientButton extends StatelessWidget {
               : Icon(icon, color: Colors.white),
           label: Text(
             isLoading ? "Please wait..." : text,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
+              fontFamily: GoogleFonts.poppins().fontFamily,
               color: Colors.white,
             ),
           ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:mood_journal_app/src/app/app_pages.dart';
 import 'package:mood_journal_app/src/app/bindings/initial_binding.dart';
 import 'package:mood_journal_app/src/app/routes/app_routes.dart';

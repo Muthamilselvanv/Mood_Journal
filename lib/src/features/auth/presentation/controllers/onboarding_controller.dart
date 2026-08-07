@@ -12,20 +12,23 @@ class OnboardingController extends GetxController {
 
   final pages = [
     OnboardingModel(
-  image: AppAssets.onboardingScreen1,
-  title: "Track Your Mood",
-  subtitle: "Write down your thoughts and feelings in a calm, private space made just for you.",
-),
+      image: AppAssets.onboardingScreen1,
+      title: "Track Your Mood",
+      subtitle:
+          "Write down your thoughts and feelings in a calm, private space made just for you.",
+    ),
     OnboardingModel(
-  image: AppAssets.onboardingScreen2,
-  title: "Track Your Mood",
-  subtitle: "Turn everyday feelings into little notes, stickers, and memories worth keeping.",
-),
+      image: AppAssets.onboardingScreen2,
+      title: "Track Your Mood",
+      subtitle:
+          "Turn everyday feelings into little notes, stickers, and memories worth keeping.",
+    ),
     OnboardingModel(
-  image: AppAssets.onboardingScreen3,
-  title: "Track Your Mood",
-  subtitle: "See your mood trends over time and discover what truly makes you feel your best.",
-),
+      image: AppAssets.onboardingScreen3,
+      title: "Track Your Mood",
+      subtitle:
+          "See your mood trends over time and discover what truly makes you feel your best.",
+    ),
   ];
 
   void onPageChanged(int index) {

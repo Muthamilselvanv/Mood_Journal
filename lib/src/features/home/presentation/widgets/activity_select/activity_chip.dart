@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mood_journal_app/src/features/home/presentation/models/activity_model.dart';
 
 class ActivityChip extends StatelessWidget {
@@ -48,6 +49,7 @@ class ActivityChip extends StatelessWidget {
                     ? activity.color
                     : Theme.of(context).colorScheme.onSurface,
                 fontWeight: FontWeight.w600,
+                fontFamily: GoogleFonts.poppins().fontFamily,
               ),
             ),
           ],

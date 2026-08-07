@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_flutter/lucide_flutter.dart';
 import 'package:mood_journal_app/src/app/routes/app_routes.dart';
 import 'package:mood_journal_app/src/core/constants/app_assets.dart';
@@ -36,13 +37,20 @@ class LoginPage extends GetView<LoginController> {
 
                 const SizedBox(height: AppSpacing.space8),
 
-                Text("Welcome Back", style: theme.textTheme.headlineMedium),
+                Text(
+                  "Welcome Back",
+                  style: theme.textTheme.headlineMedium?.copyWith(
+                    fontFamily: GoogleFonts.poppins().fontFamily,
+                  ),
+                ),
 
                 const SizedBox(height: 8),
 
                 Text(
                   "Sign in to continue your mood journey.",
-                  style: theme.textTheme.bodyMedium,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    fontFamily: GoogleFonts.poppins().fontFamily,
+                  ),
                   textAlign: TextAlign.center,
                 ),
 
@@ -85,9 +93,12 @@ class LoginPage extends GetView<LoginController> {
                     onPressed: () {
                       controller.popUp();
                     },
-                    child: const Text(
+                    child: Text(
                       "Forgot Password?",
-                      style: TextStyle(color: Color(0xff7C4DFF)),
+                      style: TextStyle(
+                        color: const Color(0xff7C4DFF),
+                        fontFamily: GoogleFonts.poppins().fontFamily,
+                      ),
                     ),
                   ),
                 ),
@@ -130,10 +141,11 @@ class LoginPage extends GetView<LoginController> {
                         controller.isLoading.value
                             ? "Signing In..."
                             : "Sign In",
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
+                          fontFamily: GoogleFonts.poppins().fontFamily,
                         ),
                       ),
                     ),
@@ -179,12 +191,13 @@ class LoginPage extends GetView<LoginController> {
                         ),
                       ),
                       icon: const Icon(LucideIcons.user, color: Colors.white),
-                      label: const Text(
+                      label: Text(
                         "Continue as Guest",
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
+                          fontFamily: GoogleFonts.poppins().fontFamily,
                         ),
                       ),
                     ),
@@ -196,15 +209,23 @@ class LoginPage extends GetView<LoginController> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text("Don't have an account?"),
+                    Text(
+                      "Don't have an account?",
+                      style: TextStyle(
+                        fontFamily: GoogleFonts.poppins().fontFamily,
+                      ),
+                    ),
 
                     TextButton(
                       onPressed: () {
                         Get.toNamed(AppRoutes.register);
                       },
-                      child: const Text(
+                      child: Text(
                         "Create Account",
-                        style: TextStyle(color: Color(0xff7C4DFF)),
+                        style: TextStyle(
+                          color: const Color(0xff7C4DFF),
+                          fontFamily: GoogleFonts.poppins().fontFamily,
+                        ),
                       ),
                     ),
                   ],

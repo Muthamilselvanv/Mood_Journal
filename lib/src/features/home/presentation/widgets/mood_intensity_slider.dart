@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mood_journal_app/src/core/constants/app_spacing.dart';
-import 'package:mood_journal_app/src/core/constants/app_text_style.dart';
 import 'package:mood_journal_app/src/features/home/presentation/controllers/home_controller.dart';
 
 class MoodIntensitySlider extends GetView<HomeController> {
@@ -20,7 +20,7 @@ class MoodIntensitySlider extends GetView<HomeController> {
             style: Theme.of(context).textTheme.labelMedium?.copyWith(
               fontWeight: FontWeight.bold,
               fontSize: AppIconSizes.tiny,
-              fontFamily: AppTextStyles.heading1.fontFamily,
+              fontFamily: GoogleFonts.poppins().fontFamily,
             ),
           ),
 
@@ -31,9 +31,7 @@ class MoodIntensitySlider extends GetView<HomeController> {
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: Colors.grey
-              )
+              border: Border.all(color: Colors.grey),
             ),
             child: Column(
               children: [
@@ -45,7 +43,7 @@ class MoodIntensitySlider extends GetView<HomeController> {
                         color: Theme.of(context).colorScheme.onSurface,
                         fontWeight: FontWeight.bold,
                         fontSize: AppIconSizes.tiny,
-                        fontFamily: AppTextStyles.heading1.fontFamily,
+                        fontFamily: GoogleFonts.poppins().fontFamily,
                       ),
                     ),
 
@@ -56,6 +54,7 @@ class MoodIntensitySlider extends GetView<HomeController> {
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         color: mood.color,
                         fontWeight: FontWeight.bold,
+                        fontFamily: GoogleFonts.poppins().fontFamily,
                       ),
                     ),
                   ],
@@ -101,9 +100,10 @@ class MoodIntensitySlider extends GetView<HomeController> {
                     10,
                     (index) => Text(
                       "${index + 1}",
-                      style: Theme.of(
-                        context,
-                      ).textTheme.bodySmall?.copyWith(color: Theme.of(context).colorScheme.onSurface),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontFamily: GoogleFonts.poppins().fontFamily,
+                      ),
                     ),
                   ),
                 ),

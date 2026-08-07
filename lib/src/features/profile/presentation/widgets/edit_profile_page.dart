@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_flutter/lucide_flutter.dart';
 import 'package:mood_journal_app/src/features/auth/data/models/user_model.dart';
 import 'package:mood_journal_app/src/features/profile/presentation/controllers/profile_controller.dart';
@@ -132,6 +133,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 "Edit Your Profile",
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
+                  fontFamily: GoogleFonts.poppins().fontFamily,
                 ),
               ),
 
@@ -139,7 +141,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
               Text(
                 "Keep your information up to date.",
-                style: TextStyle(color: Colors.grey),
+                style: TextStyle(color: Colors.grey,fontFamily: GoogleFonts.poppins().fontFamily,),
               ),
 
               const SizedBox(height: 32),
@@ -158,6 +160,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         "Name",
                         style: Theme.of(context).textTheme.titleSmall?.copyWith(
                           fontWeight: FontWeight.w600,
+                          fontFamily: GoogleFonts.poppins().fontFamily,
                         ),
                       ),
                     ],
@@ -202,12 +205,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    children: const [
-                      Icon(LucideIcons.edit2, size: 18),
-                      SizedBox(width: 8),
+                    children: [
+                      const Icon(LucideIcons.edit2, size: 18),
+                      const SizedBox(width: 8),
                       Text(
                         "Bio",
-                        style: TextStyle(fontWeight: FontWeight.w600),
+                        style: TextStyle(fontWeight: FontWeight.w600,fontFamily: GoogleFonts.poppins().fontFamily,),
                       ),
                     ],
                   ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mood_journal_app/src/core/constants/app_spacing.dart';
 import '../../models/weather_model.dart';
 
@@ -20,7 +21,7 @@ class WeatherItem extends StatelessWidget {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
           //color: Colors.white,
           color: selected
@@ -45,6 +46,7 @@ class WeatherItem extends StatelessWidget {
                     ? weather.color
                     : Theme.of(context).colorScheme.onSurface,
                 fontWeight: FontWeight.w600,
+                fontFamily: GoogleFonts.poppins().fontFamily,
               ),
             ),
           ],

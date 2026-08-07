@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:mood_journal_app/src/app/routes/app_routes.dart';
 import 'package:mood_journal_app/src/features/home/data/repositories/mood_repository.dart';
 import 'package:mood_journal_app/src/features/home/presentation/controllers/home_controller.dart';
@@ -16,7 +17,7 @@ class BuildAddMoodButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<HomeController>();
     final repository = Get.find<MoodRepository>();
-
+    final userId = GetStorage().read("userId");
     return SizedBox(
       width: double.infinity,
       child: Obx(
@@ -28,7 +29,7 @@ class BuildAddMoodButton extends StatelessWidget {
 
             final entry = MoodEntry(
               id: controller.editingEntry.value?.id,
-              userId: 2501,//controller.userId.value,
+              userId: userId, //controller.userId.value,
               mood: controller.selectedMood.title,
               weather: controller.weather.title,
               activities: controller.selectedActivities.toList(),

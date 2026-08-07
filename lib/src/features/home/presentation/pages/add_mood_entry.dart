@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mood_journal_app/src/core/utils/app_bottom_sheet.dart';
 import 'package:mood_journal_app/src/core/constants/app_spacing.dart';
 import 'package:mood_journal_app/src/features/home/presentation/controllers/home_controller.dart';
@@ -27,7 +28,7 @@ class _AddMoodEntryState extends State<AddMoodEntry> {
     return Scaffold(
       appBar: AppBar(
         //automaticallyImplyLeading: false,
-        centerTitle: true,
+        centerTitle: false,
         titleSpacing: AppSpacing.space20,
         toolbarHeight: AppSpacing.toolBarhight, // 70
         // backgroundColor: AppColors.appBackground,
@@ -35,7 +36,7 @@ class _AddMoodEntryState extends State<AddMoodEntry> {
         scrolledUnderElevation: 0,
         title: Text(
           'Add Mood Entry',
-          style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 20),
+          style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 20,fontFamily: GoogleFonts.poppins().fontFamily,),
         ),
       ),
       body: SafeArea(

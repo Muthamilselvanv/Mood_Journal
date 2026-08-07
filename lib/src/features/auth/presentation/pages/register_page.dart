@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_flutter/lucide_flutter.dart';
 import 'package:mood_journal_app/src/app/routes/app_routes.dart';
 import 'package:mood_journal_app/src/core/constants/app_assets.dart';
@@ -18,7 +19,7 @@ class RegisterPage extends GetView<RegisterController> {
       appBar: AppBar(
         elevation: 0,
         scrolledUnderElevation: 0,
-        centerTitle: true,
+        centerTitle: false,
         title: const Text("Create Account"),
       ),
       body: SafeArea(
@@ -43,7 +44,9 @@ class RegisterPage extends GetView<RegisterController> {
 
                 Text(
                   "Create Your Account",
-                  style: theme.textTheme.headlineMedium,
+                  style: theme.textTheme.headlineMedium?.copyWith(
+                    fontFamily: GoogleFonts.poppins().fontFamily,
+                  ),
                   textAlign: TextAlign.center,
                 ),
 
@@ -51,7 +54,9 @@ class RegisterPage extends GetView<RegisterController> {
 
                 Text(
                   "Start tracking your emotions and build healthy habits.",
-                  style: theme.textTheme.bodyMedium,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    fontFamily: GoogleFonts.poppins().fontFamily,
+                  ),
                   textAlign: TextAlign.center,
                 ),
 
@@ -170,10 +175,11 @@ class RegisterPage extends GetView<RegisterController> {
                           controller.isLoading.value
                               ? "Creating Account..."
                               : "Create Account",
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
+                            fontFamily: GoogleFonts.poppins().fontFamily,
                           ),
                         ),
                       ),
@@ -186,13 +192,23 @@ class RegisterPage extends GetView<RegisterController> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text("Already have an account?"),
+                    Text(
+                      "Already have an account?",
+                      style: TextStyle(
+                        fontFamily: GoogleFonts.poppins().fontFamily,
+                      ),
+                    ),
 
                     TextButton(
                       onPressed: () {
                         Get.offNamed(AppRoutes.login);
                       },
-                      child: const Text("Sign In"),
+                      child: Text(
+                        "Sign In",
+                        style: TextStyle(
+                          fontFamily: GoogleFonts.poppins().fontFamily,
+                        ),
+                      ),
                     ),
                   ],
                 ),

@@ -32,6 +32,7 @@ class DatabaseHelper {
     final dbPath = await getDatabasesPath();
 
     final path = join(dbPath, 'mood_journal.db');
+    //print("DATABASE PATH: $path");
 
     return await openDatabase(
       path,
@@ -39,6 +40,7 @@ class DatabaseHelper {
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
+    
   }
 
   Future<void> _onCreate(Database db, int version) async {

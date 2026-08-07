@@ -1,9 +1,8 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_flutter/lucide_flutter.dart';
 import 'package:mood_journal_app/src/core/constants/app_spacing.dart';
-import 'package:mood_journal_app/src/core/constants/app_text_style.dart';
 
 class AttachPhotoCard extends StatelessWidget {
   final File? image;
@@ -27,7 +26,7 @@ class AttachPhotoCard extends StatelessWidget {
           style: theme.textTheme.labelMedium?.copyWith(
             fontWeight: FontWeight.w700,
             fontSize: AppIconSizes.tiny,
-            fontFamily: AppTextStyles.heading1.fontFamily,
+            fontFamily: GoogleFonts.poppins().fontFamily,
           ),
         ),
 
@@ -117,6 +116,7 @@ class AttachPhotoCard extends StatelessWidget {
               "Add a Photo",
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
+                fontFamily: GoogleFonts.poppins().fontFamily,
               ),
             ),
 
@@ -128,6 +128,7 @@ class AttachPhotoCard extends StatelessWidget {
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
                 height: 1.4,
+                fontFamily: GoogleFonts.poppins().fontFamily,
               ),
             ),
 
@@ -154,6 +155,7 @@ class AttachPhotoCard extends StatelessWidget {
                     "Camera • Gallery",
                     style: theme.textTheme.labelMedium?.copyWith(
                       fontWeight: FontWeight.w600,
+                      fontFamily: GoogleFonts.poppins().fontFamily,
                     ),
                   ),
                 ],
@@ -178,6 +180,7 @@ class AttachPhotoCard extends StatelessWidget {
                   style: theme.textTheme.labelMedium?.copyWith(
                     color: theme.colorScheme.primary,
                     fontWeight: FontWeight.w600,
+                    fontFamily: GoogleFonts.poppins().fontFamily,
                   ),
                 ),
               ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AuthTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -20,14 +21,25 @@ class AuthTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return TextField(
       controller: controller,
       obscureText: obscure,
+      style: TextStyle(color: theme.colorScheme.onSurface),
+
       decoration: InputDecoration(
         hintText: hint,
+        hintStyle: TextStyle(
+          color: isDark ? Colors.grey.shade400 : Colors.grey.shade600,
+          fontFamily: GoogleFonts.poppins().fontFamily,
+        ),
+
         errorText: errorText,
+
         filled: true,
-        fillColor: const Color(0xffF8F9FD),
+        fillColor: isDark ? theme.colorScheme.surface : const Color(0xffF8F9FD),
 
         prefixIcon: Icon(icon, color: const Color(0xff7C4DFF)),
 
@@ -40,7 +52,9 @@ class AuthTextField extends StatelessWidget {
 
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
-          borderSide: BorderSide(color: Colors.grey.shade300),
+          borderSide: BorderSide(
+            color: isDark ? Colors.grey.shade700 : Colors.grey.shade300,
+          ),
         ),
 
         focusedBorder: OutlineInputBorder(

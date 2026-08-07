@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mood_journal_app/src/core/constants/app_spacing.dart';
 
 class AchievementCard extends StatelessWidget {
@@ -30,7 +31,7 @@ class AchievementCard extends StatelessWidget {
     
               Text(
                 emoji,
-                style: const TextStyle(fontSize: 28),
+                style: TextStyle(fontSize: 28,fontFamily: GoogleFonts.poppins().fontFamily,),
               ),
     
               const SizedBox(height: 14),
@@ -38,6 +39,7 @@ class AchievementCard extends StatelessWidget {
               Text(
                 title,
                 textAlign: TextAlign.center,
+                style: TextStyle(fontFamily: GoogleFonts.poppins().fontFamily,),
               ),
             ],
           ),

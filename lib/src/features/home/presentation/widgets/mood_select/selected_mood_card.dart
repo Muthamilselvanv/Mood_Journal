@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mood_journal_app/src/core/constants/app_spacing.dart';
 import 'package:mood_journal_app/src/features/home/presentation/controllers/home_controller.dart';
 
@@ -48,7 +49,7 @@ class SelectedMoodCard extends GetView<HomeController> {
 
             const SizedBox(height: AppSpacing.space8),
 
-            Text(mood.title, style: Theme.of(context).textTheme.headlineSmall),
+            Text(mood.title, style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontFamily: GoogleFonts.poppins().fontFamily,)),
 
             const SizedBox(height: AppSpacing.space8),
 
@@ -56,7 +57,7 @@ class SelectedMoodCard extends GetView<HomeController> {
               "Tap a mood below to change",
               style: Theme.of(
                 context,
-              ).textTheme.bodyMedium?.copyWith(color: Colors.grey),
+              ).textTheme.bodyMedium?.copyWith(color: Colors.grey,fontFamily: GoogleFonts.poppins().fontFamily,),
             ),
           ],
         ),

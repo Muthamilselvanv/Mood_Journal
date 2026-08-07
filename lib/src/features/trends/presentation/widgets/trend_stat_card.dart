@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class TrendStatCard extends StatelessWidget {
   final String emoji;
@@ -33,7 +34,7 @@ class TrendStatCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(emoji, style: const TextStyle(fontSize: 28)),
+          Text(emoji, style: TextStyle(fontSize: 28,fontFamily: GoogleFonts.poppins().fontFamily,)),
 
           const SizedBox(height: 12),
 
@@ -46,6 +47,7 @@ class TrendStatCard extends StatelessWidget {
                 color: theme.colorScheme.onSurface,
                 fontWeight: FontWeight.bold,
                 letterSpacing: 1,
+                fontFamily: GoogleFonts.poppins().fontFamily,
               ),
             ),
           ),
@@ -57,6 +59,7 @@ class TrendStatCard extends StatelessWidget {
             style: theme.textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.bold,
               color: theme.colorScheme.onSurface,
+              fontFamily: GoogleFonts.poppins().fontFamily,
             ),
           ),
         ],

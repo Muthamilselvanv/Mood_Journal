@@ -1,12 +1,12 @@
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_flutter/lucide_flutter.dart';
 import 'package:mood_journal_app/src/app/routes/app_routes.dart';
 import 'package:mood_journal_app/src/core/constants/app_assets.dart';
 import 'package:mood_journal_app/src/core/constants/app_colors.dart';
 import 'package:mood_journal_app/src/core/constants/app_spacing.dart';
-import 'package:mood_journal_app/src/core/constants/app_text_style.dart';
 import 'package:mood_journal_app/src/features/main/presentation/controller/main_controller.dart';
 import 'package:mood_journal_app/src/features/profile/presentation/controllers/profile_controller.dart';
 import 'package:mood_journal_app/src/shared/widgets/app_gradient_button.dart';
@@ -25,13 +25,9 @@ class HomePage extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      //Appbar
       appBar: AppBar(
-        //automaticallyImplyLeading: false,
-        //centerTitle: false,
         titleSpacing: AppSpacing.space20,
         toolbarHeight: AppSpacing.toolBarhight, // 70
-        // backgroundColor: AppColors.appBackground,
         elevation: 0,
         scrolledUnderElevation: 0,
         title: Row(
@@ -43,16 +39,18 @@ class HomePage extends StatelessWidget {
                 children: [
                   Text(
                     formattedDate(),
-                    style: Theme.of(
-                      context,
-                    ).textTheme.titleSmall?.copyWith(color: Colors.grey),
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      color: Colors.grey,
+                      fontFamily: GoogleFonts.poppins().fontFamily,
+                    ),
                   ),
                   const SizedBox(height: AppSpacing.space4),
                   Text(
                     greeting(),
-                    style: Theme.of(
-                      context,
-                    ).textTheme.titleSmall?.copyWith(fontSize: 20),
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      fontSize: 20,
+                      fontFamily: GoogleFonts.poppins().fontFamily,
+                    ),
                   ),
                 ],
               ),
@@ -222,7 +220,7 @@ Widget buildMoodCard(BuildContext context) {
             child: Text("🌸", style: TextStyle(fontSize: bigCircle * 0.45)),
           ),
           Padding(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -234,6 +232,7 @@ Widget buildMoodCard(BuildContext context) {
                         : const Color(0xff7B61FF),
                     fontWeight: FontWeight.w700,
                     letterSpacing: 1.5,
+                    fontFamily: GoogleFonts.poppins().fontFamily,
                   ),
                 ),
 
@@ -244,6 +243,7 @@ Widget buildMoodCard(BuildContext context) {
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     color: isDark ? Colors.white : Colors.black,
                     fontWeight: FontWeight.bold,
+                    fontFamily: GoogleFonts.poppins().fontFamily,
                   ),
                 ),
 
@@ -346,7 +346,9 @@ Widget buildTodaySnapshot(BuildContext context) {
                     const SizedBox(height: AppSpacing.space8),
                     Text(
                       "No mood recorded yet",
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontFamily: GoogleFonts.poppins().fontFamily,
+                      ),
                     ),
                   ],
                 ),
@@ -401,7 +403,7 @@ Widget buildTodaySnapshot(BuildContext context) {
                                 ?.copyWith(
                                   fontWeight: FontWeight.bold,
                                   fontSize: AppIconSizes.medium,
-                                  fontFamily: AppTextStyles.heading1.fontFamily,
+                                  fontFamily: GoogleFonts.poppins().fontFamily,
                                   color: isDark ? Colors.white : Colors.black,
                                 ),
                           ),
@@ -423,7 +425,7 @@ Widget buildTodaySnapshot(BuildContext context) {
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           fontSize: AppIconSizes.tiny,
-                          fontFamily: AppTextStyles.bodyMedium.fontFamily,
+                          fontFamily: GoogleFonts.poppins().fontFamily,
                           color: Colors.grey,
                         ),
                       ),
@@ -440,6 +442,7 @@ Widget buildTodaySnapshot(BuildContext context) {
                             latest.weather,
                             style: TextStyle(
                               color: isDark ? Colors.white : Colors.black,
+                              fontFamily: GoogleFonts.poppins().fontFamily,
                             ),
                           ),
 
@@ -449,6 +452,7 @@ Widget buildTodaySnapshot(BuildContext context) {
                             "•",
                             style: TextStyle(
                               color: isDark ? Colors.white : Colors.black,
+                              fontFamily: GoogleFonts.poppins().fontFamily,
                             ),
                           ),
 
@@ -461,6 +465,7 @@ Widget buildTodaySnapshot(BuildContext context) {
                             style: Theme.of(context).textTheme.bodyMedium
                                 ?.copyWith(
                                   color: isDark ? Colors.white : Colors.black,
+                                  fontFamily: GoogleFonts.poppins().fontFamily,
                                 ),
                           ),
                         ],
@@ -510,6 +515,7 @@ class StatsCard extends StatelessWidget {
               value,
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 color: isDark ? Colors.white : Colors.black87,
+                fontFamily: GoogleFonts.poppins().fontFamily,
               ),
             ),
             const SizedBox(height: AppSpacing.space8),
@@ -517,6 +523,7 @@ class StatsCard extends StatelessWidget {
               label,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 color: isDark ? Colors.white : Colors.black87,
+                fontFamily: GoogleFonts.poppins().fontFamily,
               ),
               textAlign: TextAlign.center,
             ),

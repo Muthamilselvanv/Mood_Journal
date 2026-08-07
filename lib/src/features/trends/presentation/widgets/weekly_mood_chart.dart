@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mood_journal_app/src/features/trends/presentation/controllers/trends_controller.dart';
 
 class WeeklyMoodChart extends StatelessWidget {
@@ -24,13 +25,13 @@ class WeeklyMoodChart extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("THIS WEEK", style: Theme.of(context).textTheme.labelMedium),
+            Text("THIS WEEK", style: Theme.of(context).textTheme.labelMedium?.copyWith(fontFamily: GoogleFonts.poppins().fontFamily,)),
 
             const SizedBox(height: 6),
 
             Text(
               "Daily Mood Score",
-              style: Theme.of(context).textTheme.titleLarge,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: GoogleFonts.poppins().fontFamily,),
             ),
 
             SizedBox(height: padding),
@@ -40,12 +41,13 @@ class WeeklyMoodChart extends StatelessWidget {
               width: double.infinity,
               child: Obx(() {
                 if (controller.weeklyMoodSpots.every((e) => e.y == 0)) {
-                  return const Center(
+                  return Center(
                     child: Text(
                       "No mood entries this week",
                       style: TextStyle(
                         color: Colors.grey,
                         fontWeight: FontWeight.w500,
+                        fontFamily: GoogleFonts.poppins().fontFamily,
                       ),
                     ),
                   );
@@ -82,9 +84,10 @@ class WeeklyMoodChart extends StatelessWidget {
                           return spots.map((spot) {
                             return LineTooltipItem(
                               "${spot.y.toStringAsFixed(1)}/10",
-                              const TextStyle(
+                              TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
+                                fontFamily: GoogleFonts.poppins().fontFamily,
                               ),
                             );
                           }).toList();
@@ -143,9 +146,10 @@ class WeeklyMoodChart extends StatelessWidget {
 
                             return Text(
                               value.toInt().toString(),
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 11,
                                 color: Colors.grey,
+                                fontFamily: GoogleFonts.poppins().fontFamily,
                               ),
                             );
                           },
@@ -169,6 +173,7 @@ class WeeklyMoodChart extends StatelessWidget {
                                 style: TextStyle(
                                   fontSize: isTablet ? 13 : 11,
                                   fontWeight: FontWeight.w600,
+                                  fontFamily: GoogleFonts.poppins().fontFamily,
                                 ),
                               ),
                             );

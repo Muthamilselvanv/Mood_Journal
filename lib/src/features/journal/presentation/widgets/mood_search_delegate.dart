@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mood_journal_app/src/features/home/presentation/models/mood_entry_model.dart';
 import 'package:mood_journal_app/src/features/journal/presentation/controllers/journal_controller.dart';
 import 'package:mood_journal_app/src/features/journal/presentation/widgets/journal_card.dart';
@@ -48,7 +49,34 @@ class MoodSearchDelegate extends SearchDelegate {
     }
 
     if (results.isEmpty) {
-      return const Center(child: Text("No journals found"));
+      return Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(
+              Icons.menu_book_rounded, // or Icons.book_outlined
+              size: 72,
+              color: Colors.grey,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              "No journals found",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey,
+                fontFamily: GoogleFonts.poppins().fontFamily,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              "Start by adding your first journal entry.",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 14, color: Colors.grey,fontFamily: GoogleFonts.poppins().fontFamily,),
+            ),
+          ],
+        ),
+      );
     }
 
     return ListView.separated(

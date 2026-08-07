@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mood_journal_app/src/features/journal/presentation/controllers/journal_controller.dart';
 
 class MoodFilter extends GetView<JournalController> {
@@ -56,6 +57,7 @@ class MoodFilter extends GetView<JournalController> {
                             : isDark
                             ? Colors.white
                             : Colors.black87,
+                        fontFamily: GoogleFonts.poppins().fontFamily,
                       ),
                     ),
                   ],

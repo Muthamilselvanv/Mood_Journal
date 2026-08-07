@@ -6,14 +6,14 @@ String formattedDate() {
   //return DateFormat('EEEE, dd MMMM yyyy').format(DateTime.now());
 }
 
-String formateaddDate() {
-  return DateFormat('dd-mm-yyyy').format(DateTime.now());
+String formatAddDate() {
+  return DateFormat('dd-MM-yyyy').format(DateTime.now());
 }
 
 String greeting() {
   final hour = DateTime.now().hour;
 
- // final String userName = 'Muthu';
+  // final String userName = 'Muthu';
   final box = GetStorage();
 
   final name = box.read("userName") ?? "Guest";

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mood_journal_app/src/core/constants/app_spacing.dart';
 import 'package:mood_journal_app/src/features/home/presentation/controllers/home_controller.dart';
 import 'package:mood_journal_app/src/features/home/presentation/widgets/mood_select/mood_item.dart';
@@ -10,7 +11,7 @@ class MoodSelector extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    //final isDark = Theme.of(context).brightness == Brightness.dark;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -19,6 +20,7 @@ class MoodSelector extends GetView<HomeController> {
           style: Theme.of(context).textTheme.labelMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 fontSize: AppIconSizes.small,
+                fontFamily: GoogleFonts.poppins().fontFamily,
               ),
         ),
 

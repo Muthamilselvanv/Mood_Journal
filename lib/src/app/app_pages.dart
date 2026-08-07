@@ -12,6 +12,10 @@ import 'package:mood_journal_app/src/features/home/presentation/pages/home_page.
 import 'package:mood_journal_app/src/features/main/presentation/pages/main_page.dart';
 import 'package:mood_journal_app/src/features/main/presentation/binding/main_binding.dart';
 import 'package:mood_journal_app/src/features/home/presentation/pages/add_mood_entry.dart';
+import 'package:mood_journal_app/src/features/profile/presentation/widgets/about/about_page.dart';
+import 'package:mood_journal_app/src/features/profile/presentation/widgets/about/app_info_page.dart';
+import 'package:mood_journal_app/src/features/profile/presentation/widgets/about/contact_support_page.dart';
+import 'package:mood_journal_app/src/features/profile/presentation/widgets/about/terms_conditions_page.dart';
 
 class AppPages {
   AppPages._(); // private constructor to prevent instantiation
@@ -47,6 +51,12 @@ class AppPages {
     ),
 
     GetPage(name: AppRoutes.addMoodEntry, page: () => const AddMoodEntry()),
+
+    GetPage(name: AppRoutes.support, page: () => const ContactSupportPage()),
+    GetPage(name: AppRoutes.about, page: () => const AboutPage()),
+    GetPage(name: AppRoutes.privacy, page: () => const AppInfoPage()),
+    GetPage(name: AppRoutes.terms, page: () => const TermsConditionsPage()),
+    //GetPage(name: AppRoutes.rate, page: () => const RateAppPage()),
   ];
 
   static final unknownRoute = GetPage(

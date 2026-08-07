@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mood_journal_app/src/features/home/presentation/models/mood_select_model.dart';
 
 class MoodItem extends StatelessWidget {
@@ -57,6 +58,7 @@ class MoodItem extends StatelessWidget {
               style: TextStyle(
                 fontSize: 15,
                 fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                fontFamily: GoogleFonts.poppins().fontFamily,
                 color: selected
                     ? mood.color
                     : isDark

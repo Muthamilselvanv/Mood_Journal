@@ -69,8 +69,8 @@ class OnboardingItem extends StatelessWidget {
                     height: 18,
                     decoration: BoxDecoration(
                       color: isDark
-    ? const Color(0xff5AA9FF).withOpacity(.28)
-    : const Color(0xff5AA9FF).withOpacity(.18),
+                          ? const Color(0xff5AA9FF).withOpacity(.28)
+                          : const Color(0xff5AA9FF).withOpacity(.18),
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -112,6 +112,7 @@ class OnboardingItem extends StatelessWidget {
                 color: theme.colorScheme.onSurface.withOpacity(.7),
                 height: 1.7,
                 fontSize: 16,
+                fontFamily: GoogleFonts.poppins().fontFamily,
               ),
             ),
           ),

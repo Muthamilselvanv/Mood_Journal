@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mood_journal_app/src/features/auth/presentation/controllers/onboarding_controller.dart';
 import 'package:mood_journal_app/src/features/auth/presentation/widgets/onboarding_item.dart';
 import 'package:mood_journal_app/src/features/auth/presentation/widgets/page_indicator.dart';
@@ -104,9 +105,9 @@ class OnboardingPage extends GetView<OnboardingController> {
                               vertical: 10,
                             ),
                           ),
-                          child: const Text(
+                          child:  Text(
                             "Skip",
-                            style: TextStyle(fontWeight: FontWeight.w600),
+                            style: TextStyle(fontWeight: FontWeight.w600,fontFamily: GoogleFonts.poppins().fontFamily,),
                           ),
                         );
                       }),
@@ -203,6 +204,7 @@ class OnboardingPage extends GetView<OnboardingController> {
                                   style: theme.textTheme.bodyMedium?.copyWith(
                                     color: theme.colorScheme.onSurface.withOpacity(.7),
                                     fontWeight: FontWeight.w500,
+                                    fontFamily: GoogleFonts.poppins().fontFamily,
                                   ),
                                 ),
                               ],
@@ -241,12 +243,13 @@ class OnboardingPage extends GetView<OnboardingController> {
                                     borderRadius: BorderRadius.circular(18),
                                   ),
                                 ),
-                                child: const Text(
+                                child: Text(
                                   "Get Started",
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 17,
                                     fontWeight: FontWeight.bold,
+                                    fontFamily: GoogleFonts.poppins().fontFamily,
                                   ),
                                 ),
                               ),

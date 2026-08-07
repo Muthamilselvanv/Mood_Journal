@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mood_journal_app/src/core/constants/app_colors.dart';
 import 'package:mood_journal_app/src/features/trends/presentation/controllers/trends_controller.dart';
 import 'insight_tile.dart';
@@ -39,6 +40,7 @@ class InsightsCard extends StatelessWidget {
                     : const Color(0xff7B61FF),
                 fontWeight: FontWeight.w700,
                 letterSpacing: 1.5,
+                fontFamily: GoogleFonts.poppins().fontFamily,
               ),
             ),
             const SizedBox(height: 8),
@@ -48,6 +50,7 @@ class InsightsCard extends StatelessWidget {
               style: theme.textTheme.headlineSmall?.copyWith(
                 color: theme.colorScheme.onSurface,
                 fontWeight: FontWeight.bold,
+                fontFamily: GoogleFonts.poppins().fontFamily,
               ),
             ),
 
@@ -64,9 +67,10 @@ class InsightsCard extends StatelessWidget {
                     const TextSpan(text: "Most common mood: "),
                     TextSpan(
                       text: controller.controller.mostCommonMood,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.skyBlue,
                         fontWeight: FontWeight.bold,
+                        fontFamily: GoogleFonts.poppins().fontFamily,
                       ),
                     ),
                   ],
@@ -82,14 +86,15 @@ class InsightsCard extends StatelessWidget {
                 text: TextSpan(
                   style: Theme.of(
                     context,
-                  ).textTheme.titleMedium?.copyWith(color: Colors.black87),
+                  ).textTheme.titleMedium?.copyWith(color: Colors.black87,fontFamily: GoogleFonts.poppins().fontFamily,),
                   children: [
                     const TextSpan(text: "Best day: "),
                     TextSpan(
                       text: controller.happiestDay,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.skyBlue,
                         fontWeight: FontWeight.bold,
+                        fontFamily: GoogleFonts.poppins().fontFamily,
                       ),
                     ),
                   ],
@@ -105,14 +110,15 @@ class InsightsCard extends StatelessWidget {
                 text: TextSpan(
                   style: Theme.of(
                     context,
-                  ).textTheme.titleMedium?.copyWith(color: Colors.black87),
+                  ).textTheme.titleMedium?.copyWith(color: Colors.black87,fontFamily: GoogleFonts.poppins().fontFamily,),
                   children: [
                     const TextSpan(text: "Favorite weather: "),
                     TextSpan(
                       text: controller.favoriteWeather,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.skyBlue,
                         fontWeight: FontWeight.bold,
+                        fontFamily: GoogleFonts.poppins().fontFamily,
                       ),
                     ),
                   ],
@@ -128,14 +134,15 @@ class InsightsCard extends StatelessWidget {
                 text: TextSpan(
                   style: Theme.of(
                     context,
-                  ).textTheme.titleMedium?.copyWith(color: Colors.black87),
+                  ).textTheme.titleMedium?.copyWith(color: Colors.black87,fontFamily: GoogleFonts.poppins().fontFamily,),
                   children: [
                     const TextSpan(text: "Top activity: "),
                     TextSpan(
                       text: controller.favoriteActivity,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.skyBlue,
                         fontWeight: FontWeight.bold,
+                        fontFamily: GoogleFonts.poppins().fontFamily,
                       ),
                     ),
                   ],
@@ -151,14 +158,15 @@ class InsightsCard extends StatelessWidget {
                 text: TextSpan(
                   style: Theme.of(
                     context,
-                  ).textTheme.titleMedium?.copyWith(color: Colors.black87),
+                  ).textTheme.titleMedium?.copyWith(color: Colors.black87,fontFamily: GoogleFonts.poppins().fontFamily,),
                   children: [
                     const TextSpan(text: "Weekend insight: "),
                     TextSpan(
                       text: controller.weekendInsight,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.skyBlue,
                         fontWeight: FontWeight.bold,
+                        fontFamily: GoogleFonts.poppins().fontFamily,
                       ),
                     ),
                   ],

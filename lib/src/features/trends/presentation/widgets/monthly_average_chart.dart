@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mood_journal_app/src/features/trends/presentation/controllers/trends_controller.dart';
 
 class MonthlyAverageChart extends StatelessWidget {
@@ -9,7 +10,7 @@ class MonthlyAverageChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<TrendsController>();
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    //final isDark = Theme.of(context).brightness == Brightness.dark;
     final width = MediaQuery.of(context).size.width;
     final isTablet = width > 600;
 
@@ -23,13 +24,20 @@ class MonthlyAverageChart extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("THIS MONTH", style: Theme.of(context).textTheme.labelMedium),
+            Text(
+              "THIS MONTH",
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                fontFamily: GoogleFonts.poppins().fontFamily,
+              ),
+            ),
 
             const SizedBox(height: 4),
 
             Text(
               "Weekly Averages",
-              style: Theme.of(context).textTheme.titleLarge,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontFamily: GoogleFonts.poppins().fontFamily,
+              ),
             ),
 
             const SizedBox(height: 30),
@@ -45,12 +53,13 @@ class MonthlyAverageChart extends StatelessWidget {
                 );
 
                 if (!hasData) {
-                  return const Center(
+                  return Center(
                     child: Text(
                       "No mood entries this month",
                       style: TextStyle(
                         color: Colors.grey,
                         fontWeight: FontWeight.w500,
+                        fontFamily: GoogleFonts.poppins().fontFamily,
                       ),
                     ),
                   );
@@ -87,6 +96,7 @@ class MonthlyAverageChart extends StatelessWidget {
                             TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
+                              fontFamily: GoogleFonts.poppins().fontFamily,
                             ),
                           );
                         },
@@ -112,9 +122,10 @@ class MonthlyAverageChart extends StatelessWidget {
 
                             return Text(
                               value.toInt().toString(),
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 11,
                                 color: Colors.grey,
+                                fontFamily: GoogleFonts.poppins().fontFamily,
                               ),
                             );
                           },
@@ -139,6 +150,7 @@ class MonthlyAverageChart extends StatelessWidget {
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   fontSize: isTablet ? 14 : 11,
+                                  fontFamily: GoogleFonts.poppins().fontFamily,
                                 ),
                               ),
                             );

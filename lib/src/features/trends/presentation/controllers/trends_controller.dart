@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:mood_journal_app/src/features/journal/presentation/controllers/journal_controller.dart';
 
@@ -238,10 +239,11 @@ class TrendsController extends GetxController {
         color: moodColors[e.key],
         radius: 48,
         title: "${percent.toStringAsFixed(0)}%",
-        titleStyle: const TextStyle(
+        titleStyle: TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.bold,
           fontSize: 12,
+          fontFamily: GoogleFonts.poppins().fontFamily,
         ),
       );
     }).toList();

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mood_journal_app/src/core/constants/app_spacing.dart';
 import 'package:mood_journal_app/src/features/journal/presentation/controllers/journal_controller.dart';
 import 'package:mood_journal_app/src/features/journal/presentation/widgets/add_mood_fab.dart';
@@ -26,7 +27,7 @@ class JournalPage extends StatelessWidget {
 
         title: Text(
           "Journal",
-          style: Theme.of(context).textTheme.headlineSmall,
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontFamily: GoogleFonts.poppins().fontFamily,),
         ),
 
         actions: [
