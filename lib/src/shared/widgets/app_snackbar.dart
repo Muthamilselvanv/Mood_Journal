@@ -7,7 +7,7 @@ class AppSnackbar {
 
   static void success(String message) {
     Get.snackbar(
-      icon: Icon(LucideIcons.check, color: Colors.white,),
+      icon: Icon(LucideIcons.check, color: Colors.white),
       "Success",
       message,
       snackPosition: SnackPosition.TOP,

@@ -7,6 +7,8 @@ import 'package:mood_journal_app/src/features/trends/presentation/controllers/tr
 class WeeklyMoodChart extends StatelessWidget {
   const WeeklyMoodChart({super.key});
 
+  static const purple = Color(0xff7B61FF);
+
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<TrendsController>();
@@ -25,22 +27,43 @@ class WeeklyMoodChart extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("THIS WEEK", style: Theme.of(context).textTheme.labelMedium?.copyWith(fontFamily: GoogleFonts.poppins().fontFamily,)),
+            // ----------------------------------------------------------
+            // HEADER
+            // ----------------------------------------------------------
+            Text(
+              "THIS WEEK",
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                fontFamily: GoogleFonts.poppins().fontFamily,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0.5,
+              ),
+            ),
 
             const SizedBox(height: 6),
 
             Text(
               "Daily Mood Score",
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: GoogleFonts.poppins().fontFamily,),
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontFamily: GoogleFonts.poppins().fontFamily,
+                fontWeight: FontWeight.w700,
+              ),
             ),
 
             SizedBox(height: padding),
 
+            // ----------------------------------------------------------
+            // CHART
+            // ----------------------------------------------------------
             SizedBox(
               height: chartHeight,
               width: double.infinity,
               child: Obx(() {
-                if (controller.weeklyMoodSpots.every((e) => e.y == 0)) {
+                final allSpots = controller.weeklyMoodSpots;
+
+                // Check whether the user has at least one mood entry.
+                final hasData = allSpots.any((spot) => spot.y > 0);
+
+                if (!hasData) {
                   return Center(
                     child: Text(
                       "No mood entries this week",
@@ -53,18 +76,46 @@ class WeeklyMoodChart extends StatelessWidget {
                   );
                 }
 
+                // ------------------------------------------------------
+                // IMPORTANT
+                //
+                // Do NOT remove the missing day.
+                //
+                // Keep its X position and replace its Y with
+                // FlSpot.nullSpot.
+                //
+                // This creates a GAP in the line.
+                // ------------------------------------------------------
+
+                final List<FlSpot> chartSpots = allSpots.map<FlSpot>((spot) {
+                  if (spot.y <= 0) {
+                    return FlSpot.nullSpot;
+                  }
+
+                  return spot;
+                }).toList();
+
                 return LineChart(
                   LineChartData(
+                    minX: 0,
+                    maxX: 6,
+
                     minY: 0,
                     maxY: 10,
 
-                    clipData: const FlClipData.all(),
+                    clipData: const FlClipData.none(),
 
+                    // --------------------------------------------------
+                    // BORDER
+                    // --------------------------------------------------
                     borderData: FlBorderData(
                       show: true,
                       border: Border.all(color: Colors.grey.shade200),
                     ),
 
+                    // --------------------------------------------------
+                    // GRID
+                    // --------------------------------------------------
                     gridData: FlGridData(
                       show: true,
                       drawVerticalLine: false,
@@ -77,6 +128,9 @@ class WeeklyMoodChart extends StatelessWidget {
                       },
                     ),
 
+                    // --------------------------------------------------
+                    // TOUCH
+                    // --------------------------------------------------
                     lineTouchData: LineTouchData(
                       enabled: true,
                       touchTooltipData: LineTouchTooltipData(
@@ -95,33 +149,39 @@ class WeeklyMoodChart extends StatelessWidget {
                       ),
                     ),
 
+                    // --------------------------------------------------
+                    // LINE
+                    // --------------------------------------------------
                     lineBarsData: [
                       LineChartBarData(
-                        spots: controller.weeklyMoodSpots,
+                        spots: chartSpots,
 
-                        isCurved: true,
-                        curveSmoothness: 0.35,
+                        // Keep straight lines for mood scores.
+                        isCurved: false,
 
                         barWidth: isTablet ? 5 : 4,
 
                         isStrokeCapRound: true,
 
-                        color: const Color(0xff7B61FF),
+                        color: purple,
 
+                        // ------------------------------------------------
+                        // AREA BELOW LINE
+                        // ------------------------------------------------
                         belowBarData: BarAreaData(
                           show: true,
-                          color: const Color(0xff7B61FF).withOpacity(.12),
+                          color: purple.withOpacity(0.10),
                         ),
 
+                        // ------------------------------------------------
+                        // DOTS
+                        // ------------------------------------------------
                         dotData: FlDotData(
                           show: true,
                           getDotPainter: (spot, percent, bar, index) {
-                            final isLast =
-                                index == controller.weeklyMoodSpots.length - 1;
-
                             return FlDotCirclePainter(
-                              radius: isLast ? 6 : 4,
-                              color: const Color(0xff7B61FF),
+                              radius: 5,
+                              color: purple,
                               strokeWidth: 2,
                               strokeColor: Colors.white,
                             );
@@ -130,10 +190,16 @@ class WeeklyMoodChart extends StatelessWidget {
                       ),
                     ],
 
+                    // --------------------------------------------------
+                    // TITLES
+                    // --------------------------------------------------
                     titlesData: FlTitlesData(
                       topTitles: const AxisTitles(),
                       rightTitles: const AxisTitles(),
 
+                      // ------------------------------------------------
+                      // LEFT Y AXIS
+                      // ------------------------------------------------
                       leftTitles: AxisTitles(
                         sideTitles: SideTitles(
                           showTitles: true,
@@ -156,20 +222,26 @@ class WeeklyMoodChart extends StatelessWidget {
                         ),
                       ),
 
+                      // ------------------------------------------------
+                      // X AXIS
+                      // ------------------------------------------------
                       bottomTitles: AxisTitles(
                         sideTitles: SideTitles(
                           showTitles: true,
                           reservedSize: 34,
+                          interval: 1,
                           getTitlesWidget: (value, meta) {
-                            if (value < 0 ||
-                                value >= controller.last7Days.length) {
+                            final index = value.toInt();
+
+                            if (index < 0 ||
+                                index >= controller.last7Days.length) {
                               return const SizedBox();
                             }
 
                             return Padding(
                               padding: const EdgeInsets.only(top: 8),
                               child: Text(
-                                controller.last7Days[value.toInt()],
+                                controller.last7Days[index],
                                 style: TextStyle(
                                   fontSize: isTablet ? 13 : 11,
                                   fontWeight: FontWeight.w600,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mood_journal_app/src/app/app_pages.dart';
+import 'package:mood_journal_app/src/app/routes/app_pages.dart';
 import 'package:mood_journal_app/src/app/bindings/initial_binding.dart';
 import 'package:mood_journal_app/src/app/routes/app_routes.dart';
 import 'package:mood_journal_app/src/app/theme/app_theme.dart';

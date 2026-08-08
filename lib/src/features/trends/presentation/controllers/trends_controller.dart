@@ -94,9 +94,9 @@ class TrendsController extends GetxController {
     return map.entries.reduce((a, b) => a.value > b.value ? a : b).key;
   }
 
-  //Weely mood spots for the chart
+  // Weekly mood spots for the chart
   List<FlSpot> get weeklyMoodSpots {
-    List<FlSpot> spots = [];
+    final List<FlSpot> spots = [];
 
     for (int i = 6; i >= 0; i--) {
       final day = DateTime(

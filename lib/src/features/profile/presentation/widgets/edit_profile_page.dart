@@ -141,7 +141,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
               Text(
                 "Keep your information up to date.",
-                style: TextStyle(color: Colors.grey,fontFamily: GoogleFonts.poppins().fontFamily,),
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontFamily: GoogleFonts.poppins().fontFamily,
+                ),
               ),
 
               const SizedBox(height: 32),
@@ -151,10 +154,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 children: [
                   Row(
                     children: [
-                      const Icon(
-                        LucideIcons.user,
-                        size: 18,
-                      ),
+                      const Icon(LucideIcons.user, size: 18),
                       const SizedBox(width: 8),
                       Text(
                         "Name",
@@ -210,7 +210,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       const SizedBox(width: 8),
                       Text(
                         "Bio",
-                        style: TextStyle(fontWeight: FontWeight.w600,fontFamily: GoogleFonts.poppins().fontFamily,),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontFamily: GoogleFonts.poppins().fontFamily,
+                        ),
                       ),
                     ],
                   ),
@@ -218,8 +221,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   TextField(
                     minLines: 4,
                     maxLines: 5,
+                    controller: bioController,
+                    textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
                       hintText: "Living one day at a time 🌿",
+                      border: InputBorder.none,
                     ),
                   ),
                 ],
