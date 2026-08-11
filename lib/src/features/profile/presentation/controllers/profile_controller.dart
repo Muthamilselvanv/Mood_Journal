@@ -1,5 +1,9 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:mood_journal_app/src/core/services/image_storage_service.dart';
 import 'package:mood_journal_app/src/features/auth/data/models/user_model.dart';
 import 'package:mood_journal_app/src/features/profile/data/repositories/profile_repository.dart';
 import 'package:mood_journal_app/src/core/services/image_picker_service.dart';
@@ -46,17 +50,36 @@ class ProfileController extends GetxController {
   }
 
   Future<void> pickProfileImage() async {
+    debugPrint("📸 pickProfileImage() called");
+
     final image = await ImagePickerService.pickFromGallery();
 
-    if (image == null || user.value == null) return;
+    if (image == null) {
+      debugPrint("❌ No image selected");
+      return;
+    }
 
-    final updatedUser = user.value!.copyWith(profileImage: image.path);
+    debugPrint("✅ Selected image path: ${image.path}");
 
-    await updateProfile(updatedUser);
+    final currentUser = user.value;
+
+    if (currentUser == null) {
+      debugPrint("❌ User is null");
+      return;
+    }
+
+    final updatedUser = currentUser.copyWith(profileImage: image.path);
+
+    user.value = updatedUser;
+
+    debugPrint("✅ Controller profileImage: ${user.value!.profileImage}");
+
+    await _repository.updateProfile(updatedUser);
+
+    debugPrint("✅ Profile updated in database");
   }
 
   void editProfile() {
     Get.to(() => EditProfilePage(user: user.value!));
   }
-
 }

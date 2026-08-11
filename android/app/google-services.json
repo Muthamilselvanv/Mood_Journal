@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "23408367101",
+    "project_id": "nilora-mood-journal-app",
+    "storage_bucket": "nilora-mood-journal-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:23408367101:android:5bc7a9d90b0d6ec9557594",
+        "android_client_info": {
+          "package_name": "com.example.mood_journal_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB81tmjAdYH8Y-9HG5Ah-JxPamwtZpOzwA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

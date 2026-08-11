@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImagePickerService {
@@ -7,25 +8,52 @@ class ImagePickerService {
 
   static final ImagePicker _picker = ImagePicker();
 
-  static Future<File?> pickFromCamera() async {
-    final image = await _picker.pickImage(
-      source: ImageSource.camera,
-      imageQuality: 85,
-    );
+  static Future<File?> pickFromGallery() async {
+    try {
+      debugPrint("📸 Opening gallery...");
 
-    if (image == null) return null;
+      final XFile? image = await _picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 85,
+      );
 
-    return File(image.path);
+      if (image == null) {
+        debugPrint("❌ No image selected");
+        return null;
+      }
+
+      debugPrint("✅ Image path: ${image.path}");
+
+      return File(image.path);
+    } catch (e, stackTrace) {
+      debugPrint("❌ Image picker error: $e");
+      debugPrint("$stackTrace");
+      return null;
+    }
   }
 
-  static Future<File?> pickFromGallery() async {
-    final image = await _picker.pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 85,
-    );
+  static Future<File?> pickFromCamera() async {
+    try {
+      final XFile? image = await _picker.pickImage(
+        source: ImageSource.camera,
+        imageQuality: 85,
+      );
 
-    if (image == null) return null;
+      if (image == null) {
+        return null;
+      }
 
-    return File(image.path);
+      final file = File(image.path);
+
+      if (!await file.exists()) {
+        return null;
+      }
+
+      return file;
+    } catch (e, stackTrace) {
+      debugPrint("❌ Camera error: $e");
+      debugPrint("$stackTrace");
+      return null;
+    }
   }
 }

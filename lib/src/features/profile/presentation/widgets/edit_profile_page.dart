@@ -51,7 +51,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Future<void> _save() async {
-    final updated = widget.user.copyWith(
+    final currentUser = controller.user.value;
+
+    if (currentUser == null) return;
+
+    final updated = currentUser.copyWith(
       name: nameController.text.trim(),
       bio: bioController.text.trim(),
       profileImage: imagePath,

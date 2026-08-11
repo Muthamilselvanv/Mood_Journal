@@ -111,15 +111,32 @@ class JournalDetailPage extends StatelessWidget {
                     return CircleAvatar(
                       radius: 22,
                       backgroundColor: theme.colorScheme.surface,
-                      child: IconButton(
-                        onPressed: () => controller.toggleFavorite(current),
-                        icon: Icon(
-                          current.isFavorite
-                              ? Icons.favorite
-                              : Icons.favorite_outline,
-                          color: current.isFavorite ? Colors.red : Colors.grey,
-                        ),
-                      ),
+                      child: Obx(() {
+                        final isLoading =
+                            controller.isFavoriteLoading[entry.id] == true;
+
+                        if (isLoading) {
+                          return const SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          );
+                        }
+
+                        return IconButton(
+                          onPressed: () {
+                            controller.toggleFavoriteEntry(entry);
+                          },
+                          icon: Icon(
+                            current.isFavorite
+                                ? Icons.favorite
+                                : Icons.favorite_outline,
+                            color: current.isFavorite
+                                ? Colors.red
+                                : Colors.grey,
+                          ),
+                        );
+                      }),
                     );
                   }),
 
@@ -270,7 +287,10 @@ class JournalDetailPage extends StatelessWidget {
                       ),
                       child: Text(
                         weatherEmoji,
-                        style: TextStyle(fontSize: 34,fontFamily: GoogleFonts.poppins().fontFamily,),
+                        style: TextStyle(
+                          fontSize: 34,
+                          fontFamily: GoogleFonts.poppins().fontFamily,
+                        ),
                       ),
                     ),
 
@@ -334,7 +354,8 @@ class JournalDetailPage extends StatelessWidget {
                                   style: TextStyle(
                                     color: moodColor,
                                     fontWeight: FontWeight.w600,
-                                    fontFamily: GoogleFonts.poppins().fontFamily,
+                                    fontFamily:
+                                        GoogleFonts.poppins().fontFamily,
                                   ),
                                 ),
                               ),
@@ -355,7 +376,11 @@ class JournalDetailPage extends StatelessWidget {
                               Text(
                                 "No activities added",
                                 style: Theme.of(context).textTheme.bodyMedium
-                                    ?.copyWith(color: Colors.grey,fontFamily: GoogleFonts.poppins().fontFamily,),
+                                    ?.copyWith(
+                                      color: Colors.grey,
+                                      fontFamily:
+                                          GoogleFonts.poppins().fontFamily,
+                                    ),
                               ),
                             ],
                           ),
@@ -387,7 +412,11 @@ class JournalDetailPage extends StatelessWidget {
                             Text(
                               "No journal entries",
                               style: Theme.of(context).textTheme.bodyMedium
-                                  ?.copyWith(color: Colors.grey,fontFamily: GoogleFonts.poppins().fontFamily,),
+                                  ?.copyWith(
+                                    color: Colors.grey,
+                                    fontFamily:
+                                        GoogleFonts.poppins().fontFamily,
+                                  ),
                             ),
                           ],
                         ),
@@ -418,11 +447,11 @@ class JournalDetailPage extends StatelessWidget {
               ),
 
               const SizedBox(height: 20),
-              if (entry.imagePath != null && entry.imagePath!.isNotEmpty) ...[
+              if (entry.imageUrl != null && entry.imageUrl!.isNotEmpty) ...[
                 ClipRRect(
                   borderRadius: BorderRadius.circular(18),
                   child: Image.file(
-                    File(entry.imagePath!),
+                    File(entry.imageUrl!),
                     width: double.infinity,
                     height: 220,
                     fit: BoxFit.cover,
@@ -472,9 +501,15 @@ void _showDeleteDialog(BuildContext context, MoodEntry entry) {
   Get.dialog(
     AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      title: const Text("Delete Journal"),
-      content: const Text(
+      title: Center(
+        child: Text(
+          "Delete Journal",
+          style: TextStyle(fontFamily: GoogleFonts.poppins().fontFamily),
+        ),
+      ),
+      content: Text(
         "Are you sure you want to delete this journal entry?\n\nThis action cannot be undone.",
+        style: TextStyle(fontFamily: GoogleFonts.poppins().fontFamily),
       ),
       actions: [
         TextButton(onPressed: Get.back, child: const Text("Cancel")),
@@ -504,7 +539,11 @@ Widget buildAddMoodButton(BuildContext context, MoodEntry entry) {
       onPressed: () => _showDeleteDialog(context, entry),
       label: Text(
         "Delete",
-        style: TextStyle(fontSize: 16, color: Colors.redAccent,fontFamily: GoogleFonts.poppins().fontFamily,),
+        style: TextStyle(
+          fontSize: 16,
+          color: Colors.redAccent,
+          fontFamily: GoogleFonts.poppins().fontFamily,
+        ),
       ),
       icon: const Icon(Icons.delete, color: Colors.redAccent),
       style: ElevatedButton.styleFrom(

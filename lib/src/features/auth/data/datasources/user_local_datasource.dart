@@ -5,83 +5,100 @@ import 'package:sqflite/sqflite.dart';
 class UserLocalDataSource {
   final DatabaseHelper _databaseHelper = DatabaseHelper.instance;
 
-  /// Register User
   Future<int> register(UserModel user) async {
-    final Database db = await _databaseHelper.database;
+    final db = await _databaseHelper.database;
 
-    return await db.insert(
-      "users",
+    return db.insert(
+      'users',
       user.toMap(),
       conflictAlgorithm: ConflictAlgorithm.abort,
     );
   }
 
-  /// Login
-  Future<UserModel?> login({
-    required String username,
-    required String password,
+  /// Creates the local user after a fresh install, or updates its profile while
+  /// retaining its existing SQLite primary key.
+  Future<int> insertUser({
+    required String firebaseUid,
+    required String name,
+    required String email,
   }) async {
-    final Database db = await _databaseHelper.database;
+    final db = await _databaseHelper.database;
 
-    final result = await db.query(
-      "users",
-      where: "username = ? AND password = ?",
-      whereArgs: [username, password],
-      limit: 1,
-    );
+    final existing = await getUserByFirebaseUid(firebaseUid);
 
-    if (result.isEmpty) return null;
+    if (existing != null) {
+      await db.update(
+        'users',
+        {'name': name, 'email': email},
+        where: 'id = ?',
+        whereArgs: [existing.id],
+      );
+      return existing.id!;
+    }
 
-    return UserModel.fromMap(result.first);
+    return db.insert('users', {
+      'firebaseUid': firebaseUid,
+      'name': name,
+      'email': email,
+      'profileImage': null,
+      'bio': null,
+      'createdAt': DateTime.now().toIso8601String(),
+    }, conflictAlgorithm: ConflictAlgorithm.abort);
   }
 
-  /// Check username already exists
-  Future<bool> usernameExists(String username) async {
-    final Database db = await _databaseHelper.database;
+  Future<bool> emailExists(String email) async {
+    final db = await _databaseHelper.database;
 
     final result = await db.query(
-      "users",
-      columns: ["id"],
-      where: "username = ?",
-      whereArgs: [username],
+      'users',
+      columns: ['id'],
+      where: 'email = ?',
+      whereArgs: [email],
       limit: 1,
     );
 
     return result.isNotEmpty;
   }
 
-  /// Get user by ID
-  Future<UserModel?> getUser(int id) async {
-    final Database db = await _databaseHelper.database;
+  Future<UserModel?> getUserByFirebaseUid(String firebaseUid) async {
+    final db = await _databaseHelper.database;
 
     final result = await db.query(
-      "users",
-      where: "id = ?",
+      'users',
+      where: 'firebaseUid = ?',
+      whereArgs: [firebaseUid],
+      limit: 1,
+    );
+
+    return result.isEmpty ? null : UserModel.fromMap(result.first);
+  }
+
+  Future<UserModel?> getUser(int id) async {
+    final db = await _databaseHelper.database;
+
+    final result = await db.query(
+      'users',
+      where: 'id = ?',
       whereArgs: [id],
       limit: 1,
     );
 
-    if (result.isEmpty) return null;
-
-    return UserModel.fromMap(result.first);
+    return result.isEmpty ? null : UserModel.fromMap(result.first);
   }
 
-  /// Update profile
   Future<int> updateUser(UserModel user) async {
-    final Database db = await _databaseHelper.database;
+    final db = await _databaseHelper.database;
 
-    return await db.update(
-      "users",
+    return db.update(
+      'users',
       user.toMap(),
-      where: "id = ?",
+      where: 'id = ?',
       whereArgs: [user.id],
     );
   }
 
-  /// Delete account
   Future<int> deleteUser(int id) async {
-    final Database db = await _databaseHelper.database;
-
-    return await db.delete("users", where: "id = ?", whereArgs: [id]);
+    final db = await _databaseHelper.database;
+    return db.delete('users', where: 'id = ?', whereArgs: [id]);
   }
 }

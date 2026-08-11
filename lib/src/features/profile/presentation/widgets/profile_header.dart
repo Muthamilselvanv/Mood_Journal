@@ -123,7 +123,7 @@ class ProfileHeader extends GetView<ProfileController> {
               const SizedBox(height: 6),
 
               Text(
-                "@${user.username}",
+                "@${user.name}",
                 style: theme.textTheme.bodyMedium?.copyWith(color: Colors.grey),
               ),
 

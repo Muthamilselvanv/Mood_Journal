@@ -16,7 +16,7 @@ String greeting() {
   // final String userName = 'Muthu';
   final box = GetStorage();
 
-  final name = box.read("userName") ?? "Guest";
+  final name = box.read("name") ?? "Guest";
 
   if (hour < 12) {
     return "Good Morning $name 👋";

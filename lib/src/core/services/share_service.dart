@@ -40,12 +40,12 @@ ${entry.notes}
 ━━━━━━━━━━━━━━━━━━━━━
 ''';
 
-    if (entry.imagePath != null && File(entry.imagePath!).existsSync()) {
+    if (entry.imageUrl != null && File(entry.imageUrl!).existsSync()) {
       await SharePlus.instance.share(
         ShareParams(
           text: text,
           subject: "Mood Journal - ${entry.title}",
-          files: [XFile(entry.imagePath!)],
+          files: [XFile(entry.imageUrl!)],
         ),
       );
     } else {

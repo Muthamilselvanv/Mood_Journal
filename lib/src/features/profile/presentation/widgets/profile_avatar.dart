@@ -11,30 +11,34 @@ class ProfileAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final hasImage =
+        imagePath != null &&
+        imagePath!.trim().isNotEmpty &&
+        File(imagePath!).existsSync();
+
+    debugPrint("Avatar imagePath: $imagePath");
+    debugPrint("Avatar hasImage: $hasImage");
+
     return Stack(
       children: [
         Container(
           padding: const EdgeInsets.all(4),
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             shape: BoxShape.circle,
-            gradient: const LinearGradient(
+            gradient: LinearGradient(
               colors: [Color(0xff7C4DFF), Color(0xff5AA9FF)],
             ),
           ),
           child: CircleAvatar(
             radius: 54,
             backgroundColor: const Color(0xffEEF2FF),
-
-            backgroundImage: imagePath != null
-                ? FileImage(File(imagePath!))
-                : null,
-
-            child: imagePath == null
+            backgroundImage: hasImage ? FileImage(File(imagePath!)) : null,
+            child: !hasImage
                 ? Image.asset(
                     AppAssets.niloraIcon,
-                    width: 230,
+                    width: 58,
                     fit: BoxFit.contain,
-                    color: Color(0xff7C4DFF),
+                    color: const Color(0xff7C4DFF),
                   )
                 : null,
           ),

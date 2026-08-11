@@ -1,72 +1,182 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mood_journal_app/src/app/routes/app_routes.dart';
 import 'package:mood_journal_app/src/features/auth/data/repositories/user_repository.dart';
+import 'package:mood_journal_app/src/features/home/data/repositories/mood_repository.dart';
 
 class LoginController extends GetxController {
-  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  final usernameError = RxnString();
+  final emailError = RxnString();
   final passwordError = RxnString();
-
   final obscurePassword = true.obs;
-
   final isLoading = false.obs;
 
   final UserRepository repository = Get.find<UserRepository>();
+  final MoodRepository moodRepository = Get.find<MoodRepository>();
 
-  void togglePassword() {
-    obscurePassword.toggle();
-  }
+  void togglePassword() => obscurePassword.toggle();
 
   Future<void> login() async {
-    usernameError.value = null;
+    emailError.value = null;
     passwordError.value = null;
 
-    final username = usernameController.text.trim();
+    final email = emailController.text.trim();
     final password = passwordController.text;
 
-    if (username.isEmpty) {
-      usernameError.value = "Username is required";
-    }
-
-    if (password.isEmpty) {
-      passwordError.value = "Password is required";
-    }
-
-    if (usernameError.value != null || passwordError.value != null) {
-      return;
-    }
+    if (email.isEmpty) emailError.value = 'Email is required';
+    if (password.isEmpty) passwordError.value = 'Password is required';
+    if (emailError.value != null || passwordError.value != null) return;
 
     isLoading.value = true;
 
-    final user = await repository.login(username: username, password: password);
+    try {
+      // 1. Firebase Authentication
+      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
-    isLoading.value = false;
+      final firebaseUser = credential.user;
+      if (firebaseUser == null) {
+        throw StateError('Firebase sign-in returned no user.');
+      }
 
-    if (user == null) {
-      passwordError.value = "Invalid username or password";
+      // 2. Permanent Firestore profile. SQLite is deliberately not used here.
+      debugPrint('Loading Firestore profile for ${firebaseUser.uid}');
+      final profile = await repository.getUserProfile(firebaseUser.uid);
 
+      if (profile == null) {
+        passwordError.value =
+            'Your account profile is missing. Please contact support.';
+        return;
+      }
+
+      final name = profile['name']?.toString().trim() ?? '';
+      final userEmail =
+          profile['email']?.toString().trim() ??
+          firebaseUser.email?.trim() ??
+          '';
+
+      if (name.isEmpty || userEmail.isEmpty) {
+        throw StateError('Firestore profile is incomplete.');
+      }
+
+      // 3. Recreate SQLite user after reinstall, or use its existing local ID.
+      final localUser = await repository.getUserByFirebaseUid(firebaseUser.uid);
+
+      final localUserId =
+          localUser?.id ??
+          await repository.insertUser(
+            firebaseUid: firebaseUser.uid,
+            name: name,
+            email: userEmail,
+          );
+
+      // 4. Firestore → SQLite journal upsert.
+      await moodRepository.syncMoodEntriesFromFirebase(
+        firebaseUid: firebaseUser.uid,
+        localUserId: localUserId,
+      );
+
+      // 5. Persist session only after complete restoration succeeds.
+      final box = GetStorage();
+      await box.write('isLoggedIn', true);
+      await box.write('isGuest', false);
+      await box.write('firebaseUid', firebaseUser.uid);
+      await box.write('userId', localUserId);
+      await box.write('name', name);
+      await box.write('email', userEmail);
+
+      Get.offAllNamed(AppRoutes.home);
+    } on FirebaseAuthException catch (error, stackTrace) {
+      debugPrint('LOGIN AUTH ERROR: ${error.code} ${error.message}');
+      debugPrintStack(stackTrace: stackTrace);
+
+      switch (error.code) {
+        case 'invalid-credential':
+        case 'wrong-password':
+        case 'user-not-found':
+          passwordError.value = 'Invalid email or password';
+          break;
+        case 'invalid-email':
+          emailError.value = 'Invalid email address';
+          break;
+        case 'user-disabled':
+          emailError.value = 'This account has been disabled';
+          break;
+        case 'too-many-requests':
+          passwordError.value = 'Too many attempts. Try again later.';
+          break;
+        default:
+          passwordError.value = error.message ?? 'Unable to sign in';
+      }
+    } on FirebaseException catch (error, stackTrace) {
+      debugPrint('LOGIN FIRESTORE ERROR: ${error.code} ${error.message}');
+      debugPrintStack(stackTrace: stackTrace);
+
+      Get.snackbar(
+        'Cloud data error',
+        'Sign-in succeeded, but your profile or journals could not be loaded. '
+            'Check your connection and Firestore rules.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } on StateError catch (error, stackTrace) {
+      debugPrint('LOGIN DATA ERROR: $error');
+      debugPrintStack(stackTrace: stackTrace);
+
+      Get.snackbar(
+        'Account setup error',
+        error.message?.toString() ?? 'Your account data is incomplete.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } catch (error, stackTrace) {
+      debugPrint('LOGIN ERROR: $error');
+      debugPrintStack(stackTrace: stackTrace);
+
+      Get.snackbar(
+        'Login failed',
+        'Something went wrong while restoring your local data.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> resetPassword(String email) async {
+    if (email.trim().isEmpty) {
+      Get.snackbar(
+        'Email required',
+        'Please enter your email address.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
       return;
     }
 
-    final box = GetStorage();
-
-    box.write("isLoggedIn", true);
-    box.write("userId", user.id);
-    box.write("name", user.name);
-    box.write("userName", user.username);
-    box.write("password", user.password);
-    box.write("bio", user.bio);
-    box.write("isGuest", false);
-
-    Get.offAllNamed(AppRoutes.home);
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email.trim());
+      Get.back();
+      Get.snackbar(
+        'Email sent',
+        'Check your email for the password-reset link.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } on FirebaseAuthException catch (error) {
+      Get.snackbar(
+        'Unable to reset password',
+        error.message ?? 'Please try again.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
   }
 
-  //forgot password
   void popUp() {
     Get.dialog(
       Dialog(
@@ -179,10 +289,10 @@ class LoginController extends GetxController {
     );
   }
 
-  // @override
-  // void onClose() {
-  //   usernameController.dispose();
-  //   passwordController.dispose();
-  //   super.onClose();
-  // }
+  @override
+  void onClose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.onClose();
+  }
 }

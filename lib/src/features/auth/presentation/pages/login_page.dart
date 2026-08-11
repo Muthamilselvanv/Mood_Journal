@@ -58,10 +58,10 @@ class LoginPage extends GetView<LoginController> {
 
                 Obx(
                   () => AuthTextField(
-                    controller: controller.usernameController,
-                    hint: "Username",
-                    icon: LucideIcons.user,
-                    errorText: controller.usernameError.value,
+                    controller: controller.emailController,
+                    hint: "Email",
+                    icon: LucideIcons.mail,
+                    errorText: controller.emailError.value,
                   ),
                 ),
 
@@ -105,48 +105,70 @@ class LoginPage extends GetView<LoginController> {
 
                 const SizedBox(height: 12),
 
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(18),
-                      gradient: const LinearGradient(
-                        colors: [Color(0xff7C4DFF), Color(0xff5AA9FF)],
+                Obx(
+                  () => SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(18),
+                        gradient: const LinearGradient(
+                          colors: [Color(0xff7C4DFF), Color(0xff5AA9FF)],
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color(0x407C4DFF),
+                            blurRadius: 18,
+                            offset: Offset(0, 8),
+                          ),
+                        ],
                       ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: const Color(0xff7C4DFF).withOpacity(.25),
-                          blurRadius: 18,
-                          offset: const Offset(0, 8),
+                      child: ElevatedButton(
+                        onPressed: controller.isLoading.value
+                            ? null
+                            : () async {
+                                await controller.login();
+                              },
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          backgroundColor: Colors.transparent,
+                          disabledBackgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18),
+                          ),
                         ),
-                      ],
-                    ),
-                    child: ElevatedButton.icon(
-                      onPressed: controller.isLoading.value
-                          ? null
-                          : () async {
-                              await controller.login();
-                            },
-                      style: ElevatedButton.styleFrom(
-                        elevation: 0,
-                        backgroundColor: Colors.transparent,
-                        shadowColor: Colors.transparent,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18),
-                        ),
-                      ),
-                      icon: const Icon(LucideIcons.logIn, color: Colors.white),
-                      label: Text(
-                        controller.isLoading.value
-                            ? "Signing In..."
-                            : "Sign In",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                          fontFamily: GoogleFonts.poppins().fontFamily,
-                        ),
+                        child: controller.isLoading.value
+                            ? const SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.5,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.white,
+                                  ),
+                                ),
+                              )
+                            : Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(
+                                    LucideIcons.logIn,
+                                    color: Colors.white,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    "Sign In",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white,
+                                      fontFamily:
+                                          GoogleFonts.poppins().fontFamily,
+                                    ),
+                                  ),
+                                ],
+                              ),
                       ),
                     ),
                   ),

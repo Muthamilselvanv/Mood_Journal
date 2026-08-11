@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_flutter/lucide_flutter.dart';
@@ -124,6 +125,8 @@ class HomeController extends GetxController {
 
   bool get isEditing => editingEntry.value != null;
 
+  final isSaving = false.obs;
+
   final selectedIndex = 0.obs;
 
   final intensity = 1.0.obs;
@@ -145,6 +148,49 @@ class HomeController extends GetxController {
   MoodModel get selectedMood => moods[selectedIndex.value];
 
   WeatherModel get weather => weathers[selectedWeather.value];
+
+  final MoodRepository _repository = Get.find<MoodRepository>();
+
+  Future<void> saveMood() async {
+    final firebaseUser = FirebaseAuth.instance.currentUser;
+
+    if (firebaseUser == null) {
+      Get.snackbar("Error", "Please login first");
+      return;
+    }
+
+    final entry = MoodEntry(
+      // MoodEntry.userId is int for SQLite.
+      // Firebase UID is handled by MoodFirebaseDataSource.
+      userId: 0,
+
+      mood: selectedMood.title,
+
+      weather: weather.title,
+
+      activities: selectedActivities.toList(),
+
+      intensity: intensity.value.toInt(),
+
+      title: titleController.text.trim(),
+
+      notes: notesController.text.trim(),
+
+      createdAt: DateTime.now(),
+
+      imageUrl: null,
+    );
+
+    try {
+      await _repository.addMoodEntry(entry);
+
+      Get.snackbar("Success", "Mood saved successfully");
+    } catch (e) {
+      debugPrint("❌ Firebase mood error: $e");
+
+      Get.snackbar("Error", "Failed to save mood");
+    }
+  }
 
   Future<void> loadMood() async {
     final moods = await repository.getAllMoods();
@@ -196,8 +242,8 @@ class HomeController extends GetxController {
     titleController.text = entry.title;
     notesController.text = entry.notes;
 
-    if (entry.imagePath != null) {
-      selectedImage.value = File(entry.imagePath!);
+    if (entry.imageUrl != null) {
+      selectedImage.value = File(entry.imageUrl!);
     }
   }
 

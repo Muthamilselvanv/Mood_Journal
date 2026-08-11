@@ -17,50 +17,74 @@ class BuildAddMoodButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<HomeController>();
     final repository = Get.find<MoodRepository>();
-    final userId = GetStorage().read("userId");
+
     return SizedBox(
       width: double.infinity,
       child: Obx(
         () => AppGradientButton(
           text: controller.isEditing ? "Update" : "Save",
-          icon: controller.isEditing ? Icons.edit : Icons.save,
-          onPressed: () async {
-            if (!controller.formKey.currentState!.validate()) return;
 
-            final entry = MoodEntry(
-              id: controller.editingEntry.value?.id,
-              userId: userId, //controller.userId.value,
-              mood: controller.selectedMood.title,
-              weather: controller.weather.title,
-              activities: controller.selectedActivities.toList(),
-              intensity: controller.intensity.value.toInt(),
-              title: controller.titleController.text,
-              notes: controller.notesController.text,
-              createdAt:
-                  controller.editingEntry.value?.createdAt ?? DateTime.now(),
-              imagePath: controller.selectedImage.value?.path,
-              isFavorite: controller.editingEntry.value?.isFavorite ?? false,
-            );
+          icon: controller.isEditing ? Icons.edit : Icons.save,
+
+          isLoading: controller.isSaving.value,
+
+          onPressed: () async {
+            if (!controller.formKey.currentState!.validate()) {
+              return;
+            }
+
+            controller.isSaving.value = true;
 
             try {
+              final imageFile = controller.selectedImage.value;
+              final userId = GetStorage().read("userId");
+
+              final entry = MoodEntry(
+                id: controller.editingEntry.value?.id,
+                firebaseId: controller.editingEntry.value?.firebaseId,
+                userId: userId,
+                mood: controller.selectedMood.title,
+                weather: controller.weather.title,
+                activities: controller.selectedActivities.toList(),
+                intensity: controller.intensity.value.toInt(),
+                title: controller.titleController.text.trim(),
+                notes: controller.notesController.text.trim(),
+                createdAt:
+                    controller.editingEntry.value?.createdAt ?? DateTime.now(),
+
+                // Local device image only
+                imageUrl:
+                    imageFile?.path ?? controller.editingEntry.value?.imageUrl,
+                isFavorite: controller.editingEntry.value?.isFavorite ?? false,
+              );
+
               if (controller.isEditing) {
+                // 1. Update Firestore
+                await repository.updateMoodEntry(entry);
+
+                // 2. Update SQLite
                 await repository.updateMood(entry);
 
+                // 3. Reload UI
                 await controller.loadMood();
-
                 await Get.find<JournalController>().loadEntries();
 
+                // 4. Reset
                 controller.resetForm();
 
+                // 5. Success
                 AppSnackbar.success("Mood updated successfully!");
 
-                // Return to JournalDetailPage
                 Get.offNamed(AppRoutes.journal);
               } else {
-                await repository.insertMood(entry);
+                // Save locally
+                final firebaseId = await repository.addMoodEntry(entry);
+
+                final firebaseEntry = entry.copyWith(firebaseId: firebaseId);
+
+                await repository.insertMood(firebaseEntry);
 
                 await controller.loadMood();
-
                 await Get.find<JournalController>().loadEntries();
 
                 controller.resetForm();
@@ -69,15 +93,17 @@ class BuildAddMoodButton extends StatelessWidget {
 
                 AppSnackbar.success("Mood saved successfully!");
 
-                // Go to Journal tab
                 Get.offNamed(AppRoutes.journal);
               }
-            } catch (e) {
-              AppSnackbar.error(
-                controller.isEditing
-                    ? "Failed to update mood."
-                    : "Failed to save mood.",
-              );
+            } catch (e, stackTrace) {
+              debugPrint("❌❌❌ SAVE MOOD ERROR ❌❌❌");
+
+              debugPrint("Error: $e");
+              debugPrint("StackTrace: $stackTrace");
+
+              AppSnackbar.error("Failed to save mood.");
+            } finally {
+              controller.isSaving.value = false;
             }
           },
         ),

@@ -75,10 +75,10 @@ class RegisterPage extends GetView<RegisterController> {
 
                 Obx(
                   () => AuthTextField(
-                    controller: controller.usernameController,
-                    hint: "Username",
-                    icon: LucideIcons.user,
-                    errorText: controller.usernameError.value,
+                    controller: controller.emailController,
+                    hint: "Email",
+                    icon: LucideIcons.mail,
+                    errorText: controller.emailError.value,
                   ),
                 ),
 

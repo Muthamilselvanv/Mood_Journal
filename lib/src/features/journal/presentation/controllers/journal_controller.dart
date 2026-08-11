@@ -1,14 +1,18 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:mood_journal_app/src/features/home/data/repositories/mood_repository.dart';
+import 'package:mood_journal_app/src/features/home/presentation/controllers/home_controller.dart';
 import 'package:mood_journal_app/src/features/home/presentation/models/mood_entry_model.dart';
+import 'package:mood_journal_app/src/shared/widgets/app_snackbar.dart';
 
 class JournalController extends GetxController {
   final selectedFilter = "All".obs;
 
   final moodEntries = <MoodEntry>[].obs;
 
-  final MoodRepository repository = Get.find();
+  final isFavoriteLoading = <int, bool>{}.obs;
+
+  final MoodRepository repository = Get.find<MoodRepository>();
 
   bool get hasFirstEntry => moodEntries.isNotEmpty;
 
@@ -175,21 +179,51 @@ class JournalController extends GetxController {
     return counts.entries.reduce((a, b) => a.value >= b.value ? a : b).key;
   }
 
-  Future<void> toggleFavorite(MoodEntry entry) async {
-    await repository.toggleFavorite(entry.id!, !entry.isFavorite);
+  Future<void> deleteEntry(MoodEntry entry) async {
+    try {
+      await repository.deleteMoodCompletely(entry);
 
-    await loadEntries();
+      await loadEntries();
+
+      await Get.find<HomeController>().loadMood();
+      AppSnackbar.success("Journal deleted");
+    } catch (e, stackTrace) {
+      debugPrint("❌ DELETE MOOD ERROR: $e");
+      debugPrint("StackTrace: $stackTrace");
+
+      AppSnackbar.error("Failed to delete journal");
+    }
   }
 
-  Future<void> deleteEntry(MoodEntry entry) async {
+  Future<void> toggleFavoriteEntry(MoodEntry entry) async {
     if (entry.id == null) return;
 
-    print("Deleting ${entry.id}");
+    final id = entry.id!;
 
-    await repository.deleteMood(entry.id!);
+    if (isFavoriteLoading[id] == true) return;
 
-    await loadEntries();
+    isFavoriteLoading[id] = true;
+    isFavoriteLoading.refresh();
 
-    print("Remaining: ${moodEntries.length}");
+    try {
+      final newValue = !entry.isFavorite;
+
+      await repository.toggleFavoriteEntry(entry, newValue);
+
+      await loadEntries();
+
+      AppSnackbar.success(
+        newValue ? "Added to favorites" : "Removed from favorites",
+      );
+    } catch (e, stackTrace) {
+      debugPrint("❌ FAVORITE ERROR: $e");
+      debugPrint("Error: $e");
+      debugPrint("StackTrace: $stackTrace");
+
+      AppSnackbar.error("Failed to update favorite");
+    } finally {
+      isFavoriteLoading[id] = false;
+      isFavoriteLoading.refresh();
+    }
   }
 }
