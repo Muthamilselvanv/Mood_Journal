@@ -9,23 +9,74 @@ class EmptyJournalView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: AppSpacing.screen,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            LucideIcons.notebookText,
-            size: AppIconSizes.extraLarge,
-            color: AppColors.coralRose,
-          ),
-          SizedBox(height: AppSpacing.space12),
-          Text(
-            "No journal entries yet",
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(fontFamily: GoogleFonts.poppins().fontFamily,),
-          ),
-        ],
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Center(
+      child: Padding(
+        padding: AppSpacing.screen,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Icon container
+            Container(
+              width: 96,
+              height: 96,
+              decoration: BoxDecoration(
+                color: AppColors.coralRose.withOpacity(0.10),
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: Center(
+                child: Icon(
+                  LucideIcons.notebookText,
+                  size: 42,
+                  color: AppColors.coralRose,
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 24),
+
+            // Title
+            Text(
+              "No journal entries yet",
+              textAlign: TextAlign.center,
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                fontFamily: GoogleFonts.poppins().fontFamily,
+                color: colorScheme.onSurface,
+              ),
+            ),
+
+            const SizedBox(height: 8),
+
+            // Description
+            Text(
+              "Your thoughts and feelings will appear here.\n"
+              "Start writing your first journal entry.",
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                fontSize: 13,
+                height: 1.5,
+                fontFamily: GoogleFonts.poppins().fontFamily,
+                color: colorScheme.onSurfaceVariant,
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            // Small decorative line
+            Container(
+              width: 36,
+              height: 4,
+              decoration: BoxDecoration(
+                color: AppColors.coralRose.withOpacity(0.35),
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

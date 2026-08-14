@@ -60,9 +60,9 @@ class InsightsCard extends StatelessWidget {
               emoji: "😊",
               title: RichText(
                 text: TextSpan(
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleMedium?.copyWith(color: Colors.black87),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: theme.colorScheme.onSurface,
+                  ),
                   children: [
                     const TextSpan(text: "Most common mood: "),
                     TextSpan(
@@ -84,9 +84,10 @@ class InsightsCard extends StatelessWidget {
               emoji: "📅",
               title: RichText(
                 text: TextSpan(
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleMedium?.copyWith(color: Colors.black87,fontFamily: GoogleFonts.poppins().fontFamily,),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: Colors.black87,
+                    fontFamily: GoogleFonts.poppins().fontFamily,
+                  ),
                   children: [
                     const TextSpan(text: "Best day: "),
                     TextSpan(
@@ -108,9 +109,10 @@ class InsightsCard extends StatelessWidget {
               emoji: "🌤",
               title: RichText(
                 text: TextSpan(
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleMedium?.copyWith(color: Colors.black87,fontFamily: GoogleFonts.poppins().fontFamily,),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: theme.colorScheme.onSurface,
+                    fontFamily: GoogleFonts.poppins().fontFamily,
+                  ),
                   children: [
                     const TextSpan(text: "Favorite weather: "),
                     TextSpan(
@@ -132,9 +134,10 @@ class InsightsCard extends StatelessWidget {
               emoji: "💪",
               title: RichText(
                 text: TextSpan(
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleMedium?.copyWith(color: Colors.black87,fontFamily: GoogleFonts.poppins().fontFamily,),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: theme.colorScheme.onSurface,
+                    fontFamily: GoogleFonts.poppins().fontFamily,
+                  ),
                   children: [
                     const TextSpan(text: "Top activity: "),
                     TextSpan(
@@ -156,9 +159,10 @@ class InsightsCard extends StatelessWidget {
               emoji: "🎉",
               title: RichText(
                 text: TextSpan(
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleMedium?.copyWith(color: Colors.black87,fontFamily: GoogleFonts.poppins().fontFamily,),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: theme.colorScheme.onSurface,
+                    fontFamily: GoogleFonts.poppins().fontFamily,
+                  ),
                   children: [
                     const TextSpan(text: "Weekend insight: "),
                     TextSpan(

@@ -64,13 +64,59 @@ class WeeklyMoodChart extends StatelessWidget {
                 final hasData = allSpots.any((spot) => spot.y > 0);
 
                 if (!hasData) {
+                  final theme = Theme.of(context);
+
                   return Center(
-                    child: Text(
-                      "No mood entries this week",
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: GoogleFonts.poppins().fontFamily,
+                    child: Container(
+                      width: double.infinity,
+                      margin: const EdgeInsets.symmetric(horizontal: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 28,
+                      ),
+                      decoration: BoxDecoration(
+                        color: purple.withOpacity(0.07),
+                        borderRadius: BorderRadius.circular(22),
+                        border: Border.all(color: purple.withOpacity(0.18)),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 58,
+                            height: 58,
+                            decoration: BoxDecoration(
+                              color: purple.withOpacity(0.14),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.insights_rounded,
+                              color: purple,
+                              size: 30,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Your weekly mood story starts here',
+                            textAlign: TextAlign.center,
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: GoogleFonts.poppins().fontFamily,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Add a mood entry today to begin tracking your daily mood score.',
+                            textAlign: TextAlign.center,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              height: 1.5,
+                              color: theme.colorScheme.onSurface.withOpacity(
+                                0.65,
+                              ),
+                              fontFamily: GoogleFonts.poppins().fontFamily,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   );

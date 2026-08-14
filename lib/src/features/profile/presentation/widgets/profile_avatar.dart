@@ -16,8 +16,8 @@ class ProfileAvatar extends StatelessWidget {
         imagePath!.trim().isNotEmpty &&
         File(imagePath!).existsSync();
 
-    debugPrint("Avatar imagePath: $imagePath");
-    debugPrint("Avatar hasImage: $hasImage");
+    // debugPrint("Avatar imagePath: $imagePath");
+    // debugPrint("Avatar hasImage: $hasImage");
 
     return Stack(
       children: [
@@ -44,26 +44,26 @@ class ProfileAvatar extends StatelessWidget {
           ),
         ),
 
-        Positioned(
-          right: 0,
-          bottom: 0,
-          child: InkWell(
-            onTap: onTap,
-            borderRadius: BorderRadius.circular(20),
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: const BoxDecoration(
-                color: Color(0xff7C4DFF),
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.camera_alt,
-                size: 18,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ),
+        // Positioned(
+        //   right: 0,
+        //   bottom: 0,
+        //   child: InkWell(
+        //     onTap: onTap,
+        //     borderRadius: BorderRadius.circular(20),
+        //     child: Container(
+        //       padding: const EdgeInsets.all(8),
+        //       decoration: const BoxDecoration(
+        //         color: Color(0xff7C4DFF),
+        //         shape: BoxShape.circle,
+        //       ),
+        //       child: const Icon(
+        //         Icons.camera_alt,
+        //         size: 18,
+        //         color: Colors.white,
+        //       ),
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }

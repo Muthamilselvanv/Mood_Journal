@@ -10,6 +10,7 @@ class AboutAppSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // final version = packageInfo?.version ?? '...';
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
@@ -64,13 +65,15 @@ class AboutAppSection extends StatelessWidget {
             //   subtitle: "Share your feedback",
             //   onTap: () => Get.toNamed(AppRoutes.rate),
             // ),
-
             const Divider(height: 28),
 
             Center(
               child: Text(
-                "Mood Journal v4.0.0",
-                style: TextStyle(color: Colors.grey,fontFamily: GoogleFonts.poppins().fontFamily,),
+                "Mood Journal V1.0.0",
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontFamily: GoogleFonts.poppins().fontFamily,
+                ),
               ),
             ),
           ],

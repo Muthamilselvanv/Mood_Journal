@@ -146,7 +146,7 @@ class AboutPage extends StatelessWidget {
             const SizedBox(height: AppSpacing.space20),
 
             Text(
-              "Made with 💜 for mindful living.",
+              "Made with ❤️ for mindful living.",
               style: theme.textTheme.bodyMedium?.copyWith(color: Colors.grey),
             ),
 

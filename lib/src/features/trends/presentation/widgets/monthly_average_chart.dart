@@ -53,13 +53,60 @@ class MonthlyAverageChart extends StatelessWidget {
                 );
 
                 if (!hasData) {
+                  final theme = Theme.of(context);
+                  const accent = Color(0xff7B61FF);
+
                   return Center(
-                    child: Text(
-                      "No mood entries this month",
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: GoogleFonts.poppins().fontFamily,
+                    child: Container(
+                      width: double.infinity,
+                      margin: const EdgeInsets.symmetric(horizontal: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 28,
+                      ),
+                      decoration: BoxDecoration(
+                        color: accent.withOpacity(0.07),
+                        borderRadius: BorderRadius.circular(22),
+                        border: Border.all(color: accent.withOpacity(0.18)),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 58,
+                            height: 58,
+                            decoration: BoxDecoration(
+                              color: accent.withOpacity(0.14),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.bar_chart_rounded,
+                              color: accent,
+                              size: 30,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Your monthly progress will appear here',
+                            textAlign: TextAlign.center,
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: GoogleFonts.poppins().fontFamily,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Add mood entries throughout this month to see your weekly averages.',
+                            textAlign: TextAlign.center,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              height: 1.5,
+                              color: theme.colorScheme.onSurface.withOpacity(
+                                0.65,
+                              ),
+                              fontFamily: GoogleFonts.poppins().fontFamily,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   );

@@ -171,7 +171,6 @@ class ContactSupportPage extends StatelessWidget {
                         const SizedBox(height: 8),
 
                         Text(
-                          "Nilora works completely offline.\n\n"
                           "Copy the email address above and send your "
                           "feedback or support request when you have "
                           "an internet connection.",
@@ -189,7 +188,7 @@ class ContactSupportPage extends StatelessWidget {
             const SizedBox(height: 36),
 
             Text(
-              "I am happy to help 💜",
+              "I am happy to help ❤️",
               style: theme.textTheme.bodyMedium?.copyWith(
                 fontStyle: FontStyle.italic,
                 color: theme.colorScheme.onSurface.withOpacity(.6),

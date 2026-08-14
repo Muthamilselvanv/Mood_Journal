@@ -90,9 +90,10 @@ class LoginPage extends GetView<LoginController> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
-                    onPressed: () {
-                      controller.popUp();
-                    },
+                    onPressed: controller.showForgotPasswordDialog,
+                    // onPressed: () {
+                    //   controller.popUp();
+                    // },
                     child: Text(
                       "Forgot Password?",
                       style: TextStyle(

@@ -22,7 +22,20 @@ class UserFirebaseDataSource {
       'uid': uid,
       'name': name,
       'email': email,
+      'bio': '',
+      'profileImage': null,
       'createdAt': FieldValue.serverTimestamp(),
+    });
+  }
+
+  Future<void> updateUserProfile({
+    required String uid,
+    required String name,
+    required String bio,
+  }) async {
+    await _firestore.collection('users').doc(uid).update({
+      'name': name,
+      'bio': bio,
     });
   }
 }

@@ -1,22 +1,18 @@
-import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:mood_journal_app/src/core/services/image_storage_service.dart';
+import 'package:mood_journal_app/src/core/services/image_picker_service.dart';
 import 'package:mood_journal_app/src/features/auth/data/models/user_model.dart';
 import 'package:mood_journal_app/src/features/profile/data/repositories/profile_repository.dart';
-import 'package:mood_journal_app/src/core/services/image_picker_service.dart';
 import 'package:mood_journal_app/src/features/profile/presentation/widgets/edit_profile_page.dart';
 
 class ProfileController extends GetxController {
   final ProfileRepository _repository = Get.find<ProfileRepository>();
-
   final _box = GetStorage();
 
   final user = Rxn<UserModel>();
-
   final isLoading = false.obs;
+  final isSaving = false.obs;
 
   @override
   void onInit() {
@@ -28,58 +24,97 @@ class ProfileController extends GetxController {
     isLoading.value = true;
 
     try {
-      final userId = _box.read("userId");
+      final userId = _box.read<int>('userId');
 
       if (userId == null) {
         user.value = null;
         return;
       }
 
-      final result = await _repository.getUser(userId);
+      user.value = await _repository.getUser(userId);
+    } catch (error, stackTrace) {
+      debugPrint('PROFILE LOAD ERROR: $error');
+      debugPrintStack(stackTrace: stackTrace);
 
-      user.value = result;
+      Get.snackbar(
+        'Profile unavailable',
+        'Your profile could not be loaded. Please try again.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
     } finally {
       isLoading.value = false;
     }
   }
 
   Future<void> updateProfile(UserModel updatedUser) async {
-    await _repository.updateProfile(updatedUser);
+    if (updatedUser.name.trim().isEmpty) {
+      Get.snackbar(
+        'Name required',
+        'Please enter your name.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
 
-    user.value = updatedUser;
+    isSaving.value = true;
+
+    try {
+      await _repository.updateProfile(updatedUser);
+
+      user.value = updatedUser;
+      await _box.write('name', updatedUser.name);
+
+      Get.snackbar(
+        'Profile updated',
+        'Your changes have been saved.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } catch (error, stackTrace) {
+      debugPrint('PROFILE UPDATE ERROR: $error');
+      debugPrintStack(stackTrace: stackTrace);
+
+      Get.snackbar(
+        'Could not save profile',
+        'Check your internet connection and try again.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+
+      rethrow;
+    } finally {
+      isSaving.value = false;
+    }
   }
 
-  Future<void> pickProfileImage() async {
-    debugPrint("📸 pickProfileImage() called");
+  /// Select only. The image is saved when the user presses Save Changes.
+  Future<String?> pickProfileImage() async {
+    try {
+      final image = await ImagePickerService.pickFromGallery();
+      return image?.path;
+    } catch (error, stackTrace) {
+      debugPrint('PROFILE IMAGE ERROR: $error');
+      debugPrintStack(stackTrace: stackTrace);
 
-    final image = await ImagePickerService.pickFromGallery();
-
-    if (image == null) {
-      debugPrint("❌ No image selected");
-      return;
+      Get.snackbar(
+        'Image unavailable',
+        'We could not open your gallery. Please try again.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return null;
     }
-
-    debugPrint("✅ Selected image path: ${image.path}");
-
-    final currentUser = user.value;
-
-    if (currentUser == null) {
-      debugPrint("❌ User is null");
-      return;
-    }
-
-    final updatedUser = currentUser.copyWith(profileImage: image.path);
-
-    user.value = updatedUser;
-
-    debugPrint("✅ Controller profileImage: ${user.value!.profileImage}");
-
-    await _repository.updateProfile(updatedUser);
-
-    debugPrint("✅ Profile updated in database");
   }
 
   void editProfile() {
-    Get.to(() => EditProfilePage(user: user.value!));
+    final currentUser = user.value;
+
+    if (currentUser == null) {
+      Get.snackbar(
+        'Profile unavailable',
+        'Please wait for your profile to load.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
+
+    Get.to(() => EditProfilePage(user: currentUser));
   }
 }

@@ -1,6 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -20,6 +18,8 @@ class LoginController extends GetxController {
 
   final UserRepository repository = Get.find<UserRepository>();
   final MoodRepository moodRepository = Get.find<MoodRepository>();
+
+  final isResettingPassword = false.obs;
 
   void togglePassword() => obscurePassword.toggle();
 
@@ -114,6 +114,13 @@ class LoginController extends GetxController {
         case 'too-many-requests':
           passwordError.value = 'Too many attempts. Try again later.';
           break;
+        case 'network-request-failed':
+          Get.snackbar(
+            'Internet connection required',
+            'Check your Wi-Fi or mobile data and try again.',
+            snackPosition: SnackPosition.BOTTOM,
+          );
+          break;
         default:
           passwordError.value = error.message ?? 'Unable to sign in';
       }
@@ -133,7 +140,7 @@ class LoginController extends GetxController {
 
       Get.snackbar(
         'Account setup error',
-        error.message?.toString() ?? 'Your account data is incomplete.',
+        error.message.toString(),
         snackPosition: SnackPosition.BOTTOM,
       );
     } catch (error, stackTrace) {
@@ -150,30 +157,111 @@ class LoginController extends GetxController {
     }
   }
 
-  Future<void> resetPassword(String email) async {
-    if (email.trim().isEmpty) {
-      Get.snackbar(
-        'Email required',
-        'Please enter your email address.',
-        snackPosition: SnackPosition.BOTTOM,
-      );
-      return;
-    }
+  void showForgotPasswordDialog() {
+    final resetEmailController = TextEditingController(
+      text: emailController.text.trim(),
+    );
+
+    Get.dialog(
+      AlertDialog(
+        title: const Text('Reset password'),
+        content: TextField(
+          controller: resetEmailController,
+          keyboardType: TextInputType.emailAddress,
+          autofillHints: const [AutofillHints.email],
+          decoration: const InputDecoration(
+            labelText: 'Email address',
+            hintText: 'you@example.com',
+          ),
+        ),
+        actions: [
+          TextButton(onPressed: Get.back, child: const Text('Cancel')),
+          Obx(
+            () => FilledButton(
+              onPressed: isResettingPassword.value
+                  ? null
+                  : () async {
+                      final email = resetEmailController.text.trim();
+
+                      if (!GetUtils.isEmail(email)) {
+                        Get.snackbar(
+                          'Invalid email',
+                          'Enter a valid email address.',
+                          snackPosition: SnackPosition.BOTTOM,
+                        );
+                        return;
+                      }
+
+                      final sent = await resetPassword(email);
+
+                      if (!sent) return;
+
+                      // Close only the dialog.
+                      Get.back();
+
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        Get.snackbar(
+                          'Reset link sent',
+                          'Check your Inbox, Spam, or Promotions folder.',
+                          snackPosition: SnackPosition.TOP,
+                          duration: const Duration(seconds: 5),
+                          backgroundColor: const Color(0xFF245B75),
+                        );
+                      });
+                    },
+              child: isResettingPassword.value
+                  ? const SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Text('Send reset link'),
+            ),
+          ),
+        ],
+      ),
+    ).whenComplete(resetEmailController.dispose);
+  }
+
+  Future<bool> resetPassword(String email) async {
+    isResettingPassword.value = true;
 
     try {
-      await FirebaseAuth.instance.sendPasswordResetEmail(email: email.trim());
-      Get.back();
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      return true;
+    } on FirebaseAuthException catch (error, stackTrace) {
+      debugPrint('RESET PASSWORD ERROR: ${error.code}');
+      debugPrintStack(stackTrace: stackTrace);
+
+      final message = switch (error.code) {
+        'invalid-email' => 'Enter a valid email address.',
+        'network-request-failed' =>
+          'No internet connection. Connect to Wi-Fi or mobile data and try again.',
+        'too-many-requests' =>
+          'Too many requests. Please wait a few minutes and try again.',
+        _ => 'Unable to send the reset email. Please try again.',
+      };
+
       Get.snackbar(
-        'Email sent',
-        'Check your email for the password-reset link.',
+        'Password reset unavailable',
+        message,
         snackPosition: SnackPosition.BOTTOM,
       );
-    } on FirebaseAuthException catch (error) {
+
+      return false;
+    } catch (error, stackTrace) {
+      debugPrint('RESET PASSWORD UNKNOWN ERROR: $error');
+      debugPrintStack(stackTrace: stackTrace);
+
       Get.snackbar(
-        'Unable to reset password',
-        error.message ?? 'Please try again.',
+        'Could not send reset link',
+        'Please check your internet connection and try again.',
         snackPosition: SnackPosition.BOTTOM,
       );
+
+      return false;
+    } finally {
+      isResettingPassword.value = false;
     }
   }
 

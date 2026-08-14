@@ -33,7 +33,13 @@ class InitialBinding extends Bindings {
       fenix: true,
     );
 
-    Get.lazyPut<ProfileRepository>(() => ProfileRepository(), fenix: true);
+    Get.lazyPut<ProfileRepository>(
+      () => ProfileRepository(
+        localDataSource: Get.find<ProfileLocalDataSource>(),
+        firebaseDataSource: Get.find<UserFirebaseDataSource>(),
+      ),
+      fenix: true,
+    );
 
     Get.lazyPut<MoodFirebaseDataSource>(
       () => MoodFirebaseDataSource(),

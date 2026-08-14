@@ -6,6 +6,8 @@ import 'package:mood_journal_app/src/features/trends/presentation/widgets/monthl
 import 'package:mood_journal_app/src/features/trends/presentation/widgets/mood_breakdown_chart.dart';
 import 'package:mood_journal_app/src/features/trends/presentation/widgets/trend_stats_grid.dart';
 import 'package:mood_journal_app/src/features/trends/presentation/widgets/weekly_mood_chart.dart';
+import 'package:get/get.dart';
+import 'package:mood_journal_app/src/features/trends/presentation/controllers/trends_controller.dart';
 
 class TrendsPages extends StatefulWidget {
   const TrendsPages({super.key});
@@ -15,6 +17,7 @@ class TrendsPages extends StatefulWidget {
 }
 
 class _TrendsPagesState extends State<TrendsPages> {
+  final trendsController = Get.find<TrendsController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +31,9 @@ class _TrendsPagesState extends State<TrendsPages> {
 
         title: Text(
           "Mood Trends",
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontFamily: GoogleFonts.poppins().fontFamily,),
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+            fontFamily: GoogleFonts.poppins().fontFamily,
+          ),
         ),
       ),
       body: SafeArea(
@@ -40,11 +45,26 @@ class _TrendsPagesState extends State<TrendsPages> {
               const TrendStatsGrid(),
               const SizedBox(height: AppSpacing.space20),
               const WeeklyMoodChart(),
+              const SizedBox(height: AppSpacing.space20),
               const MonthlyAverageChart(),
               const SizedBox(height: AppSpacing.space20),
               const MoodBreakdownChart(),
               const SizedBox(height: AppSpacing.space20),
-              const InsightsCard(),
+              Obx(() {
+                final hasMoodEntries =
+                    trendsController.controller.moodEntries.isNotEmpty;
+
+                if (!hasMoodEntries) {
+                  return const SizedBox.shrink();
+                }
+
+                return const Column(
+                  children: [
+                    SizedBox(height: AppSpacing.space20),
+                    InsightsCard(),
+                  ],
+                );
+              }),
             ],
           ),
         ),

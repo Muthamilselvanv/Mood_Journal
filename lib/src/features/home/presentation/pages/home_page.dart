@@ -330,28 +330,71 @@ Widget buildTodaySnapshot(BuildContext context) {
         final latest = controller.latestMood.value;
 
         if (latest == null) {
+          final theme = Theme.of(context);
+          final colorScheme = theme.colorScheme;
+
           return Card(
             elevation: isDark ? 2 : 0,
             shadowColor: Colors.black.withOpacity(.35),
+            color: colorScheme.surface,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18),
+              side: BorderSide(
+                color: isDark
+                    ? Colors.grey.withOpacity(0.25)
+                    : Colors.transparent,
+              ),
+            ),
             child: Padding(
-              padding: AppSpacing.card,
-              child: Center(
-                child: Column(
-                  children: [
-                    Icon(
-                      LucideIcons.notebookText,
-                      size: AppIconSizes.large,
-                      color: Colors.grey,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Icon
+                  Container(
+                    width: 64,
+                    height: 64,
+                    decoration: BoxDecoration(
+                      color: AppColors.coralRose.withOpacity(0.10),
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                    const SizedBox(height: AppSpacing.space8),
-                    Text(
-                      "No mood recorded yet",
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontFamily: GoogleFonts.poppins().fontFamily,
+                    child: Center(
+                      child: Icon(
+                        LucideIcons.notebookPen,
+                        size: 30,
+                        color: AppColors.coralRose,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+
+                  const SizedBox(height: 14),
+
+                  // Title
+                  Text(
+                    "No mood recorded yet",
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: GoogleFonts.poppins().fontFamily,
+                      color: colorScheme.onSurface,
+                    ),
+                  ),
+
+                  const SizedBox(height: 6),
+
+                  // Description
+                  Text(
+                    "Record your mood today to see your snapshot here.",
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      fontSize: 12,
+                      height: 1.4,
+                      fontFamily: GoogleFonts.poppins().fontFamily,
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
               ),
             ),
           );

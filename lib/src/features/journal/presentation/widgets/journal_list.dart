@@ -13,26 +13,57 @@ class JournalList extends GetView<JournalController> {
       final entries = controller.filteredEntries;
 
       if (entries.isEmpty) {
+        final theme = Theme.of(context);
+        final colorScheme = theme.colorScheme;
+
         return Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(
-                Icons.menu_book_rounded, // or Icons.book_outlined
-                size: 72,
-                color: Colors.grey,
-              ),
-              const SizedBox(height: 12),
-              Text(
-                "No journals found",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.grey,
-                  fontFamily: GoogleFonts.poppins().fontFamily,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Icon container
+                Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: colorScheme.primary.withOpacity(0.10),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Icon(
+                    Icons.menu_book_rounded,
+                    size: 48,
+                    color: colorScheme.primary,
+                  ),
                 ),
-              ),
-            ],
+
+                const SizedBox(height: 24),
+
+                // Title
+                Text(
+                  "No journals found",
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontFamily: GoogleFonts.poppins().fontFamily,
+                    fontWeight: FontWeight.w700,
+                    color: colorScheme.onSurface,
+                  ),
+                ),
+
+                const SizedBox(height: 8),
+
+                // Description
+                Text(
+                  "Your thoughts and feelings will appear here.\n",
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    fontFamily: GoogleFonts.poppins().fontFamily,
+                    color: colorScheme.onSurfaceVariant,
+                    height: 1.5,
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       }

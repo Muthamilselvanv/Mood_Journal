@@ -43,10 +43,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Future<void> _pickImage() async {
-    await controller.pickProfileImage();
+    final selectedPath = await controller.pickProfileImage();
+
+    if (selectedPath == null || !mounted) return;
 
     setState(() {
-      imagePath = controller.user.value?.profileImage;
+      imagePath = selectedPath;
     });
   }
 
@@ -227,11 +229,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     maxLines: 5,
                     controller: bioController,
                     textInputAction: TextInputAction.next,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       hintText: "Living one day at a time 🌿",
-                      border: InputBorder.none,
+                      border: isDark
+                          ? OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey.shade700),
+                            )
+                          : null,
                     ),
-                  ),
+                  )
                 ],
               ),
 
