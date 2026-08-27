@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:mood_journal_app/src/core/services/image_picker_service.dart';
@@ -46,14 +47,17 @@ class ProfileController extends GetxController {
     }
   }
 
-  Future<void> updateProfile(UserModel updatedUser) async {
+  Future<bool> updateProfile(UserModel updatedUser) async {
     if (updatedUser.name.trim().isEmpty) {
       Get.snackbar(
         'Name required',
         'Please enter your name.',
         snackPosition: SnackPosition.BOTTOM,
+        margin: const EdgeInsets.all(16),
+        borderRadius: 14,
       );
-      return;
+
+      return false;
     }
 
     isSaving.value = true;
@@ -61,25 +65,26 @@ class ProfileController extends GetxController {
     try {
       await _repository.updateProfile(updatedUser);
 
+      // Update controller state immediately
       user.value = updatedUser;
+
+      // Update stored name
       await _box.write('name', updatedUser.name);
 
-      Get.snackbar(
-        'Profile updated',
-        'Your changes have been saved.',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      return true;
     } catch (error, stackTrace) {
       debugPrint('PROFILE UPDATE ERROR: $error');
       debugPrintStack(stackTrace: stackTrace);
 
       Get.snackbar(
         'Could not save profile',
-        'Check your internet connection and try again.',
+        'Unable to update your profile. Please try again.',
         snackPosition: SnackPosition.BOTTOM,
+        margin: const EdgeInsets.all(16),
+        borderRadius: 14,
       );
 
-      rethrow;
+      return false;
     } finally {
       isSaving.value = false;
     }

@@ -85,8 +85,7 @@ class InsightsCard extends StatelessWidget {
               title: RichText(
                 text: TextSpan(
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: Colors.black87,
-                    fontFamily: GoogleFonts.poppins().fontFamily,
+                    color: theme.colorScheme.onSurface,
                   ),
                   children: [
                     const TextSpan(text: "Best day: "),

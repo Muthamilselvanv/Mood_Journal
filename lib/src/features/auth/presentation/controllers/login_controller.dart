@@ -203,9 +203,10 @@ class LoginController extends GetxController {
                         Get.snackbar(
                           'Reset link sent',
                           'Check your Inbox, Spam, or Promotions folder.',
-                          snackPosition: SnackPosition.TOP,
+                          snackPosition: SnackPosition.BOTTOM,
                           duration: const Duration(seconds: 5),
-                          backgroundColor: const Color(0xFF245B75),
+                          backgroundColor: Colors.green,
+                          colorText: Colors.white,
                         );
                       });
                     },
@@ -220,7 +221,11 @@ class LoginController extends GetxController {
           ),
         ],
       ),
-    ).whenComplete(resetEmailController.dispose);
+    ).whenComplete(() {
+      Future.delayed(const Duration(milliseconds: 500), () {
+        resetEmailController.dispose();
+      });
+    });
   }
 
   Future<bool> resetPassword(String email) async {

@@ -99,27 +99,36 @@ class RegisterController extends GetxController {
         email: email,
       );
 
-      final localUserId = await _repository.insertUser(
+      await _repository.insertUser(
         firebaseUid: firebaseUser.uid,
         name: name,
         email: email,
       );
 
-      final box = GetStorage();
-      await box.write('isLoggedIn', true);
-      await box.write('isGuest', false);
-      await box.write('firebaseUid', firebaseUser.uid);
-      await box.write('userId', localUserId);
-      await box.write('name', name);
-      await box.write('email', email);
+      // Firebase automatically signs in after account creation.
+      // Sign out so the user must log in manually.
+      await FirebaseAuth.instance.signOut();
 
-      Get.snackbar(
-        'Account created',
-        'Please log in with your new email and password.',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      // Clear any saved login session, but keep SQLite user data.
+      final box = GetStorage();
+      await box.remove('isLoggedIn');
+      await box.remove('isGuest');
+      await box.remove('firebaseUid');
+      await box.remove('userId');
+      await box.remove('name');
+      await box.remove('email');
 
       Get.offAllNamed(AppRoutes.login);
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Get.snackbar(
+          'Account created',
+          'Please log in with your new email and password.',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+      });
     } on FirebaseAuthException catch (error, stackTrace) {
       debugPrint('REGISTER AUTH ERROR: ${error.code} ${error.message}');
       debugPrintStack(stackTrace: stackTrace);

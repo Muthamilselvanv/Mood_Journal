@@ -63,9 +63,28 @@ class _EditProfilePageState extends State<EditProfilePage> {
       profileImage: imagePath,
     );
 
-    await controller.updateProfile(updated);
+    final success = await controller.updateProfile(updated);
 
-    Get.back();
+    if (!success) {
+      return;
+    }
+
+    if (!mounted) return;
+
+    // Close Edit Profile page
+    Get.back(result: true);
+
+    // Show success message
+    Get.snackbar(
+      "Profile Updated",
+      "Your profile has been updated successfully.",
+      snackPosition: SnackPosition.TOP,
+      margin: const EdgeInsets.all(16),
+      borderRadius: 14,
+      duration: const Duration(seconds: 2),
+      backgroundColor: Colors.green,
+      colorText: Colors.white,
+    );
   }
 
   @override
@@ -233,20 +252,28 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       hintText: "Living one day at a time 🌿",
                       border: isDark
                           ? OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey.shade700),
+                              borderSide: BorderSide(
+                                color: Colors.grey.shade700,
+                              ),
                             )
                           : null,
                     ),
-                  )
+                  ),
                 ],
               ),
 
               const SizedBox(height: 40),
 
-              AppGradientButton(
-                text: "Save Changes",
-                icon: LucideIcons.save,
-                onPressed: _save,
+              Obx(
+                () => AppGradientButton(
+                  text: controller.isSaving.value
+                      ? "Saving..."
+                      : "Save Changes",
+                  icon: controller.isSaving.value
+                      ? LucideIcons.loader
+                      : LucideIcons.save,
+                  onPressed: controller.isSaving.value ? null : _save,
+                ),
               ),
             ],
           ),

@@ -55,6 +55,9 @@ class MoodItem extends StatelessWidget {
 
             Text(
               mood.title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 15,
                 fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
