@@ -46,13 +46,12 @@ Nilora is also a personal portfolio project built to demonstrate practical Flutt
 > Add your real application screenshots inside a `screenshots/` folder.
 
 <div align="center">
-
-<img src="screenshots/nilora-home.png" width="220" alt="Nilora Home Screen"/>
-&nbsp;
 <img src="screenshots/nilora-register.png" width="220" alt="Register Screen"/>
 &nbsp;
-<img src="screenshots/nilora-add-mood.png" width="220" alt="Dark Mode Mood Entry Screen"/>
-
+<img src="screenshots/nilora-login.png" width="220" alt="Login Screen"/>
+&nbsp;
+<img src="screenshots/nilora-home.png" width="220" alt="Nilora Home Screen"/>
+    
 <br/><br/>
 
 <!-- <img src="screenshots/profile.png" width="220" alt="Profile Screen"/>
