@@ -51,15 +51,15 @@ Nilora is also a personal portfolio project built to demonstrate practical Flutt
 &nbsp;
 <img src="screenshots/nilora-register.png" width="220" alt="Register Screen"/>
 &nbsp;
-<img src="screenshots/journal.png" width="220" alt="Journal Screen"/>
+<img src="screenshots/nilora-add-mood.png" width="220" alt="Dark Mode Mood Entry Screen"/>
 
 <br/><br/>
 
-<img src="screenshots/profile.png" width="220" alt="Profile Screen"/>
+<!-- <img src="screenshots/profile.png" width="220" alt="Profile Screen"/>
 &nbsp;
 <img src="screenshots/trends.png" width="220" alt="Mood Trends"/>
 &nbsp;
-<img src="screenshots/nilora-add-mood.png" width="220" alt="Dark Mode"/>
+<img src="screenshots/nilora-add-mood.png" width="220" alt="Dark Mode"/> -->
 
 </div>
 
