@@ -16,7 +16,7 @@ class MoodBreakdownChart extends StatelessWidget {
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(26),
-        side: BorderSide(color: theme.dividerColor.withOpacity(0.15)),
+        side: BorderSide(color: theme.dividerColor.withValues(alpha: 0.15)),
       ),
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -66,7 +66,9 @@ class MoodBreakdownChart extends StatelessWidget {
                         Text(
                           total == 1 ? 'Entry' : 'Entries',
                           style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.colorScheme.onSurface.withOpacity(0.6),
+                            color: theme.colorScheme.onSurface.withValues(
+                              alpha: 0.6,
+                            ),
                             fontFamily: GoogleFonts.poppins().fontFamily,
                           ),
                         ),
@@ -172,7 +174,7 @@ class _LegendItem extends StatelessWidget {
         Text(
           '$count',
           style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.onSurface.withOpacity(0.6),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
             fontFamily: GoogleFonts.poppins().fontFamily,
           ),
         ),
@@ -180,7 +182,7 @@ class _LegendItem extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.14),
+            color: color.withValues(alpha: 0.14),
             borderRadius: BorderRadius.circular(20),
           ),
           child: Text(
@@ -230,9 +232,9 @@ class _EmptyMoodBreakdown extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 30),
           decoration: BoxDecoration(
-            color: accent.withOpacity(0.08),
+            color: accent.withValues(alpha: 0.08),
             borderRadius: BorderRadius.circular(22),
-            border: Border.all(color: accent.withOpacity(0.18)),
+            border: Border.all(color: accent.withValues(alpha: 0.18)),
           ),
           child: Column(
             children: [
@@ -240,7 +242,7 @@ class _EmptyMoodBreakdown extends StatelessWidget {
                 width: 58,
                 height: 58,
                 decoration: BoxDecoration(
-                  color: accent.withOpacity(0.14),
+                  color: accent.withValues(alpha: 0.14),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
@@ -264,7 +266,7 @@ class _EmptyMoodBreakdown extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: theme.textTheme.bodySmall?.copyWith(
                   height: 1.5,
-                  color: theme.colorScheme.onSurface.withOpacity(0.65),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
                   fontFamily: GoogleFonts.poppins().fontFamily,
                 ),
               ),

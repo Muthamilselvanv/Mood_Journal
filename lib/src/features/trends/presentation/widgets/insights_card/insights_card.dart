@@ -18,7 +18,9 @@ class InsightsCard extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
-          color: isDark ? Colors.white.withOpacity(.08) : Colors.transparent,
+          color: isDark
+              ? Colors.white.withValues(alpha: .08)
+              : Colors.transparent,
         ),
         gradient: LinearGradient(
           begin: Alignment.topLeft,

@@ -37,11 +37,15 @@ class UserRepository {
     required String firebaseUid,
     required String name,
     required String email,
+    String? profileImage,
+    String? bio,
   }) async {
     return await _localDataSource.insertUser(
       firebaseUid: firebaseUid,
       name: name,
       email: email,
+      profileImage: profileImage,
+      bio: bio,
     );
   }
 

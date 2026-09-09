@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -33,10 +32,7 @@ class ProfileController extends GetxController {
       }
 
       user.value = await _repository.getUser(userId);
-    } catch (error, stackTrace) {
-      debugPrint('PROFILE LOAD ERROR: $error');
-      debugPrintStack(stackTrace: stackTrace);
-
+    } catch (_) {
       Get.snackbar(
         'Profile unavailable',
         'Your profile could not be loaded. Please try again.',
@@ -63,19 +59,16 @@ class ProfileController extends GetxController {
     isSaving.value = true;
 
     try {
-      await _repository.updateProfile(updatedUser);
+      final persistedUser = await _repository.updateProfile(updatedUser);
 
       // Update controller state immediately
-      user.value = updatedUser;
+      user.value = persistedUser;
 
       // Update stored name
-      await _box.write('name', updatedUser.name);
+      await _box.write('name', persistedUser.name);
 
       return true;
-    } catch (error, stackTrace) {
-      debugPrint('PROFILE UPDATE ERROR: $error');
-      debugPrintStack(stackTrace: stackTrace);
-
+    } catch (_) {
       Get.snackbar(
         'Could not save profile',
         'Unable to update your profile. Please try again.',
@@ -93,12 +86,13 @@ class ProfileController extends GetxController {
   /// Select only. The image is saved when the user presses Save Changes.
   Future<String?> pickProfileImage() async {
     try {
-      final image = await ImagePickerService.pickFromGallery();
+      final image = await ImagePickerService.pickFromGallery(
+        maxWidth: 512,
+        maxHeight: 512,
+        imageQuality: 65,
+      );
       return image?.path;
-    } catch (error, stackTrace) {
-      debugPrint('PROFILE IMAGE ERROR: $error');
-      debugPrintStack(stackTrace: stackTrace);
-
+    } catch (_) {
       Get.snackbar(
         'Image unavailable',
         'We could not open your gallery. Please try again.',
@@ -106,6 +100,27 @@ class ProfileController extends GetxController {
       );
       return null;
     }
+  }
+
+  Future<String?> takeProfilePhoto() async {
+    final image = await ImagePickerService.pickFromCamera(
+      maxWidth: 512,
+      maxHeight: 512,
+      imageQuality: 65,
+    );
+    return image?.path;
+  }
+
+  Future<void> selectAndSaveProfilePhoto({required bool useCamera}) async {
+    final currentUser = user.value;
+    if (currentUser == null || isSaving.value) return;
+
+    final selectedPath = useCamera
+        ? await takeProfilePhoto()
+        : await pickProfileImage();
+    if (selectedPath == null) return;
+
+    await updateProfile(currentUser.copyWith(profileImage: selectedPath));
   }
 
   void editProfile() {

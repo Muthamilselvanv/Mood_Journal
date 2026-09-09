@@ -66,7 +66,7 @@ class MoodSearchDelegate extends SearchDelegate {
                 width: 96,
                 height: 96,
                 decoration: BoxDecoration(
-                  color: AppColors.coralRose.withOpacity(0.10),
+                  color: AppColors.coralRose.withValues(alpha: 0.10),
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: Center(
@@ -114,7 +114,7 @@ class MoodSearchDelegate extends SearchDelegate {
                 width: 36,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: AppColors.coralRose.withOpacity(0.35),
+                  color: AppColors.coralRose.withValues(alpha: 0.35),
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),

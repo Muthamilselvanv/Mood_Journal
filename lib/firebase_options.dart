@@ -58,7 +58,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyB81tmjAdYH8Y-9HG5Ah-JxPamwtZpOzwA',
-    appId: '1:23408367101:android:5bc7a9d90b0d6ec9557594',
+    appId: '1:23408367101:android:1b0c9032649e121e557594',
     messagingSenderId: '23408367101',
     projectId: 'nilora-mood-journal-app',
     storageBucket: 'nilora-mood-journal-app.firebasestorage.app',

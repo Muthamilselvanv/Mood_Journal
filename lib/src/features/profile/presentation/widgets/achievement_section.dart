@@ -48,12 +48,24 @@ class AchievementSection extends StatelessWidget {
                   AchievementCard(
                     width: cardWidth,
                     emoji: controller.hasFirstEntry ? '⭐' : '🔒',
-                    title: controller.hasFirstEntry ? 'First Entry' : 'Locked',
+                    title: controller.hasFirstEntry
+                        ? 'First Entry Unlocked'
+                        : 'First Entry',
+                    subtitle: controller.hasFirstEntry
+                        ? 'Achievement unlocked'
+                        : 'Save your first journal',
+                    unlocked: controller.hasFirstEntry,
                   ),
                   AchievementCard(
                     width: cardWidth,
                     emoji: controller.isMoodMaster ? '💪' : '🔒',
-                    title: controller.isMoodMaster ? 'Mood Master' : 'Locked',
+                    title: controller.isMoodMaster
+                        ? 'Mood Master Unlocked'
+                        : 'Mood Master',
+                    subtitle: controller.isMoodMaster
+                        ? 'Achievement unlocked'
+                        : '${controller.moodEntries.length}/10 entries',
+                    unlocked: controller.isMoodMaster,
                   ),
                 ],
               ),

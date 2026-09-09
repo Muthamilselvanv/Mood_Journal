@@ -65,9 +65,11 @@ class MonthlyAverageChart extends StatelessWidget {
                         vertical: 28,
                       ),
                       decoration: BoxDecoration(
-                        color: accent.withOpacity(0.07),
+                        color: accent.withValues(alpha: 0.07),
                         borderRadius: BorderRadius.circular(22),
-                        border: Border.all(color: accent.withOpacity(0.18)),
+                        border: Border.all(
+                          color: accent.withValues(alpha: 0.18),
+                        ),
                       ),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -76,7 +78,7 @@ class MonthlyAverageChart extends StatelessWidget {
                             width: 58,
                             height: 58,
                             decoration: BoxDecoration(
-                              color: accent.withOpacity(0.14),
+                              color: accent.withValues(alpha: 0.14),
                               shape: BoxShape.circle,
                             ),
                             child: const Icon(
@@ -100,8 +102,8 @@ class MonthlyAverageChart extends StatelessWidget {
                             textAlign: TextAlign.center,
                             style: theme.textTheme.bodySmall?.copyWith(
                               height: 1.5,
-                              color: theme.colorScheme.onSurface.withOpacity(
-                                0.65,
+                              color: theme.colorScheme.onSurface.withValues(
+                                alpha: 0.65,
                               ),
                               fontFamily: GoogleFonts.poppins().fontFamily,
                             ),

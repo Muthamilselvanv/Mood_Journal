@@ -25,16 +25,22 @@ class TrendStatCard extends StatelessWidget {
       height: 125,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: isDark ? borderColor.withOpacity(.18) : backgroundColor,
+        color: isDark ? borderColor.withValues(alpha: .18) : backgroundColor,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: isDark ? borderColor.withOpacity(.50) : borderColor,
+          color: isDark ? borderColor.withValues(alpha: .50) : borderColor,
         ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(emoji, style: TextStyle(fontSize: 28,fontFamily: GoogleFonts.poppins().fontFamily,)),
+          Text(
+            emoji,
+            style: TextStyle(
+              fontSize: 28,
+              fontFamily: GoogleFonts.poppins().fontFamily,
+            ),
+          ),
 
           const SizedBox(height: 12),
 

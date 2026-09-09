@@ -29,7 +29,7 @@ class AppGradientButton extends StatelessWidget {
           ),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xff7C4DFF).withOpacity(.25),
+              color: const Color(0xff7C4DFF).withValues(alpha: .25),
               blurRadius: 18,
               offset: const Offset(0, 8),
             ),

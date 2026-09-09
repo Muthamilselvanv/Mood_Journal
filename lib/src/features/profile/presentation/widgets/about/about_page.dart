@@ -40,7 +40,7 @@ class AboutPage extends StatelessWidget {
                     width: 95,
                     height: 95,
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(.15),
+                      color: Colors.white.withValues(alpha: .15),
                       shape: BoxShape.circle,
                     ),
                     child: Padding(
@@ -64,7 +64,7 @@ class AboutPage extends StatelessWidget {
                   Text(
                     "Version 4.0.0",
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurface.withOpacity(.7),
+                      color: theme.colorScheme.onSurface.withValues(alpha: .7),
                     ),
                   ),
 
@@ -190,7 +190,7 @@ class _FeatureTile extends StatelessWidget {
               width: 54,
               height: 54,
               decoration: BoxDecoration(
-                color: AppColors.moodNeutral.withOpacity(.12),
+                color: AppColors.moodNeutral.withValues(alpha: .12),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Icon(icon, color: AppColors.moodNeutral),

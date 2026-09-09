@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -82,6 +81,8 @@ class RegisterController extends GetxController {
     if (!valid) return;
 
     isLoading.value = true;
+    User? createdUser;
+    var profileCreated = false;
 
     try {
       final credential = await FirebaseAuth.instance
@@ -91,34 +92,23 @@ class RegisterController extends GetxController {
       if (firebaseUser == null) {
         throw StateError('Firebase did not return a created user.');
       }
+      createdUser = firebaseUser;
 
-      debugPrint('Creating Firestore profile for ${firebaseUser.uid}');
       await _repository.createUserProfile(
         uid: firebaseUser.uid,
         name: name,
         email: email,
       );
-
-      await _repository.insertUser(
-        firebaseUid: firebaseUser.uid,
-        name: name,
-        email: email,
-      );
+      profileCreated = true;
 
       // Firebase automatically signs in after account creation.
       // Sign out so the user must log in manually.
       await FirebaseAuth.instance.signOut();
 
-      // Clear any saved login session, but keep SQLite user data.
-      final box = GetStorage();
-      await box.remove('isLoggedIn');
-      await box.remove('isGuest');
-      await box.remove('firebaseUid');
-      await box.remove('userId');
-      await box.remove('name');
-      await box.remove('email');
+      // SQLite is restored from Firestore after the user's first login.
+      await _clearSavedSession();
 
-      Get.offAllNamed(AppRoutes.login);
+      _openLogin();
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Get.snackbar(
@@ -129,9 +119,23 @@ class RegisterController extends GetxController {
           colorText: Colors.white,
         );
       });
-    } on FirebaseAuthException catch (error, stackTrace) {
-      debugPrint('REGISTER AUTH ERROR: ${error.code} ${error.message}');
-      debugPrintStack(stackTrace: stackTrace);
+    } on FirebaseAuthException catch (error) {
+      if (profileCreated) {
+        await FirebaseAuth.instance.signOut();
+        await _clearSavedSession();
+        _openLogin();
+
+        Get.snackbar(
+          'Account created',
+          'Please log in with your new email and password.',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+        return;
+      }
+
+      if (createdUser != null && !profileCreated) {
+        await _rollbackCreatedAccount(createdUser);
+      }
 
       if (error.code == 'email-already-in-use') {
         emailError.value = 'This email is already registered';
@@ -142,28 +146,89 @@ class RegisterController extends GetxController {
       } else {
         Get.snackbar('Registration failed', error.message ?? 'Try again.');
       }
-    } on FirebaseException catch (error, stackTrace) {
-      debugPrint('REGISTER FIRESTORE ERROR: ${error.code} ${error.message}');
-      debugPrintStack(stackTrace: stackTrace);
+    } on FirebaseException catch (_) {
+      final rolledBack = await _rollbackCreatedAccount(createdUser);
 
       Get.snackbar(
         'Profile setup failed',
-        'Your account was created, but the Firestore profile could not be saved. '
-            'Check your connection and Firestore rules.',
+        rolledBack
+            ? 'No account was kept. Check your connection and try again.'
+            : 'Your account may have been created. Try signing in or resetting '
+                  'your password before registering again.',
         snackPosition: SnackPosition.BOTTOM,
       );
-    } catch (error, stackTrace) {
-      debugPrint('REGISTER ERROR: $error');
-      debugPrintStack(stackTrace: stackTrace);
+    } catch (_) {
+      if (profileCreated) {
+        await FirebaseAuth.instance.signOut();
+        await _clearSavedSession();
+        _openLogin();
+
+        Get.snackbar(
+          'Account created',
+          'Please log in with your new email and password.',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+        return;
+      }
+
+      final rolledBack = await _rollbackCreatedAccount(createdUser);
 
       Get.snackbar(
         'Registration failed',
-        'Unable to finish account setup. Please try again.',
+        rolledBack
+            ? 'No account was kept. Please try again.'
+            : 'Your account may have been created. Try signing in or resetting '
+                  'your password before registering again.',
         snackPosition: SnackPosition.BOTTOM,
       );
     } finally {
       isLoading.value = false;
     }
+  }
+
+  Future<void> _clearSavedSession() async {
+    final box = GetStorage();
+    const sessionKeys = <String>[
+      'isLoggedIn',
+      'isGuest',
+      'firebaseUid',
+      'userId',
+      'name',
+      'userName',
+      'email',
+    ];
+
+    for (final key in sessionKeys) {
+      await box.remove(key);
+    }
+  }
+
+  void _openLogin() {
+    if (Get.previousRoute == AppRoutes.login) {
+      Get.back();
+      return;
+    }
+
+    Get.offAllNamed(AppRoutes.login);
+  }
+
+  Future<bool> _rollbackCreatedAccount(User? user) async {
+    if (user == null) return false;
+
+    var deleted = false;
+
+    try {
+      await user.delete();
+      deleted = true;
+    } catch (_) {
+    } finally {
+      try {
+        await FirebaseAuth.instance.signOut();
+        await _clearSavedSession();
+      } catch (_) {}
+    }
+
+    return deleted;
   }
 
   @override

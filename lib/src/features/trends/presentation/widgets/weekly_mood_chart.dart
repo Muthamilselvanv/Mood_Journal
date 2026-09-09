@@ -75,9 +75,11 @@ class WeeklyMoodChart extends StatelessWidget {
                         vertical: 28,
                       ),
                       decoration: BoxDecoration(
-                        color: purple.withOpacity(0.07),
+                        color: purple.withValues(alpha: 0.07),
                         borderRadius: BorderRadius.circular(22),
-                        border: Border.all(color: purple.withOpacity(0.18)),
+                        border: Border.all(
+                          color: purple.withValues(alpha: 0.18),
+                        ),
                       ),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -86,7 +88,7 @@ class WeeklyMoodChart extends StatelessWidget {
                             width: 58,
                             height: 58,
                             decoration: BoxDecoration(
-                              color: purple.withOpacity(0.14),
+                              color: purple.withValues(alpha: 0.14),
                               shape: BoxShape.circle,
                             ),
                             child: const Icon(
@@ -110,8 +112,8 @@ class WeeklyMoodChart extends StatelessWidget {
                             textAlign: TextAlign.center,
                             style: theme.textTheme.bodySmall?.copyWith(
                               height: 1.5,
-                              color: theme.colorScheme.onSurface.withOpacity(
-                                0.65,
+                              color: theme.colorScheme.onSurface.withValues(
+                                alpha: 0.65,
                               ),
                               fontFamily: GoogleFonts.poppins().fontFamily,
                             ),
@@ -216,7 +218,7 @@ class WeeklyMoodChart extends StatelessWidget {
                         // ------------------------------------------------
                         belowBarData: BarAreaData(
                           show: true,
-                          color: purple.withOpacity(0.10),
+                          color: purple.withValues(alpha: 0.10),
                         ),
 
                         // ------------------------------------------------

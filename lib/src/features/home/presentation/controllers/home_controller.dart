@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_flutter/lucide_flutter.dart';
 import 'package:mood_journal_app/src/core/constants/app_colors.dart';
-import 'package:mood_journal_app/src/core/services/permission_service.dart';
 import 'package:mood_journal_app/src/core/services/image_picker_service.dart';
 import 'package:mood_journal_app/src/features/home/data/repositories/mood_repository.dart';
 import 'package:mood_journal_app/src/features/home/presentation/models/mood_entry_model.dart';
@@ -127,7 +126,7 @@ class HomeController extends GetxController {
 
   final isSaving = false.obs;
 
-  final selectedIndex = 0.obs;
+  final selectedIndex = (-1).obs;
 
   final intensity = 1.0.obs;
 
@@ -145,7 +144,10 @@ class HomeController extends GetxController {
 
   final latestMood = Rxn<MoodEntry>();
 
-  MoodModel get selectedMood => moods[selectedIndex.value];
+  MoodModel? get selectedMood {
+    final index = selectedIndex.value;
+    return index >= 0 && index < moods.length ? moods[index] : null;
+  }
 
   WeatherModel get weather => weathers[selectedWeather.value];
 
@@ -164,7 +166,7 @@ class HomeController extends GetxController {
       // Firebase UID is handled by MoodFirebaseDataSource.
       userId: 0,
 
-      mood: selectedMood.title,
+      mood: selectedMood?.title ?? '',
 
       weather: weather.title,
 
@@ -185,9 +187,7 @@ class HomeController extends GetxController {
       await _repository.addMoodEntry(entry);
 
       Get.snackbar("Success", "Mood saved successfully");
-    } catch (e) {
-      debugPrint("❌ Firebase mood error: $e");
-
+    } catch (_) {
       Get.snackbar("Error", "Failed to save mood");
     }
   }
@@ -253,21 +253,27 @@ class HomeController extends GetxController {
     titleController.clear();
     notesController.clear();
 
-    selectedIndex.value = 0;
+    selectedIndex.value = -1;
     selectedWeather.value = 0;
 
     selectedActivities.clear();
 
-    intensity.value = 5;
+    intensity.value = 1;
 
     selectedImage.value = null;
   }
 
+  void startNewEntry() {
+    editingEntry.value = null;
+    titleController.clear();
+    notesController.clear();
+    selectedWeather.value = 0;
+    selectedActivities.clear();
+    intensity.value = 1;
+    selectedImage.value = null;
+  }
+
   Future<void> takePhoto() async {
-    final granted = await PermissionService.requestCameraPermission();
-
-    if (!granted) return;
-
     final image = await ImagePickerService.pickFromCamera();
 
     if (image != null) {
@@ -276,10 +282,6 @@ class HomeController extends GetxController {
   }
 
   Future<void> pickPhoto() async {
-    final granted = await PermissionService.requestGalleryPermission();
-
-    if (!granted) return;
-
     final image = await ImagePickerService.pickFromGallery();
 
     if (image != null) {

@@ -1,1 +1,29 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"nilora-mood-journal-app","appId":"1:23408367101:android:5bc7a9d90b0d6ec9557594","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"nilora-mood-journal-app","configurations":{"android":"1:23408367101:android:5bc7a9d90b0d6ec9557594","ios":"1:23408367101:ios:836aa34367e086e5557594","web":"1:23408367101:web:2cc70fc1aa89bd6c557594"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "nilora-mood-journal-app",
+          "appId": "1:23408367101:android:1b0c9032649e121e557594",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "nilora-mood-journal-app",
+          "configurations": {
+            "android": "1:23408367101:android:1b0c9032649e121e557594",
+            "ios": "1:23408367101:ios:836aa34367e086e5557594",
+            "web": "1:23408367101:web:2cc70fc1aa89bd6c557594"
+          }
+        }
+      }
+    }
+  },
+  "storage": [
+    {
+      "target": "profile-images",
+      "rules": "storage.rules"
+    }
+  ]
+}

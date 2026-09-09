@@ -22,7 +22,7 @@ class AppBottomNavigation extends StatelessWidget {
         borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(.06),
+            color: Colors.black.withValues(alpha: .06),
             blurRadius: 20,
             offset: const Offset(0, -5),
           ),
@@ -80,7 +80,7 @@ class AppBottomNavigation extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: selected
-                    ? AppColors.primary.withOpacity(.15)
+                    ? AppColors.primary.withValues(alpha: .15)
                     : Colors.transparent,
               ),
               child: Icon(

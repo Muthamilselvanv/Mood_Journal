@@ -24,7 +24,7 @@ class ActivityChip extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
           color: selected
-              ? activity.color.withOpacity(.12)
+              ? activity.color.withValues(alpha: .12)
               : Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(30),
           border: Border.all(

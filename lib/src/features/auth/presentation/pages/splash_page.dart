@@ -40,8 +40,8 @@ class SplashPage extends GetView<SplashController> {
                 height: 260,
                 decoration: BoxDecoration(
                   color: isDark
-                      ? const Color(0xff7C4DFF).withOpacity(.18)
-                      : const Color(0xff7C4DFF).withOpacity(.08),
+                      ? const Color(0xff7C4DFF).withValues(alpha: .18)
+                      : const Color(0xff7C4DFF).withValues(alpha: .08),
                   shape: BoxShape.circle,
                 ),
               ),
@@ -55,8 +55,8 @@ class SplashPage extends GetView<SplashController> {
                 height: 240,
                 decoration: BoxDecoration(
                   color: isDark
-                      ? const Color(0xff5AA9FF).withOpacity(.18)
-                      : const Color(0xff5AA9FF).withOpacity(.08),
+                      ? const Color(0xff5AA9FF).withValues(alpha: .18)
+                      : const Color(0xff5AA9FF).withValues(alpha: .08),
                   shape: BoxShape.circle,
                 ),
               ),

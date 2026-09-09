@@ -16,6 +16,7 @@ class SelectedMoodCard extends GetView<HomeController> {
     double responsiveSize = 80 * scaleFactor;
     return Obx(() {
       final mood = controller.selectedMood;
+      final color = mood?.color ?? Theme.of(context).colorScheme.primary;
 
       return AnimatedContainer(
         duration: const Duration(milliseconds: 300),
@@ -25,7 +26,7 @@ class SelectedMoodCard extends GetView<HomeController> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(28),
           // Background changes automatically
-          color: mood.color.withOpacity(.12),
+          color: color.withValues(alpha: .12),
         ),
 
         child: Column(
@@ -39,7 +40,7 @@ class SelectedMoodCard extends GetView<HomeController> {
               ),
               child: Center(
                 child: Text(
-                  mood.emoji,
+                  mood?.emoji ?? '🙂',
                   style: const TextStyle(
                     fontSize: AppIconSizes.extraLarge * 1.5,
                   ),
@@ -49,15 +50,23 @@ class SelectedMoodCard extends GetView<HomeController> {
 
             const SizedBox(height: AppSpacing.space8),
 
-            Text(mood.title, style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontFamily: GoogleFonts.poppins().fontFamily,)),
+            Text(
+              mood?.title ?? 'Choose your mood',
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                fontFamily: GoogleFonts.poppins().fontFamily,
+              ),
+            ),
 
             const SizedBox(height: AppSpacing.space8),
 
             Text(
-              "Tap a mood below to change",
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium?.copyWith(color: Colors.grey,fontFamily: GoogleFonts.poppins().fontFamily,),
+              mood == null
+                  ? "Tap a mood below to begin"
+                  : "Tap a mood below to change",
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Colors.grey,
+                fontFamily: GoogleFonts.poppins().fontFamily,
+              ),
             ),
           ],
         ),

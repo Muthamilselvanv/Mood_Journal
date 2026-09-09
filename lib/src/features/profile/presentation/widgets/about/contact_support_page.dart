@@ -78,7 +78,9 @@ class ContactSupportPage extends StatelessWidget {
               elevation: 0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(22),
-                side: BorderSide(color: theme.dividerColor.withOpacity(.15)),
+                side: BorderSide(
+                  color: theme.dividerColor.withValues(alpha: .15),
+                ),
               ),
               child: InkWell(
                 borderRadius: BorderRadius.circular(22),
@@ -145,9 +147,9 @@ class ContactSupportPage extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.orange.withOpacity(.08),
+                color: Colors.orange.withValues(alpha: .08),
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Colors.orange.withOpacity(.25)),
+                border: Border.all(color: Colors.orange.withValues(alpha: .25)),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -191,7 +193,7 @@ class ContactSupportPage extends StatelessWidget {
               "I am happy to help ❤️",
               style: theme.textTheme.bodyMedium?.copyWith(
                 fontStyle: FontStyle.italic,
-                color: theme.colorScheme.onSurface.withOpacity(.6),
+                color: theme.colorScheme.onSurface.withValues(alpha: .6),
               ),
             ),
           ],

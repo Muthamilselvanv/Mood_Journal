@@ -5,12 +5,14 @@ import 'package:mood_journal_app/src/features/home/presentation/models/mood_sele
 class MoodItem extends StatelessWidget {
   final MoodModel mood;
   final bool selected;
+  final bool compact;
   final VoidCallback onTap;
 
   const MoodItem({
     super.key,
     required this.mood,
     required this.selected,
+    this.compact = false,
     required this.onTap,
   });
 
@@ -23,9 +25,9 @@ class MoodItem extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
 
-        width: 72,
+        width: compact ? 80 : 92,
 
-        padding: const EdgeInsets.symmetric(vertical: 16),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
 
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface, // Always white
@@ -40,7 +42,7 @@ class MoodItem extends StatelessWidget {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(.05),
+              color: Colors.black.withValues(alpha: .05),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -49,7 +51,7 @@ class MoodItem extends StatelessWidget {
 
         child: Column(
           children: [
-            Text(mood.emoji, style: const TextStyle(fontSize: 28)),
+            Text(mood.emoji, style: TextStyle(fontSize: compact ? 25 : 28)),
 
             const SizedBox(height: 8),
 
@@ -59,7 +61,7 @@ class MoodItem extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 15,
+                fontSize: compact ? 13 : 15,
                 fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
                 fontFamily: GoogleFonts.poppins().fontFamily,
                 color: selected

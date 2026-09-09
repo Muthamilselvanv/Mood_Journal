@@ -29,7 +29,7 @@ class ProfilePage extends StatelessWidget {
               AchievementSection(),
 
               SizedBox(height: AppSpacing.space24),
-              
+
               AboutAppSection(),
 
               SizedBox(height: AppSpacing.space24),

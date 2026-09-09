@@ -1,14 +1,13 @@
-import 'dart:io';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_flutter/lucide_flutter.dart';
 import 'package:mood_journal_app/src/app/routes/app_routes.dart';
-import 'package:mood_journal_app/src/core/constants/app_assets.dart';
 import 'package:mood_journal_app/src/core/constants/app_colors.dart';
 import 'package:mood_journal_app/src/core/constants/app_spacing.dart';
 import 'package:mood_journal_app/src/features/main/presentation/controller/main_controller.dart';
 import 'package:mood_journal_app/src/features/profile/presentation/controllers/profile_controller.dart';
+import 'package:mood_journal_app/src/features/profile/presentation/widgets/profile_image.dart';
 import 'package:mood_journal_app/src/shared/widgets/app_gradient_button.dart';
 import 'package:mood_journal_app/src/features/home/presentation/widgets/greeting.dart';
 import 'package:mood_journal_app/src/features/home/presentation/controllers/home_controller.dart';
@@ -26,6 +25,7 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         titleSpacing: AppSpacing.space20,
         toolbarHeight: AppSpacing.toolBarhight, // 70
         elevation: 0,
@@ -90,20 +90,10 @@ class HomePage extends StatelessWidget {
                     shape: BoxShape.circle,
                     color: isDark ? Colors.white : Colors.white,
                   ),
-                  child: CircleAvatar(
-                    radius: 18,
-                    backgroundColor: AppColors.primary.withOpacity(.15),
-                    backgroundImage: user?.profileImage != null
-                        ? FileImage(File(user!.profileImage!))
-                        : null,
-                    child: user?.profileImage == null
-                        ? Image.asset(
-                            AppAssets.niloraIcon,
-                            width: 230,
-                            fit: BoxFit.contain,
-                            color: AppColors.primary,
-                          )
-                        : null,
+                  child: ProfileImage(
+                    imagePath: user?.profileImage,
+                    size: 36,
+                    iconColor: AppColors.primary,
                   ),
                 ),
               );
@@ -120,7 +110,7 @@ class HomePage extends StatelessWidget {
             children: [
               buildMoodCard(context),
               const SizedBox(height: AppSpacing.space20),
-              const MoodSelector(title: "SELECT YOUR MOOD"), // from widget
+              const MoodSelector(title: "SELECT YOUR MOOD"),
               const SizedBox(height: AppSpacing.space20),
               buildAddMoodButton(context),
               const SizedBox(height: AppSpacing.space24),
@@ -174,8 +164,8 @@ Widget buildMoodCard(BuildContext context) {
               height: bigCircle,
               decoration: BoxDecoration(
                 color: isDark
-                    ? Colors.deepPurpleAccent.withOpacity(.18)
-                    : Colors.purple.withOpacity(.10),
+                    ? Colors.deepPurpleAccent.withValues(alpha: .18)
+                    : Colors.purple.withValues(alpha: .10),
                 shape: BoxShape.circle,
               ),
             ),
@@ -190,8 +180,8 @@ Widget buildMoodCard(BuildContext context) {
               height: smallCircle,
               decoration: BoxDecoration(
                 color: isDark
-                    ? Colors.tealAccent.withOpacity(.15)
-                    : Colors.teal.withOpacity(.25),
+                    ? Colors.tealAccent.withValues(alpha: .15)
+                    : Colors.teal.withValues(alpha: .25),
                 shape: BoxShape.circle,
               ),
             ),
@@ -206,8 +196,8 @@ Widget buildMoodCard(BuildContext context) {
               height: bigCircle,
               decoration: BoxDecoration(
                 color: isDark
-                    ? Colors.blueAccent.withOpacity(.12)
-                    : Colors.lightBlue.withOpacity(.15),
+                    ? Colors.blueAccent.withValues(alpha: .12)
+                    : Colors.lightBlue.withValues(alpha: .15),
                 shape: BoxShape.circle,
               ),
             ),
@@ -266,7 +256,7 @@ Widget buildMoodCard(BuildContext context) {
                               ? []
                               : [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(.08),
+                                    color: Colors.black.withValues(alpha: .08),
                                     blurRadius: 10,
                                     offset: const Offset(0, 4),
                                   ),
@@ -301,6 +291,7 @@ Widget buildAddMoodButton(BuildContext context) {
       text: "Add Today's Mood",
       icon: Icons.add,
       onPressed: () {
+        Get.find<HomeController>().startNewEntry();
         Get.toNamed(AppRoutes.addMoodEntry);
       },
     ),
@@ -335,13 +326,13 @@ Widget buildTodaySnapshot(BuildContext context) {
 
           return Card(
             elevation: isDark ? 2 : 0,
-            shadowColor: Colors.black.withOpacity(.35),
+            shadowColor: Colors.black.withValues(alpha: .35),
             color: colorScheme.surface,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(18),
               side: BorderSide(
                 color: isDark
-                    ? Colors.grey.withOpacity(0.25)
+                    ? Colors.grey.withValues(alpha: 0.25)
                     : Colors.transparent,
               ),
             ),
@@ -355,7 +346,7 @@ Widget buildTodaySnapshot(BuildContext context) {
                     width: 64,
                     height: 64,
                     decoration: BoxDecoration(
-                      color: AppColors.coralRose.withOpacity(0.10),
+                      color: AppColors.coralRose.withValues(alpha: 0.10),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Center(

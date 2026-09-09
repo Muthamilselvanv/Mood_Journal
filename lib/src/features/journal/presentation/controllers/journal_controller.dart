@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:mood_journal_app/src/core/services/network_service.dart';
 import 'package:mood_journal_app/src/features/home/data/repositories/mood_repository.dart';
 import 'package:mood_journal_app/src/features/home/presentation/controllers/home_controller.dart';
 import 'package:mood_journal_app/src/features/home/presentation/models/mood_entry_model.dart';
@@ -22,21 +24,12 @@ class JournalController extends GetxController {
   void onInit() {
     super.onInit();
     loadEntries();
-    loadMood();
   }
 
   @override
   void onClose() {
     searchController.dispose();
     super.onClose();
-  }
-
-  Future<void> loadMood() async {
-    final repository = Get.find<MoodRepository>();
-
-    final moods = await repository.getAllMoods();
-
-    print("Total entries: ${moods.length}");
   }
 
   final searchController = TextEditingController();
@@ -179,7 +172,15 @@ class JournalController extends GetxController {
     return counts.entries.reduce((a, b) => a.value >= b.value ? a : b).key;
   }
 
-  Future<void> deleteEntry(MoodEntry entry) async {
+  Future<bool> deleteEntry(MoodEntry entry) async {
+    final isGuest = GetStorage().read<bool>('isGuest') ?? false;
+    if (!isGuest && !await NetworkService.hasInternetConnection()) {
+      AppSnackbar.warning(
+        'Internet connection is required to delete a signed-in journal.',
+      );
+      return false;
+    }
+
     try {
       await repository.deleteMoodCompletely(entry);
 
@@ -187,11 +188,15 @@ class JournalController extends GetxController {
 
       await Get.find<HomeController>().loadMood();
       AppSnackbar.success("Journal deleted");
-    } catch (e, stackTrace) {
-      debugPrint("❌ DELETE MOOD ERROR: $e");
-      debugPrint("StackTrace: $stackTrace");
-
+      return true;
+    } on CloudWriteCompletedException {
+      AppSnackbar.warning(
+        'Deleted online. Local refresh is pending; do not delete again.',
+      );
+      return true;
+    } catch (_) {
       AppSnackbar.error("Failed to delete journal");
+      return false;
     }
   }
 
@@ -215,11 +220,11 @@ class JournalController extends GetxController {
       AppSnackbar.success(
         newValue ? "Added to favorites" : "Removed from favorites",
       );
-    } catch (e, stackTrace) {
-      debugPrint("❌ FAVORITE ERROR: $e");
-      debugPrint("Error: $e");
-      debugPrint("StackTrace: $stackTrace");
-
+    } on CloudWriteCompletedException {
+      AppSnackbar.warning(
+        'Updated online. Local refresh is pending; do not retry.',
+      );
+    } catch (_) {
       AppSnackbar.error("Failed to update favorite");
     } finally {
       isFavoriteLoading[id] = false;

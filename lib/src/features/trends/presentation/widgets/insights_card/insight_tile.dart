@@ -12,10 +12,10 @@ class InsightTile extends StatelessWidget {
       height: 54,
       padding: const EdgeInsets.symmetric(horizontal: 18),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface.withOpacity(0.72),
+        color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.72),
         borderRadius: BorderRadius.circular(18),
         border: Border.all(
-          color: Theme.of(context).dividerColor.withOpacity(0.16),
+          color: Theme.of(context).dividerColor.withValues(alpha: 0.16),
         ),
       ),
       child: Row(

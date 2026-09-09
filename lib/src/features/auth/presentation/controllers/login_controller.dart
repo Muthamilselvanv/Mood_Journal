@@ -49,7 +49,6 @@ class LoginController extends GetxController {
       }
 
       // 2. Permanent Firestore profile. SQLite is deliberately not used here.
-      debugPrint('Loading Firestore profile for ${firebaseUser.uid}');
       final profile = await repository.getUserProfile(firebaseUser.uid);
 
       if (profile == null) {
@@ -63,21 +62,21 @@ class LoginController extends GetxController {
           profile['email']?.toString().trim() ??
           firebaseUser.email?.trim() ??
           '';
+      final profileImage = profile['profileImage']?.toString().trim();
+      final bio = profile['bio']?.toString();
 
       if (name.isEmpty || userEmail.isEmpty) {
         throw StateError('Firestore profile is incomplete.');
       }
 
       // 3. Recreate SQLite user after reinstall, or use its existing local ID.
-      final localUser = await repository.getUserByFirebaseUid(firebaseUser.uid);
-
-      final localUserId =
-          localUser?.id ??
-          await repository.insertUser(
-            firebaseUid: firebaseUser.uid,
-            name: name,
-            email: userEmail,
-          );
+      final localUserId = await repository.insertUser(
+        firebaseUid: firebaseUser.uid,
+        name: name,
+        email: userEmail,
+        profileImage: profileImage?.isEmpty == true ? null : profileImage,
+        bio: bio,
+      );
 
       // 4. Firestore → SQLite journal upsert.
       await moodRepository.syncMoodEntriesFromFirebase(
@@ -95,10 +94,7 @@ class LoginController extends GetxController {
       await box.write('email', userEmail);
 
       Get.offAllNamed(AppRoutes.home);
-    } on FirebaseAuthException catch (error, stackTrace) {
-      debugPrint('LOGIN AUTH ERROR: ${error.code} ${error.message}');
-      debugPrintStack(stackTrace: stackTrace);
-
+    } on FirebaseAuthException catch (error) {
       switch (error.code) {
         case 'invalid-credential':
         case 'wrong-password':
@@ -124,29 +120,20 @@ class LoginController extends GetxController {
         default:
           passwordError.value = error.message ?? 'Unable to sign in';
       }
-    } on FirebaseException catch (error, stackTrace) {
-      debugPrint('LOGIN FIRESTORE ERROR: ${error.code} ${error.message}');
-      debugPrintStack(stackTrace: stackTrace);
-
+    } on FirebaseException catch (_) {
       Get.snackbar(
         'Cloud data error',
         'Sign-in succeeded, but your profile or journals could not be loaded. '
             'Check your connection and Firestore rules.',
         snackPosition: SnackPosition.BOTTOM,
       );
-    } on StateError catch (error, stackTrace) {
-      debugPrint('LOGIN DATA ERROR: $error');
-      debugPrintStack(stackTrace: stackTrace);
-
+    } on StateError catch (error) {
       Get.snackbar(
         'Account setup error',
         error.message.toString(),
         snackPosition: SnackPosition.BOTTOM,
       );
-    } catch (error, stackTrace) {
-      debugPrint('LOGIN ERROR: $error');
-      debugPrintStack(stackTrace: stackTrace);
-
+    } catch (_) {
       Get.snackbar(
         'Login failed',
         'Something went wrong while restoring your local data.',
@@ -158,74 +145,9 @@ class LoginController extends GetxController {
   }
 
   void showForgotPasswordDialog() {
-    final resetEmailController = TextEditingController(
-      text: emailController.text.trim(),
-    );
-
     Get.dialog(
-      AlertDialog(
-        title: const Text('Reset password'),
-        content: TextField(
-          controller: resetEmailController,
-          keyboardType: TextInputType.emailAddress,
-          autofillHints: const [AutofillHints.email],
-          decoration: const InputDecoration(
-            labelText: 'Email address',
-            hintText: 'you@example.com',
-          ),
-        ),
-        actions: [
-          TextButton(onPressed: Get.back, child: const Text('Cancel')),
-          Obx(
-            () => FilledButton(
-              onPressed: isResettingPassword.value
-                  ? null
-                  : () async {
-                      final email = resetEmailController.text.trim();
-
-                      if (!GetUtils.isEmail(email)) {
-                        Get.snackbar(
-                          'Invalid email',
-                          'Enter a valid email address.',
-                          snackPosition: SnackPosition.BOTTOM,
-                        );
-                        return;
-                      }
-
-                      final sent = await resetPassword(email);
-
-                      if (!sent) return;
-
-                      // Close only the dialog.
-                      Get.back();
-
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        Get.snackbar(
-                          'Reset link sent',
-                          'Check your Inbox, Spam, or Promotions folder.',
-                          snackPosition: SnackPosition.BOTTOM,
-                          duration: const Duration(seconds: 5),
-                          backgroundColor: Colors.green,
-                          colorText: Colors.white,
-                        );
-                      });
-                    },
-              child: isResettingPassword.value
-                  ? const SizedBox(
-                      width: 18,
-                      height: 18,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : const Text('Send reset link'),
-            ),
-          ),
-        ],
-      ),
-    ).whenComplete(() {
-      Future.delayed(const Duration(milliseconds: 500), () {
-        resetEmailController.dispose();
-      });
-    });
+      _ForgotPasswordDialog(initialEmail: emailController.text.trim()),
+    );
   }
 
   Future<bool> resetPassword(String email) async {
@@ -234,12 +156,11 @@ class LoginController extends GetxController {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
       return true;
-    } on FirebaseAuthException catch (error, stackTrace) {
-      debugPrint('RESET PASSWORD ERROR: ${error.code}');
-      debugPrintStack(stackTrace: stackTrace);
-
+    } on FirebaseAuthException catch (error) {
       final message = switch (error.code) {
         'invalid-email' => 'Enter a valid email address.',
+        'user-not-found' =>
+          'No account uses this email. Please create an account first.',
         'network-request-failed' =>
           'No internet connection. Connect to Wi-Fi or mobile data and try again.',
         'too-many-requests' =>
@@ -254,10 +175,7 @@ class LoginController extends GetxController {
       );
 
       return false;
-    } catch (error, stackTrace) {
-      debugPrint('RESET PASSWORD UNKNOWN ERROR: $error');
-      debugPrintStack(stackTrace: stackTrace);
-
+    } catch (_) {
       Get.snackbar(
         'Could not send reset link',
         'Please check your internet connection and try again.',
@@ -387,5 +305,94 @@ class LoginController extends GetxController {
     emailController.dispose();
     passwordController.dispose();
     super.onClose();
+  }
+}
+
+class _ForgotPasswordDialog extends StatefulWidget {
+  const _ForgotPasswordDialog({required this.initialEmail});
+
+  final String initialEmail;
+
+  @override
+  State<_ForgotPasswordDialog> createState() => _ForgotPasswordDialogState();
+}
+
+class _ForgotPasswordDialogState extends State<_ForgotPasswordDialog> {
+  late final TextEditingController _emailController;
+  final LoginController _loginController = Get.find<LoginController>();
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController = TextEditingController(text: widget.initialEmail);
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _sendResetLink() async {
+    final email = _emailController.text.trim();
+
+    if (!GetUtils.isEmail(email)) {
+      Get.snackbar(
+        'Invalid email',
+        'Enter a valid email address.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
+
+    final sent = await _loginController.resetPassword(email);
+    if (!sent || !mounted) return;
+
+    Navigator.of(context).pop();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Get.snackbar(
+        'Reset link sent',
+        'Check your Inbox, Spam, or Promotions folder.',
+        snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 5),
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Reset password'),
+      content: TextField(
+        controller: _emailController,
+        keyboardType: TextInputType.emailAddress,
+        autofillHints: const [AutofillHints.email],
+        textInputAction: TextInputAction.done,
+        onSubmitted: (_) => _sendResetLink(),
+        decoration: const InputDecoration(
+          labelText: 'Email address',
+          hintText: 'you@example.com',
+        ),
+      ),
+      actions: [
+        TextButton(onPressed: Get.back, child: const Text('Cancel')),
+        Obx(
+          () => FilledButton(
+            onPressed: _loginController.isResettingPassword.value
+                ? null
+                : _sendResetLink,
+            child: _loginController.isResettingPassword.value
+                ? const SizedBox(
+                    width: 18,
+                    height: 18,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Text('Send reset link'),
+          ),
+        ),
+      ],
+    );
   }
 }

@@ -35,9 +35,7 @@ class _AppInfoPageState extends State<AppInfoPage> {
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: theme.dividerColor.withOpacity(0.18),
-        ),
+        border: Border.all(color: theme.dividerColor.withValues(alpha: 0.18)),
       ),
       child: Row(
         children: [
@@ -45,14 +43,10 @@ class _AppInfoPageState extends State<AppInfoPage> {
             width: 36,
             height: 46,
             decoration: BoxDecoration(
-              color: AppColors.moodNeutral.withOpacity(0.12),
+              color: AppColors.moodNeutral.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(14),
             ),
-            child: Icon(
-              icon,
-              color: AppColors.moodNeutral,
-              size: 22,
-            ),
+            child: Icon(icon, color: AppColors.moodNeutral, size: 22),
           ),
           const SizedBox(width: AppSpacing.space12),
           Expanded(
@@ -89,9 +83,7 @@ class _AppInfoPageState extends State<AppInfoPage> {
     final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('App Information'),
-      ),
+      appBar: AppBar(title: const Text('App Information')),
       body: SafeArea(
         child: FutureBuilder<PackageInfo>(
           future: _packageInfoFuture,
@@ -109,14 +101,8 @@ class _AppInfoPageState extends State<AppInfoPage> {
                     borderRadius: BorderRadius.circular(28),
                     gradient: LinearGradient(
                       colors: isDark
-                          ? const [
-                              Color(0xff3A2D63),
-                              Color(0xff243B5E),
-                            ]
-                          : const [
-                              Color(0xffEEF2FF),
-                              Color(0xffE0F2FE),
-                            ],
+                          ? const [Color(0xff3A2D63), Color(0xff243B5E)]
+                          : const [Color(0xffEEF2FF), Color(0xffE0F2FE)],
                     ),
                   ),
                   child: Column(
@@ -146,7 +132,9 @@ class _AppInfoPageState extends State<AppInfoPage> {
                       Text(
                         'Mood Journal Application',
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.colorScheme.onSurface.withOpacity(0.7),
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: 0.7,
+                          ),
                           fontFamily: GoogleFonts.poppins().fontFamily,
                         ),
                       ),
@@ -194,7 +182,7 @@ class _AppInfoPageState extends State<AppInfoPage> {
                     color: theme.colorScheme.surface,
                     borderRadius: BorderRadius.circular(22),
                     border: Border.all(
-                      color: theme.dividerColor.withOpacity(0.18),
+                      color: theme.dividerColor.withValues(alpha: 0.18),
                     ),
                   ),
                   child: Column(
@@ -218,7 +206,9 @@ class _AppInfoPageState extends State<AppInfoPage> {
                         'their emotional well-being through daily mood tracking.',
                         textAlign: TextAlign.center,
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.colorScheme.onSurface.withOpacity(0.7),
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: 0.7,
+                          ),
                           height: 1.6,
                           fontFamily: GoogleFonts.poppins().fontFamily,
                         ),

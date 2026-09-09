@@ -16,5 +16,6 @@ abstract final class AppRoutes {
   static const privacy = "/privacy";
   static const terms = "/terms";
   static const support = "/support";
- // static const rate = "/rate";
+  static const accountData = "/account-data";
+  // static const rate = "/rate";
 }

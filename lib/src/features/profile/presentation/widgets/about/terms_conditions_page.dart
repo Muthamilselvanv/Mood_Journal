@@ -42,7 +42,7 @@ class TermsConditionsPage extends StatelessWidget {
                     width: 82,
                     height: 82,
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(.15),
+                      color: Colors.white.withValues(alpha: .15),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
@@ -68,7 +68,7 @@ class TermsConditionsPage extends StatelessWidget {
                     "Please read these terms carefully before using Nilora.",
                     textAlign: TextAlign.center,
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurface.withOpacity(.7),
+                      color: theme.colorScheme.onSurface.withValues(alpha: .7),
                       fontFamily: GoogleFonts.poppins().fontFamily,
                     ),
                   ),
@@ -153,7 +153,7 @@ class _TermTile extends StatelessWidget {
           width: 46,
           height: 46,
           decoration: BoxDecoration(
-            color:  AppColors.moodNeutral.withOpacity(.12),
+            color: AppColors.moodNeutral.withValues(alpha: .12),
             borderRadius: BorderRadius.circular(14),
           ),
           child: const Icon(

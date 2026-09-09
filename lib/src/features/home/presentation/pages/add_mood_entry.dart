@@ -25,66 +25,74 @@ class _AddMoodEntryState extends State<AddMoodEntry> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<HomeController>();
-    return Scaffold(
-      appBar: AppBar(
-        //automaticallyImplyLeading: false,
-        centerTitle: false,
-        titleSpacing: AppSpacing.space20,
-        toolbarHeight: AppSpacing.toolBarhight, // 70
-        // backgroundColor: AppColors.appBackground,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        title: Text(
-          'Add Mood Entry',
-          style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 20,fontFamily: GoogleFonts.poppins().fontFamily,),
+    return PopScope(
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) controller.resetForm();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          //automaticallyImplyLeading: false,
+          centerTitle: false,
+          titleSpacing: AppSpacing.space20,
+          toolbarHeight: AppSpacing.toolBarhight, // 70
+          // backgroundColor: AppColors.appBackground,
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          title: Text(
+            'Add Mood Entry',
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+              fontSize: 20,
+              fontFamily: GoogleFonts.poppins().fontFamily,
+            ),
+          ),
         ),
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: AppSpacing.screen,
-          child: Column(
-            children: [
-              const SelectedMoodCard(),
-              const SizedBox(height: AppSpacing.space20),
-              const MoodSelector(title: "How are you feeling?"),
-              const SizedBox(height: AppSpacing.space20),
-              const Datecard(),
-              const SizedBox(height: AppSpacing.space20),
-              const MoodIntensitySlider(),
-              const SizedBox(height: AppSpacing.space20),
-              const WeatherSelector(),
-              const SizedBox(height: AppSpacing.space20),
-              const ActivitySelector(),
-              const SizedBox(height: AppSpacing.space20),
-              const InputFields(),
-              const SizedBox(height: AppSpacing.space20),
-              Obx(
-                () => AttachPhotoCard(
-                  image: controller.selectedImage.value,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: AppSpacing.screen,
+            child: Column(
+              children: [
+                const SelectedMoodCard(),
+                const SizedBox(height: AppSpacing.space20),
+                const MoodSelector(title: "How are you feeling?"),
+                const SizedBox(height: AppSpacing.space20),
+                const Datecard(),
+                const SizedBox(height: AppSpacing.space20),
+                const MoodIntensitySlider(),
+                const SizedBox(height: AppSpacing.space20),
+                const WeatherSelector(),
+                const SizedBox(height: AppSpacing.space20),
+                const ActivitySelector(),
+                const SizedBox(height: AppSpacing.space20),
+                const InputFields(),
+                const SizedBox(height: AppSpacing.space20),
+                Obx(
+                  () => AttachPhotoCard(
+                    image: controller.selectedImage.value,
 
-                  onTap: () {
-                    AppBottomSheet.showImagePicker(
-                      context: context,
-                      onCamera: () async {
-                        Navigator.pop(context);
-                        await controller.takePhoto();
-                      },
-                      onGallery: () async {
-                        Navigator.pop(context);
-                        await controller.pickPhoto();
-                      },
-                    );
-                  },
+                    onTap: () {
+                      AppBottomSheet.showImagePicker(
+                        context: context,
+                        onCamera: () async {
+                          Navigator.pop(context);
+                          await controller.takePhoto();
+                        },
+                        onGallery: () async {
+                          Navigator.pop(context);
+                          await controller.pickPhoto();
+                        },
+                      );
+                    },
 
-                  onRemove: () {
-                    controller.selectedImage.value = null;
-                  },
+                    onRemove: () {
+                      controller.selectedImage.value = null;
+                    },
+                  ),
                 ),
-              ),
-              const SizedBox(height: AppSpacing.space20),
-              const BuildAddMoodButton(),
-              //const SizedBox(height: AppSpacing.space20),
-            ],
+                const SizedBox(height: AppSpacing.space20),
+                const BuildAddMoodButton(),
+                //const SizedBox(height: AppSpacing.space20),
+              ],
+            ),
           ),
         ),
       ),

@@ -33,7 +33,11 @@ class AppSnackbar {
     );
   }
 
-  static void warning(String message) {
+  static void warning(
+    String message, {
+    String? actionLabel,
+    VoidCallback? onAction,
+  }) {
     Get.snackbar(
       icon: Icon(LucideIcons.triangleAlert, color: Colors.white),
       "Warning",
@@ -43,7 +47,19 @@ class AppSnackbar {
       colorText: Colors.white,
       margin: const EdgeInsets.all(12),
       borderRadius: 12,
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 4),
+      mainButton: actionLabel != null && onAction != null
+          ? TextButton(
+              onPressed: onAction,
+              child: Text(
+                actionLabel,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            )
+          : null,
     );
   }
 

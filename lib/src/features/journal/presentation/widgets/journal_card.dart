@@ -74,13 +74,13 @@ class JournalCard extends StatelessWidget {
       },
       child: Card(
         elevation: isDark ? 2 : 0,
-        shadowColor: Colors.black.withOpacity(.35),
+        shadowColor: Colors.black.withValues(alpha: .35),
         margin: const EdgeInsets.only(bottom: 18),
         color: theme.colorScheme.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
           side: isDark
-              ? BorderSide(color: Colors.white.withOpacity(.1))
+              ? BorderSide(color: Colors.white.withValues(alpha: .1))
               : BorderSide.none,
         ),
         child: Container(
@@ -106,8 +106,8 @@ class JournalCard extends StatelessWidget {
                 height: 64,
                 decoration: BoxDecoration(
                   color: isDark
-                      ? moodColor.withOpacity(.20)
-                      : moodColor.withOpacity(.12),
+                      ? moodColor.withValues(alpha: .20)
+                      : moodColor.withValues(alpha: .12),
                   borderRadius: BorderRadius.circular(18),
                 ),
                 child: Center(
@@ -157,8 +157,8 @@ class JournalCard extends StatelessWidget {
                           ),
                           decoration: BoxDecoration(
                             color: isDark
-                                ? moodColor.withOpacity(.20)
-                                : moodColor.withOpacity(.12),
+                                ? moodColor.withValues(alpha: .20)
+                                : moodColor.withValues(alpha: .12),
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(
@@ -186,7 +186,9 @@ class JournalCard extends StatelessWidget {
                         Text(
                           DateFormat("MMM dd, yyyy").format(entry.createdAt),
                           style: TextStyle(
-                            color: theme.colorScheme.onSurface.withOpacity(.65),
+                            color: theme.colorScheme.onSurface.withValues(
+                              alpha: .65,
+                            ),
                             fontWeight: FontWeight.w500,
                             fontFamily: GoogleFonts.poppins().fontFamily,
                           ),
@@ -202,7 +204,9 @@ class JournalCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         height: 1.45,
-                        color: theme.colorScheme.onSurface.withOpacity(.75),
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: .75,
+                        ),
                         fontFamily: GoogleFonts.poppins().fontFamily,
                       ),
                     ),

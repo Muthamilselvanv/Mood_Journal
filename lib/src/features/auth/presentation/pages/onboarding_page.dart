@@ -46,8 +46,8 @@ class OnboardingPage extends GetView<OnboardingController> {
                 height: 280,
                 decoration: BoxDecoration(
                   color: isDark
-                      ? const Color(0xff7C4DFF).withOpacity(.18)
-                      : const Color(0xff7C4DFF).withOpacity(.08),
+                      ? const Color(0xff7C4DFF).withValues(alpha: .18)
+                      : const Color(0xff7C4DFF).withValues(alpha: .08),
                   shape: BoxShape.circle,
                 ),
               ),
@@ -62,8 +62,8 @@ class OnboardingPage extends GetView<OnboardingController> {
                 height: 260,
                 decoration: BoxDecoration(
                   color: isDark
-                      ? const Color(0xff5AA9FF).withOpacity(.15)
-                      : const Color(0xff5AA9FF).withOpacity(.08),
+                      ? const Color(0xff5AA9FF).withValues(alpha: .15)
+                      : const Color(0xff5AA9FF).withValues(alpha: .08),
                   shape: BoxShape.circle,
                 ),
               ),
@@ -105,9 +105,12 @@ class OnboardingPage extends GetView<OnboardingController> {
                               vertical: 10,
                             ),
                           ),
-                          child:  Text(
+                          child: Text(
                             "Skip",
-                            style: TextStyle(fontWeight: FontWeight.w600,fontFamily: GoogleFonts.poppins().fontFamily,),
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontFamily: GoogleFonts.poppins().fontFamily,
+                            ),
                           ),
                         );
                       }),
@@ -149,17 +152,19 @@ class OnboardingPage extends GetView<OnboardingController> {
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
                       color: isDark
-                          ? const Color(0xff1F2937).withOpacity(.90)
-                          : Colors.white.withOpacity(.72),
+                          ? const Color(0xff1F2937).withValues(alpha: .90)
+                          : Colors.white.withValues(alpha: .72),
                       borderRadius: BorderRadius.circular(30),
                       border: Border.all(
                         color: isDark
-                            ? Colors.white.withOpacity(.08)
-                            : Colors.white.withOpacity(.45),
+                            ? Colors.white.withValues(alpha: .08)
+                            : Colors.white.withValues(alpha: .45),
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(isDark ? .25 : .04),
+                          color: Colors.black.withValues(
+                            alpha: isDark ? .25 : .04,
+                          ),
                           blurRadius: 30,
                           offset: const Offset(0, 15),
                         ),
@@ -202,9 +207,11 @@ class OnboardingPage extends GetView<OnboardingController> {
                                 Text(
                                   "Swipe to continue",
                                   style: theme.textTheme.bodyMedium?.copyWith(
-                                    color: theme.colorScheme.onSurface.withOpacity(.7),
+                                    color: theme.colorScheme.onSurface
+                                        .withValues(alpha: .7),
                                     fontWeight: FontWeight.w500,
-                                    fontFamily: GoogleFonts.poppins().fontFamily,
+                                    fontFamily:
+                                        GoogleFonts.poppins().fontFamily,
                                   ),
                                 ),
                               ],
@@ -227,7 +234,7 @@ class OnboardingPage extends GetView<OnboardingController> {
                                   BoxShadow(
                                     color: const Color(
                                       0xff7C4DFF,
-                                    ).withOpacity(.28),
+                                    ).withValues(alpha: .28),
                                     blurRadius: 18,
                                     offset: const Offset(0, 8),
                                   ),
@@ -249,7 +256,8 @@ class OnboardingPage extends GetView<OnboardingController> {
                                     color: Colors.white,
                                     fontSize: 17,
                                     fontWeight: FontWeight.bold,
-                                    fontFamily: GoogleFonts.poppins().fontFamily,
+                                    fontFamily:
+                                        GoogleFonts.poppins().fontFamily,
                                   ),
                                 ),
                               ),

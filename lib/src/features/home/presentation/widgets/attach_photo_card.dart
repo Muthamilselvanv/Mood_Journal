@@ -17,6 +17,7 @@ class AttachPhotoCard extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
 
     final cardHeight = (width * 0.58).clamp(220.0, 320.0);
+    final selectedImageHeight = (width * 0.78).clamp(260.0, 360.0);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,16 +34,16 @@ class AttachPhotoCard extends StatelessWidget {
         const SizedBox(height: AppSpacing.space8),
 
         InkWell(
-          onTap: image == null ? onTap : null,
+          onTap: onTap,
           borderRadius: BorderRadius.circular(24),
           child: Container(
             width: double.infinity,
-            height: cardHeight * 1.5,
+            height: image == null ? cardHeight : selectedImageHeight,
             decoration: BoxDecoration(
               color: theme.colorScheme.surface,
               borderRadius: BorderRadius.circular(24),
               border: Border.all(
-                color: theme.colorScheme.outline.withOpacity(.25),
+                color: theme.colorScheme.outline.withValues(alpha: .25),
               ),
             ),
             child: image == null
@@ -52,7 +53,54 @@ class AttachPhotoCard extends StatelessWidget {
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(24),
-                        child: Image.file(image!, fit: BoxFit.cover),
+                        child: ColoredBox(
+                          color: Colors.black,
+                          child: Image.file(
+                            image!,
+                            key: ValueKey(image!.path),
+                            width: double.infinity,
+                            height: double.infinity,
+                            fit: BoxFit.contain,
+                            gaplessPlayback: true,
+                            errorBuilder: (_, __, ___) => _buildPlaceholder(
+                              context,
+                              title: 'Photo could not be displayed',
+                              subtitle: 'Tap to choose another photo.',
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      Positioned(
+                        left: 14,
+                        bottom: 14,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 13,
+                            vertical: 8,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.black.withValues(alpha: .68),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: const Row(
+                            children: [
+                              Icon(
+                                Icons.photo_camera_back_rounded,
+                                color: Colors.white,
+                                size: 17,
+                              ),
+                              SizedBox(width: 7),
+                              Text(
+                                'Replace photo',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
 
                       Positioned(
@@ -83,16 +131,21 @@ class AttachPhotoCard extends StatelessWidget {
     );
   }
 
-  Widget _buildPlaceholder(BuildContext context) {
+  Widget _buildPlaceholder(
+    BuildContext context, {
+    String title = 'Add a Photo',
+    String subtitle =
+        "Capture today's memory or\nchoose one from your gallery.",
+  }) {
     final theme = Theme.of(context);
     final width = MediaQuery.of(context).size.width;
 
-    final avatarSize = (width * 0.18).clamp(64.0, 82.0);
-    final iconSize = (width * 0.08).clamp(28.0, 36.0);
+    final avatarSize = (width * 0.16).clamp(54.0, 68.0);
+    final iconSize = (width * 0.07).clamp(26.0, 32.0);
 
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -101,7 +154,7 @@ class AttachPhotoCard extends StatelessWidget {
               height: avatarSize,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: theme.colorScheme.primary.withOpacity(.12),
+                color: theme.colorScheme.primary.withValues(alpha: .12),
               ),
               child: Icon(
                 LucideIcons.imagePlus,
@@ -110,20 +163,20 @@ class AttachPhotoCard extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 22),
+            const SizedBox(height: 12),
 
             Text(
-              "Add a Photo",
+              title,
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 fontFamily: GoogleFonts.poppins().fontFamily,
               ),
             ),
 
-            const SizedBox(height: 8),
+            const SizedBox(height: 5),
 
             Text(
-              "Capture today's memory or\nchoose one from your gallery.",
+              subtitle,
               textAlign: TextAlign.center,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
@@ -132,10 +185,10 @@ class AttachPhotoCard extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 22),
+            const SizedBox(height: 12),
 
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
                 color: theme.colorScheme.primaryContainer,
                 borderRadius: BorderRadius.circular(30),
@@ -160,30 +213,6 @@ class AttachPhotoCard extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-
-            const SizedBox(height: 18),
-
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.touch_app_rounded,
-                  size: 18,
-                  color: theme.colorScheme.primary,
-                ),
-
-                const SizedBox(width: 6),
-
-                Text(
-                  "Tap anywhere to select",
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    color: theme.colorScheme.primary,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: GoogleFonts.poppins().fontFamily,
-                  ),
-                ),
-              ],
             ),
           ],
         ),

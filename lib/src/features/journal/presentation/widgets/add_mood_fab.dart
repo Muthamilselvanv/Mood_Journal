@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mood_journal_app/src/app/routes/app_routes.dart';
+import 'package:mood_journal_app/src/features/home/presentation/controllers/home_controller.dart';
 
 class AddMoodFAB extends StatelessWidget {
   const AddMoodFAB({super.key});
@@ -19,7 +20,7 @@ class AddMoodFAB extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xff8B5CF6).withOpacity(.35),
+            color: const Color(0xff8B5CF6).withValues(alpha: .35),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -30,6 +31,7 @@ class AddMoodFAB extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(50),
           onTap: () {
+            Get.find<HomeController>().startNewEntry();
             Get.toNamed(AppRoutes.addMoodEntry);
           },
           child: const Center(

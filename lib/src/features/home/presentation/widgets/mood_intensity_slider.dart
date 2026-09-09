@@ -11,6 +11,7 @@ class MoodIntensitySlider extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Obx(() {
       final mood = controller.selectedMood;
+      final accentColor = mood?.color ?? Theme.of(context).colorScheme.primary;
 
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,7 +53,7 @@ class MoodIntensitySlider extends GetView<HomeController> {
                     Text(
                       "${controller.intensity.value.toInt()}/10",
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: mood.color,
+                        color: accentColor,
                         fontWeight: FontWeight.bold,
                         fontFamily: GoogleFonts.poppins().fontFamily,
                       ),
@@ -66,13 +67,13 @@ class MoodIntensitySlider extends GetView<HomeController> {
                   data: SliderTheme.of(context).copyWith(
                     trackHeight: 6,
 
-                    activeTrackColor: mood.color,
+                    activeTrackColor: accentColor,
 
-                    inactiveTrackColor: mood.color.withOpacity(.15),
+                    inactiveTrackColor: accentColor.withValues(alpha: .15),
 
-                    thumbColor: mood.color,
+                    thumbColor: accentColor,
 
-                    overlayColor: mood.color.withOpacity(.15),
+                    overlayColor: accentColor.withValues(alpha: .15),
 
                     thumbShape: const RoundSliderThumbShape(
                       enabledThumbRadius: 9,

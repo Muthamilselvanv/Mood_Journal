@@ -1,4 +1,4 @@
-package com.example.mood_journal_app
+package com.muthamilselvan.nilora
 
 import io.flutter.embedding.android.FlutterActivity
 

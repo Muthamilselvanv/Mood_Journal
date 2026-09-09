@@ -1,0 +1,13 @@
+{
+  "projects": {},
+  "targets": {
+    "nilora-mood-journal-app": {
+      "storage": {
+        "profile-images": [
+          "nilora-mood-journal-app.firebasestorage.app"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

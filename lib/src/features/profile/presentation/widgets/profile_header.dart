@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mood_journal_app/src/app/routes/app_routes.dart';
 import 'package:mood_journal_app/src/core/constants/app_assets.dart';
 import 'package:mood_journal_app/src/core/constants/app_spacing.dart';
+import 'package:mood_journal_app/src/core/utils/app_bottom_sheet.dart';
 import 'package:mood_journal_app/src/features/profile/presentation/controllers/profile_controller.dart';
 import 'package:mood_journal_app/src/features/profile/presentation/widgets/profile_avatar.dart';
 import 'package:mood_journal_app/src/shared/widgets/app_gradient_button.dart';
@@ -108,7 +109,19 @@ class ProfileHeader extends GetView<ProfileController> {
             children: [
               ProfileAvatar(
                 imagePath: user.profileImage,
-                onTap: controller.pickProfileImage,
+                onTap: () => AppBottomSheet.showImagePicker(
+                  context: context,
+                  onCamera: () async {
+                    Navigator.pop(context);
+                    await controller.selectAndSaveProfilePhoto(useCamera: true);
+                  },
+                  onGallery: () async {
+                    Navigator.pop(context);
+                    await controller.selectAndSaveProfilePhoto(
+                      useCamera: false,
+                    );
+                  },
+                ),
               ),
 
               const SizedBox(height: 20),
@@ -131,7 +144,7 @@ class ProfileHeader extends GetView<ProfileController> {
 
               Text(
                 (user.bio == null || user.bio!.isEmpty)
-                    ? "Living one day at a time 🌿"
+                    ? "Finding calm, one day at a time."
                     : user.bio!,
                 textAlign: TextAlign.center,
                 style: theme.textTheme.bodyMedium,

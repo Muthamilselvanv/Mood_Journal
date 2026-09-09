@@ -25,18 +25,18 @@ class OnboardingItem extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(40),
               color: isDark
-                  ? const Color(0xff1F2937).withOpacity(.85)
-                  : Colors.white.withOpacity(.45),
+                  ? const Color(0xff1F2937).withValues(alpha: .85)
+                  : Colors.white.withValues(alpha: .45),
 
               border: Border.all(
                 color: isDark
-                    ? Colors.white.withOpacity(.08)
-                    : Colors.white.withOpacity(.55),
+                    ? Colors.white.withValues(alpha: .08)
+                    : Colors.white.withValues(alpha: .55),
               ),
 
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(isDark ? .25 : .05),
+                  color: Colors.black.withValues(alpha: isDark ? .25 : .05),
                   blurRadius: 30,
                   offset: const Offset(0, 15),
                 ),
@@ -54,8 +54,8 @@ class OnboardingItem extends StatelessWidget {
                     height: 26,
                     decoration: BoxDecoration(
                       color: isDark
-                          ? const Color(0xff7C4DFF).withOpacity(.30)
-                          : const Color(0xff7C4DFF).withOpacity(.15),
+                          ? const Color(0xff7C4DFF).withValues(alpha: .30)
+                          : const Color(0xff7C4DFF).withValues(alpha: .15),
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -69,8 +69,8 @@ class OnboardingItem extends StatelessWidget {
                     height: 18,
                     decoration: BoxDecoration(
                       color: isDark
-                          ? const Color(0xff5AA9FF).withOpacity(.28)
-                          : const Color(0xff5AA9FF).withOpacity(.18),
+                          ? const Color(0xff5AA9FF).withValues(alpha: .28)
+                          : const Color(0xff5AA9FF).withValues(alpha: .18),
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -109,7 +109,7 @@ class OnboardingItem extends StatelessWidget {
               key: ValueKey(page.subtitle),
               textAlign: TextAlign.center,
               style: theme.textTheme.bodyLarge?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(.7),
+                color: theme.colorScheme.onSurface.withValues(alpha: .7),
                 height: 1.7,
                 fontSize: 16,
                 fontFamily: GoogleFonts.poppins().fontFamily,

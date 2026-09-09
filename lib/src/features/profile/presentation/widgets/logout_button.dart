@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mood_journal_app/src/app/routes/app_routes.dart';
+import 'package:mood_journal_app/src/core/services/firebase/firebase_auth_service.dart';
 
 class LogoutButton extends StatelessWidget {
   const LogoutButton({super.key});
@@ -19,14 +21,18 @@ class LogoutButton extends StatelessWidget {
         icon: const Icon(Icons.logout_rounded),
         label: Text(
           "Log Out",
-          style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600,fontFamily: GoogleFonts.poppins().fontFamily,),
+          style: TextStyle(
+            fontSize: 17,
+            fontWeight: FontWeight.w600,
+            fontFamily: GoogleFonts.poppins().fontFamily,
+          ),
         ),
         style: OutlinedButton.styleFrom(
           foregroundColor: Colors.redAccent,
           backgroundColor: isDark
-              ? Colors.redAccent.withOpacity(.08)
+              ? Colors.redAccent.withValues(alpha: .08)
               : const Color(0xffFFF5F5),
-          side: BorderSide(color: Colors.redAccent.withOpacity(.35)),
+          side: BorderSide(color: Colors.redAccent.withValues(alpha: .35)),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(18),
           ),
@@ -52,7 +58,9 @@ void showLogoutDialog() {
           color: theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(28),
           border: Border.all(
-            color: isDark ? Colors.white.withOpacity(.08) : Colors.transparent,
+            color: isDark
+                ? Colors.white.withValues(alpha: .08)
+                : Colors.transparent,
           ),
         ),
         child: Column(
@@ -62,7 +70,7 @@ void showLogoutDialog() {
               width: 76,
               height: 76,
               decoration: BoxDecoration(
-                color: Colors.redAccent.withOpacity(.12),
+                color: Colors.redAccent.withValues(alpha: .12),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
@@ -88,7 +96,7 @@ void showLogoutDialog() {
               "Are you sure you want to log out?\nYou'll need to sign in again to continue.",
               textAlign: TextAlign.center,
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(.7),
+                color: theme.colorScheme.onSurface.withValues(alpha: .7),
                 height: 1.5,
                 fontFamily: GoogleFonts.poppins().fontFamily,
               ),
@@ -115,9 +123,9 @@ void showLogoutDialog() {
 
                 Expanded(
                   child: FilledButton.icon(
-                    onPressed: () {
+                    onPressed: () async {
                       Get.back();
-                      Get.offAllNamed(AppRoutes.login);
+                      await _logout();
                     },
                     icon: const Icon(Icons.logout_rounded),
                     label: const Text("Log Out"),
@@ -139,4 +147,33 @@ void showLogoutDialog() {
     ),
     barrierDismissible: true,
   );
+}
+
+Future<void> _logout() async {
+  try {
+    await FirebaseAuthService.instance.logout();
+
+    final box = GetStorage();
+    const sessionKeys = <String>[
+      'isLoggedIn',
+      'isGuest',
+      'firebaseUid',
+      'userId',
+      'name',
+      'userName',
+      'email',
+    ];
+
+    for (final key in sessionKeys) {
+      await box.remove(key);
+    }
+
+    Get.offAllNamed(AppRoutes.login);
+  } catch (_) {
+    Get.snackbar(
+      'Logout failed',
+      'Unable to log out right now. Please try again.',
+      snackPosition: SnackPosition.BOTTOM,
+    );
+  }
 }

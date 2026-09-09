@@ -21,6 +21,8 @@ class UserLocalDataSource {
     required String firebaseUid,
     required String name,
     required String email,
+    String? profileImage,
+    String? bio,
   }) async {
     final db = await _databaseHelper.database;
 
@@ -29,7 +31,12 @@ class UserLocalDataSource {
     if (existing != null) {
       await db.update(
         'users',
-        {'name': name, 'email': email},
+        {
+          'name': name,
+          'email': email,
+          'profileImage': profileImage,
+          'bio': bio,
+        },
         where: 'id = ?',
         whereArgs: [existing.id],
       );
@@ -40,8 +47,8 @@ class UserLocalDataSource {
       'firebaseUid': firebaseUid,
       'name': name,
       'email': email,
-      'profileImage': null,
-      'bio': null,
+      'profileImage': profileImage,
+      'bio': bio,
       'createdAt': DateTime.now().toIso8601String(),
     }, conflictAlgorithm: ConflictAlgorithm.abort);
   }

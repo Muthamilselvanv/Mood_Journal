@@ -1,0 +1,6 @@
+# Copy this file to key.properties and replace every placeholder.
+# Never commit key.properties, the keystore, or real passwords.
+storePassword=REPLACE_WITH_UPLOAD_KEYSTORE_PASSWORD
+keyPassword=REPLACE_WITH_UPLOAD_KEY_PASSWORD
+keyAlias=REPLACE_WITH_UPLOAD_KEY_ALIAS
+storeFile=keystores/upload-keystore.jks

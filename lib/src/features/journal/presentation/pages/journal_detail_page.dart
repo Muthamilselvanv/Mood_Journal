@@ -7,6 +7,7 @@ import 'package:lucide_flutter/lucide_flutter.dart';
 import 'package:mood_journal_app/src/app/routes/app_routes.dart';
 import 'package:mood_journal_app/src/core/constants/app_spacing.dart';
 import 'package:mood_journal_app/src/core/services/share_service.dart';
+import 'package:mood_journal_app/src/core/services/network_service.dart';
 import 'package:mood_journal_app/src/features/home/presentation/controllers/home_controller.dart';
 import 'package:mood_journal_app/src/features/home/presentation/models/mood_entry_model.dart';
 import 'package:mood_journal_app/src/features/journal/presentation/controllers/journal_controller.dart';
@@ -148,7 +149,19 @@ class JournalDetailPage extends StatelessWidget {
                     child: IconButton(
                       icon: const Icon(Icons.share_outlined),
                       onPressed: () async {
-                        await ShareService.shareMood(entry);
+                        if (!await NetworkService.hasInternetConnection()) {
+                          AppSnackbar.warning(
+                            'Internet connection is required to share this journal.',
+                          );
+                          return;
+                        }
+                        try {
+                          await ShareService.shareMood(entry);
+                        } catch (_) {
+                          AppSnackbar.error(
+                            'This journal could not be shared. Please try again.',
+                          );
+                        }
                       },
                     ),
                   ),
@@ -190,7 +203,7 @@ class JournalDetailPage extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [moodColor, moodColor.withOpacity(.75)],
+                    colors: [moodColor, moodColor.withValues(alpha: .75)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -246,7 +259,7 @@ class JournalDetailPage extends StatelessWidget {
                               value: entry.intensity / 10,
                               minHeight: 12,
                               color: moodColor,
-                              backgroundColor: moodColor.withOpacity(.15),
+                              backgroundColor: moodColor.withValues(alpha: .15),
                             ),
                           ),
                         ),
@@ -282,7 +295,7 @@ class JournalDetailPage extends StatelessWidget {
                       height: 60,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        color: moodColor.withOpacity(.10),
+                        color: moodColor.withValues(alpha: .10),
                         borderRadius: BorderRadius.circular(18),
                       ),
                       child: Text(
@@ -346,7 +359,7 @@ class JournalDetailPage extends StatelessWidget {
                                   vertical: 10,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: moodColor.withOpacity(.12),
+                                  color: moodColor.withValues(alpha: .12),
                                   borderRadius: BorderRadius.circular(30),
                                 ),
                                 child: Text(
@@ -448,29 +461,47 @@ class JournalDetailPage extends StatelessWidget {
 
               const SizedBox(height: 20),
               if (entry.imageUrl != null && entry.imageUrl!.isNotEmpty) ...[
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(18),
-                  child: Image.file(
-                    File(entry.imageUrl!),
-                    width: double.infinity,
-                    height: 220,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) {
-                      return Container(
-                        height: 220,
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade200,
-                          borderRadius: BorderRadius.circular(18),
-                        ),
-                        child: const Center(
-                          child: Icon(
-                            Icons.broken_image_outlined,
-                            size: 50,
-                            color: Colors.grey,
+                GestureDetector(
+                  onTap: () => _showImagePreview(context, entry.imageUrl!),
+                  child: Stack(
+                    alignment: Alignment.bottomRight,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(18),
+                        child: Image.file(
+                          File(entry.imageUrl!),
+                          width: double.infinity,
+                          height: 220,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => Container(
+                            height: 220,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade200,
+                              borderRadius: BorderRadius.circular(18),
+                            ),
+                            child: const Center(
+                              child: Icon(
+                                Icons.broken_image_outlined,
+                                size: 50,
+                                color: Colors.grey,
+                              ),
+                            ),
                           ),
                         ),
-                      );
-                    },
+                      ),
+                      Container(
+                        margin: const EdgeInsets.all(12),
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withValues(alpha: 0.6),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.zoom_in_rounded,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
 
@@ -497,6 +528,51 @@ class JournalDetailPage extends StatelessWidget {
   }
 }
 
+void _showImagePreview(BuildContext context, String imagePath) {
+  showDialog<void>(
+    context: context,
+    barrierDismissible: true,
+    barrierColor: Colors.black87,
+    builder: (dialogContext) => Dialog.fullscreen(
+      backgroundColor: Colors.transparent,
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () => Navigator.of(dialogContext).pop(),
+              child: InteractiveViewer(
+                minScale: 0.8,
+                maxScale: 4,
+                child: Center(
+                  child: Image.file(
+                    File(imagePath),
+                    fit: BoxFit.contain,
+                    errorBuilder: (_, __, ___) => const Icon(
+                      Icons.broken_image_outlined,
+                      size: 64,
+                      color: Colors.white70,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            top: MediaQuery.paddingOf(dialogContext).top + 8,
+            right: 12,
+            child: IconButton.filled(
+              tooltip: 'Close image',
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              icon: const Icon(Icons.close_rounded),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
 void _showDeleteDialog(BuildContext context, MoodEntry entry) {
   Get.dialog(
     AlertDialog(
@@ -519,11 +595,13 @@ void _showDeleteDialog(BuildContext context, MoodEntry entry) {
           onPressed: () async {
             Get.back();
 
-            await Get.find<JournalController>().deleteEntry(entry);
+            final deleted = await Get.find<JournalController>().deleteEntry(
+              entry,
+            );
 
-            AppSnackbar.success("Journal deleted");
-
-            Get.offNamed(AppRoutes.journal); // Back to Journal Page
+            if (deleted) {
+              Get.offNamed(AppRoutes.journal);
+            }
           },
           child: const Text("Delete"),
         ),
@@ -571,10 +649,10 @@ class _InfoCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: theme.dividerColor.withOpacity(.15)),
+        border: Border.all(color: theme.dividerColor.withValues(alpha: .15)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(.04),
+            color: Colors.black.withValues(alpha: .04),
             blurRadius: 18,
             offset: const Offset(0, 8),
           ),

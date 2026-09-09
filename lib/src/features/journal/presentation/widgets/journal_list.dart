@@ -27,7 +27,7 @@ class JournalList extends GetView<JournalController> {
                   width: 100,
                   height: 100,
                   decoration: BoxDecoration(
-                    color: colorScheme.primary.withOpacity(0.10),
+                    color: colorScheme.primary.withValues(alpha: 0.10),
                     borderRadius: BorderRadius.circular(30),
                   ),
                   child: Icon(

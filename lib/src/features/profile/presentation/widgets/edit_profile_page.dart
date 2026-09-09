@@ -1,12 +1,11 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_flutter/lucide_flutter.dart';
 import 'package:mood_journal_app/src/features/auth/data/models/user_model.dart';
 import 'package:mood_journal_app/src/features/profile/presentation/controllers/profile_controller.dart';
-import 'package:mood_journal_app/src/core/constants/app_assets.dart';
+import 'package:mood_journal_app/src/features/profile/presentation/widgets/profile_avatar.dart';
+import 'package:mood_journal_app/src/core/utils/app_bottom_sheet.dart';
 import 'package:mood_journal_app/src/shared/widgets/app_gradient_button.dart';
 
 class EditProfilePage extends StatefulWidget {
@@ -42,7 +41,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     super.dispose();
   }
 
-  Future<void> _pickImage() async {
+  Future<void> _pickGalleryImage() async {
     final selectedPath = await controller.pickProfileImage();
 
     if (selectedPath == null || !mounted) return;
@@ -50,6 +49,30 @@ class _EditProfilePageState extends State<EditProfilePage> {
     setState(() {
       imagePath = selectedPath;
     });
+  }
+
+  Future<void> _takePhoto() async {
+    final selectedPath = await controller.takeProfilePhoto();
+
+    if (selectedPath == null || !mounted) return;
+
+    setState(() {
+      imagePath = selectedPath;
+    });
+  }
+
+  void _showImagePicker() {
+    AppBottomSheet.showImagePicker(
+      context: context,
+      onCamera: () async {
+        Navigator.pop(context);
+        await _takePhoto();
+      },
+      onGallery: () async {
+        Navigator.pop(context);
+        await _pickGalleryImage();
+      },
+    );
   }
 
   Future<void> _save() async {
@@ -105,51 +128,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
           ),
           child: Column(
             children: [
-              Stack(
-                alignment: Alignment.bottomRight,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      gradient: const LinearGradient(
-                        colors: [Color(0xff7C4DFF), Color(0xff5AA9FF)],
-                      ),
-                    ),
-                    child: CircleAvatar(
-                      radius: 56,
-                      backgroundColor: Colors.white,
-                      child: CircleAvatar(
-                        radius: 52,
-                        backgroundColor: Colors.grey.shade100,
-                        backgroundImage: imagePath != null
-                            ? FileImage(File(imagePath!))
-                            : null,
-                        child: imagePath == null
-                            ? Image.asset(AppAssets.niloraIcon, width: 58)
-                            : null,
-                      ),
-                    ),
-                  ),
-
-                  Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: const Color(0xff7C4DFF),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(.15),
-                          blurRadius: 10,
-                        ),
-                      ],
-                    ),
-                    child: IconButton(
-                      onPressed: _pickImage,
-                      icon: const Icon(Icons.camera_alt),
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
+              ProfileAvatar(
+                imagePath: imagePath,
+                onTap: _showImagePicker,
+                size: MediaQuery.sizeOf(context).width < 360 ? 96 : 112,
               ),
 
               const SizedBox(height: 24),
@@ -202,7 +184,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           : null,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(.04),
+                          color: Colors.black.withValues(alpha: .04),
                           blurRadius: 12,
                           offset: const Offset(0, 4),
                         ),
@@ -249,7 +231,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     controller: bioController,
                     textInputAction: TextInputAction.next,
                     decoration: InputDecoration(
-                      hintText: "Living one day at a time 🌿",
+                      hintText: "Finding calm, one day at a time.",
                       border: isDark
                           ? OutlineInputBorder(
                               borderSide: BorderSide(

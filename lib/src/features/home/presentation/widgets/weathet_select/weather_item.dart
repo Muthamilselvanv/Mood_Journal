@@ -25,7 +25,7 @@ class WeatherItem extends StatelessWidget {
         decoration: BoxDecoration(
           //color: Colors.white,
           color: selected
-              ? weather.color.withOpacity(.12)
+              ? weather.color.withValues(alpha: .12)
               : Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(40),
           border: Border.all(

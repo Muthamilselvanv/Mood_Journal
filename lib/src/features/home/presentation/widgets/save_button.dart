@@ -7,6 +7,7 @@ import 'package:mood_journal_app/src/features/home/presentation/controllers/home
 import 'package:mood_journal_app/src/features/home/presentation/models/mood_entry_model.dart';
 import 'package:mood_journal_app/src/features/journal/presentation/controllers/journal_controller.dart';
 import 'package:mood_journal_app/src/features/main/presentation/controller/main_controller.dart';
+import 'package:mood_journal_app/src/core/services/network_service.dart';
 import 'package:mood_journal_app/src/shared/widgets/app_gradient_button.dart';
 import 'package:mood_journal_app/src/shared/widgets/app_snackbar.dart';
 
@@ -29,6 +30,11 @@ class BuildAddMoodButton extends StatelessWidget {
           isLoading: controller.isSaving.value,
 
           onPressed: () async {
+            if (controller.selectedMood == null) {
+              AppSnackbar.warning('Please select how you are feeling.');
+              return;
+            }
+
             if (!controller.formKey.currentState!.validate()) {
               return;
             }
@@ -37,13 +43,26 @@ class BuildAddMoodButton extends StatelessWidget {
 
             try {
               final imageFile = controller.selectedImage.value;
-              final userId = GetStorage().read("userId");
+              final box = GetStorage();
+              final userId = box.read<int>('userId');
+              final isGuest = box.read<bool>('isGuest') ?? false;
+
+              if (!isGuest && !await NetworkService.hasInternetConnection()) {
+                AppSnackbar.warning(
+                  'Internet connection is required to save a signed-in journal.',
+                );
+                return;
+              }
+
+              if (userId == null) {
+                throw StateError('No local user session is available.');
+              }
 
               final entry = MoodEntry(
                 id: controller.editingEntry.value?.id,
                 firebaseId: controller.editingEntry.value?.firebaseId,
                 userId: userId,
-                mood: controller.selectedMood.title,
+                mood: controller.selectedMood!.title,
                 weather: controller.weather.title,
                 activities: controller.selectedActivities.toList(),
                 intensity: controller.intensity.value.toInt(),
@@ -59,11 +78,11 @@ class BuildAddMoodButton extends StatelessWidget {
               );
 
               if (controller.isEditing) {
-                // 1. Update Firestore
-                await repository.updateMoodEntry(entry);
-
-                // 2. Update SQLite
-                await repository.updateMood(entry);
+                if (isGuest) {
+                  await repository.updateMood(entry);
+                } else {
+                  await repository.updateMoodCompletely(entry);
+                }
 
                 // 3. Reload UI
                 await controller.loadMood();
@@ -77,12 +96,11 @@ class BuildAddMoodButton extends StatelessWidget {
 
                 Get.offNamed(AppRoutes.journal);
               } else {
-                // Save locally
-                final firebaseId = await repository.addMoodEntry(entry);
-
-                final firebaseEntry = entry.copyWith(firebaseId: firebaseId);
-
-                await repository.insertMood(firebaseEntry);
+                if (isGuest) {
+                  await repository.insertMood(entry);
+                } else {
+                  await repository.addMoodCompletely(entry);
+                }
 
                 await controller.loadMood();
                 await Get.find<JournalController>().loadEntries();
@@ -95,12 +113,14 @@ class BuildAddMoodButton extends StatelessWidget {
 
                 Get.offNamed(AppRoutes.journal);
               }
-            } catch (e, stackTrace) {
-              debugPrint("❌❌❌ SAVE MOOD ERROR ❌❌❌");
-
-              debugPrint("Error: $e");
-              debugPrint("StackTrace: $stackTrace");
-
+            } on CloudWriteCompletedException {
+              controller.resetForm();
+              Get.find<MainController>().changeTap(1);
+              AppSnackbar.warning(
+                'Saved online. Local refresh is pending; do not submit again.',
+              );
+              Get.offNamed(AppRoutes.journal);
+            } catch (_) {
               AppSnackbar.error("Failed to save mood.");
             } finally {
               controller.isSaving.value = false;
