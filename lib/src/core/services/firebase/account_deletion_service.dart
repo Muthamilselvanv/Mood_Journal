@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:mood_journal_app/src/core/database/database_helper.dart';
+import 'package:mood_journal_app/src/core/services/image_storage_service.dart';
 
 class AccountDeletionService {
   AccountDeletionService._();
@@ -61,6 +62,7 @@ class AccountDeletionService {
     ];
 
     try {
+      await ImageStorageService.deleteProfileImages();
       if (localUserId != null) {
         final database = await DatabaseHelper.instance.database;
         await database.transaction((transaction) async {

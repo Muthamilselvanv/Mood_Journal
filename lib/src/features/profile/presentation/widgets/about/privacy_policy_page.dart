@@ -1,9 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PrivacyPolicyPage extends StatelessWidget {
   const PrivacyPolicyPage({super.key});
 
   static const _supportEmail = 'muthamilselvan251@gmail.com';
+  static final _onlinePolicy = Uri.parse(
+    'https://nilora-mood-journal-app.web.app/privacy',
+  );
+
+  Future<void> _openOnlinePolicy(BuildContext context) async {
+    final opened = await launchUrl(
+      _onlinePolicy,
+      mode: LaunchMode.externalApplication,
+    );
+    if (!opened && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not open the online policy.')),
+      );
+    }
+  }
 
   Widget _section(
     BuildContext context, {
@@ -73,7 +89,7 @@ class PrivacyPolicyPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Effective 31 August 2026',
+                      'Effective 14 September 2026',
                       style: theme.textTheme.bodySmall,
                     ),
                   ],
@@ -123,10 +139,9 @@ class PrivacyPolicyPage extends StatelessWidget {
               title: 'Photos and device permissions',
               body:
                   'Nilora requests camera or photo access only when you choose '
-                  'to attach an image. Image files remain on the device in the '
-                  'current version. For signed-in journals, the local image file '
-                  'reference may be included in the cloud journal record, but '
-                  'Nilora does not currently upload the image file itself.',
+                  'to attach an image. Profile and journal image files remain '
+                  'on the device in the current version and are not uploaded. '
+                  'They are not restored after uninstalling Nilora or changing devices.',
             ),
             _section(
               context,
@@ -168,6 +183,16 @@ class PrivacyPolicyPage extends StatelessWidget {
                   'practices change. The effective date above identifies the '
                   'current in-app version.',
             ),
+            const SizedBox(height: 4),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: () => _openOnlinePolicy(context),
+                icon: const Icon(Icons.open_in_new_rounded),
+                label: const Text('View policy online'),
+              ),
+            ),
+            const SizedBox(height: 8),
           ],
         ),
       ),

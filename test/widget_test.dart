@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get/get.dart';
 import 'package:mood_journal_app/src/features/home/presentation/models/mood_select_model.dart';
 import 'package:mood_journal_app/src/features/home/presentation/widgets/mood_select/mood_item.dart';
 import 'package:mood_journal_app/src/features/profile/presentation/widgets/about/privacy_policy_page.dart';
+import 'package:mood_journal_app/src/features/profile/presentation/widgets/delete_account_button.dart';
 import 'package:mood_journal_app/src/features/profile/presentation/widgets/profile_image.dart';
 
 void main() {
@@ -13,7 +15,7 @@ void main() {
 
     expect(find.text('Privacy Policy'), findsOneWidget);
     expect(find.text('Nilora Privacy Policy'), findsOneWidget);
-    expect(find.text('Effective 31 August 2026'), findsOneWidget);
+    expect(find.text('Effective 14 September 2026'), findsOneWidget);
   });
 
   testWidgets('compact Neutral mood tile keeps its label on one line', (
@@ -58,6 +60,24 @@ void main() {
 
     expect(find.byType(Image), findsOneWidget);
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('account deletion accurately describes local photo handling', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      const GetMaterialApp(home: Scaffold(body: DeleteAccountButton())),
+    );
+
+    await tester.tap(find.text('Account and data'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Delete my account'));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.text('Nilora does not upload your photo files to its server.'),
+      findsOneWidget,
+    );
   });
 }
 

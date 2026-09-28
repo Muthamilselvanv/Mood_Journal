@@ -98,7 +98,8 @@ class _DeleteAccountDialogState extends State<_DeleteAccountDialog> {
       Get.offAllNamed(AppRoutes.login);
       Get.snackbar(
         'Account deleted',
-        'Your Nilora account and associated data were deleted.',
+        'Your cloud account and journal data were permanently deleted. '
+            'Photos and Nilora data saved on this device were also removed.',
         snackPosition: SnackPosition.BOTTOM,
       );
     } on FirebaseAuthException catch (error) {
@@ -144,9 +145,18 @@ class _DeleteAccountDialogState extends State<_DeleteAccountDialog> {
         children: [
           const Text('This action is permanent. Nilora will remove:'),
           const SizedBox(height: 12),
-          const _DeletionItem(label: 'Your account and profile'),
-          const _DeletionItem(label: 'All cloud journal entries'),
-          const _DeletionItem(label: 'All Nilora data stored on this device'),
+          const _DeletionItem(label: 'Your Firebase account and cloud profile'),
+          const _DeletionItem(label: 'All cloud mood and journal entries'),
+          const _DeletionItem(
+            label: 'Your profile photo and Nilora data stored on this device',
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'Nilora does not upload your photo files to its server.',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
           const SizedBox(height: 14),
           Text(
             'Enter your password to confirm.',

@@ -29,14 +29,17 @@ class UserLocalDataSource {
     final existing = await getUserByFirebaseUid(firebaseUid);
 
     if (existing != null) {
+      final updates = <String, Object?>{
+        'name': name,
+        'email': email,
+        'bio': bio,
+      };
+      if (profileImage != null && profileImage.isNotEmpty) {
+        updates['profileImage'] = profileImage;
+      }
       await db.update(
         'users',
-        {
-          'name': name,
-          'email': email,
-          'profileImage': profileImage,
-          'bio': bio,
-        },
+        updates,
         where: 'id = ?',
         whereArgs: [existing.id],
       );

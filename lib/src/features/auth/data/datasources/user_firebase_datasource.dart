@@ -32,12 +32,11 @@ class UserFirebaseDataSource {
     required String uid,
     required String name,
     required String bio,
-    required String? profileImage,
   }) async {
     await _firestore.collection('users').doc(uid).update({
       'name': name,
       'bio': bio,
-      'profileImage': profileImage,
+      'profileImage': FieldValue.delete(),
     });
   }
 }
